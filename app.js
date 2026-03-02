@@ -287,7 +287,7 @@
     },
     {
       name: "Eden Olvera",
-      role: "Architectural & computational designer",
+      role: "Architectural Designer",
       img: "Team Members/eden.olvera.webp",
       slug: "eden-olvera",
       sortOrder: 12,

@@ -346,7 +346,7 @@
         {
           from: "bot",
           html:
-            "Ask me about projects, team members, or professors. Try: 'list projects', 'Shade LA', 'who is Monica Kaye', or 'list professors'.",
+            "Welcome to the Digital Twins Projects Hub — a space to create, share, and track projects across disciplines.",
         },
       ],
     },
@@ -880,7 +880,7 @@
 
       state.chat.messages.push({ from: "user", html: escapeHtml(text) });
       const reply = answerChat(text);
-      state.chat.messages.push({ from: "bot", html: reply });
+      state.chat.messages.push({ from: "bot", html: `Okay — let me take a look for you...<br/><br/>${reply}` });
       state.chat.draft = "";
       renderChatAssistant();
     };

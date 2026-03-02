@@ -285,6 +285,26 @@
       ],
       experience: ["Team member on Shade LA."],
     },
+    {
+      name: "Eden Olvera",
+      role: "Architectural & computational designer",
+      img: "Team Members/eden.olvera.webp",
+      slug: "eden-olvera",
+      sortOrder: 12,
+      bio:
+        "I am an architectural and computational designer working at the intersection of ecology, geometry, and generative systems. My work focuses on parametric modeling, recursive spatial subdivision, and data-driven design to create responsive environments and adaptive spatial strategies. Using tools such as Grasshopper, GIS, and custom scripting, I translate environmental and biological data—such as plant proximity, terrain, and hydrology—into computational frameworks that inform spatial organization, density, and form. I am particularly interested in ecological architecture, emergent systems, and computational methodologies that bridge natural intelligence with advanced design technologies.",
+      highlights: ["2025 Design Village, Cal Poly — Competition Winner"],
+      skills: [
+        "Computational Design & Parametric Modeling (Grasshopper, Rhino)",
+        "Generative Systems & Algorithmic Geometry",
+        "GIS & Environmental Data Integration (in progress)",
+        "Recursive Subdivision + Spatial Optimization",
+        "Python / Design Scripting (in progress)",
+        "Ecological & Landscape Systems Design",
+        "3D Modeling + Digital Fabrication Workflows",
+      ],
+      experience: ["Team member on Shade LA.", "Team member on Pando Populus.", "Team member on PUHC Innovation Alleys."],
+    },
     { name: "Priya N", role: "Systems", img: "https://placehold.co/254x240", slug: "priya-n" },
     { name: "John Appleseed", role: "Architecture", img: "https://placehold.co/254x240", slug: "john-appleseed" },
   ];
@@ -2096,7 +2116,7 @@
     ];
 
     const csSlugs = new Set(["omid-ahmadi", "mario-chong-loo", "saron-feyisa", "michael-lee", "volodymyr-balan"]);
-    const archSlugs = new Set(["monique-nogueira", "myisha-arellano", "yiceth-cosby", "monica-kaye", "brenda-cardoza", "eddie-cortez"]);
+    const archSlugs = new Set(["monique-nogueira", "myisha-arellano", "yiceth-cosby", "monica-kaye", "brenda-cardoza", "eddie-cortez", "eden-olvera"]);
     const filteredMembers = members.filter((m) => {
       const slug = String(m?.slug || "");
       if (filterKey === "cs") return csSlugs.has(slug);

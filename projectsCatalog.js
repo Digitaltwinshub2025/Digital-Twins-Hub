@@ -338,6 +338,7 @@ window.PROJECTS_CATALOG = [
         { name: 'Saron Feyisa', role: 'Software Engineer — platform development, mapping, and integration' },
         { name: 'Monica Kaye', role: 'UX & Visual Design — research-driven interface and communication design' },
         { name: 'Volodymyr Balan', role: 'Backend Software Engineer — APIs, database modeling, and performance optimization' },
+        { name: 'Eden Olvera', role: 'Architectural & computational design — parametric modeling, GIS, and generative systems' },
       ],
       collaboration: [],
     },
@@ -426,6 +427,7 @@ window.PROJECTS_CATALOG = [
       members: [
         { name: 'Ed', role: 'Engineer' },
         { name: 'Eddie Cortez', role: 'Architectural Technology Designer' },
+        { name: 'Eden Olvera', role: 'Architectural & computational design — parametric modeling, GIS, and generative systems' },
       ],
       collaboration: [],
     },
@@ -604,6 +606,7 @@ window.PROJECTS_CATALOG = [
       members: [
         { name: 'Michael Lee', role: 'Project Lead' },
         { name: 'Brenda Cardoza', role: 'Interior design student — design concepts, digital modeling, and site analysis' },
+        { name: 'Eden Olvera', role: 'Architectural & computational design — parametric modeling, GIS, and generative systems' },
       ],
       collaboration: [],
     },

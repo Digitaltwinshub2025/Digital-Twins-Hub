@@ -339,7 +339,17 @@
       pathways: null,
     },
     // Chat
-    chat: { open: false },
+    chat: {
+      open: false,
+      draft: "",
+      messages: [
+        {
+          from: "bot",
+          html:
+            "Ask me about projects, team members, or professors. Try: 'list projects', 'Shade LA', 'who is Monica Kaye', or 'list professors'.",
+        },
+      ],
+    },
   };
 
   // -----------------------------
@@ -352,6 +362,135 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+  }
+
+  function normalizeChatText(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ");
+  }
+
+  function chatIncludes(haystack, needle) {
+    const h = normalizeChatText(haystack);
+    const n = normalizeChatText(needle);
+    if (!h || !n) return false;
+    return h.includes(n);
+  }
+
+  function getChatKnowledge() {
+    const projects = Array.isArray(state.projects) ? state.projects : [];
+    const members = Array.isArray(state.projectsPage.teamMembers) ? state.projectsPage.teamMembers : [];
+    const professors = homeLeaders();
+    return { projects, members, professors };
+  }
+
+  function formatProjectLink(p) {
+    const id = p && p.id != null ? String(p.id) : "";
+    const title = escapeHtml(p?.title || "Untitled Project");
+    if (!id) return title;
+    return `<a href="#/projects?id=${encodeURIComponent(id)}" class="underline" onclick="event.stopPropagation()">${title}</a>`;
+  }
+
+  function formatMemberLink(m) {
+    const slug = String(m?.slug || "");
+    const name = escapeHtml(m?.name || "Unnamed");
+    if (!slug) return name;
+    return `<a href="#/team/${encodeURIComponent(slug)}" class="underline" onclick="event.stopPropagation()">${name}</a>`;
+  }
+
+  function answerChat(queryRaw) {
+    const q = normalizeChatText(queryRaw);
+    if (!q) return "Please type a question.";
+
+    const { projects, members, professors } = getChatKnowledge();
+
+    const wantsHelp = /^(help|\?)$/.test(q) || q.includes("what can you do");
+    if (wantsHelp) {
+      return (
+        "Try: <br/>" +
+        "- list projects<br/>" +
+        "- list team<br/>" +
+        "- list professors<br/>" +
+        "- Shade LA<br/>" +
+        "- who is Eddie Cortez<br/>" +
+        "- projects for Eden Olvera"
+      );
+    }
+
+    const wantsListProjects = (q.includes("list") || q.includes("show") || q.includes("all")) && q.includes("project");
+    if (wantsListProjects) {
+      const top = projects.slice(0, 12);
+      const items = top.map((p) => `- ${formatProjectLink(p)}`).join("<br/>");
+      return `Projects (${projects.length}):<br/>${items}${projects.length > top.length ? "<br/>…" : ""}`;
+    }
+
+    const wantsListTeam = (q.includes("list") || q.includes("show") || q.includes("all")) && (q.includes("team") || q.includes("members"));
+    if (wantsListTeam) {
+      const sorted = [...members]
+        .filter((m) => m && m.name)
+        .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+      const top = sorted.slice(0, 16);
+      const items = top.map((m) => `- ${formatMemberLink(m)}${m.role ? ` <span class=\"text-black/60\">(${escapeHtml(m.role)})</span>` : ""}`).join("<br/>");
+      return `Team members (${sorted.length}):<br/>${items}${sorted.length > top.length ? "<br/>…" : ""}`;
+    }
+
+    const wantsListProfessors = (q.includes("list") || q.includes("show") || q.includes("all")) && (q.includes("prof") || q.includes("leader"));
+    if (wantsListProfessors) {
+      const items = professors
+        .map((p) => `- <span class=\"font-semibold\">${escapeHtml(p?.name || "")}</span>${p?.title ? ` <span class=\"text-black/60\">(${escapeHtml(p.title)})</span>` : ""}`)
+        .join("<br/>");
+      return `Professors / Leaders:<br/>${items}`;
+    }
+
+    const matchMember = members.find((m) => m && m.name && chatIncludes(m.name, q)) || members.find((m) => m && m.name && q.includes(normalizeChatText(m.name)));
+    if (matchMember) {
+      const parts = [];
+      parts.push(`<div><span class=\"font-semibold\">${escapeHtml(matchMember.name)}</span>${matchMember.role ? ` <span class=\"text-black/60\">• ${escapeHtml(matchMember.role)}</span>` : ""}</div>`);
+      if (matchMember.bio) parts.push(`<div class=\"mt-1 text-black/80\">${escapeHtml(matchMember.bio)}</div>`);
+      parts.push(`<div class=\"mt-2\">Open: ${formatMemberLink(matchMember)}</div>`);
+      return parts.join("");
+    }
+
+    const matchProject = projects.find((p) => p && p.title && chatIncludes(p.title, q)) || projects.find((p) => p && p.title && q.includes(normalizeChatText(p.title)));
+    if (matchProject) {
+      const teamMembers = Array.isArray(matchProject?.team?.members) ? matchProject.team.members : [];
+      const names = teamMembers.map((m) => String(m?.name || "").trim()).filter(Boolean);
+      const parts = [];
+      parts.push(`<div><span class=\"font-semibold\">${escapeHtml(matchProject.title || "")}</span>${matchProject.category ? ` <span class=\"text-black/60\">• ${escapeHtml(matchProject.category)}</span>` : ""}</div>`);
+      if (matchProject.goal) parts.push(`<div class=\"mt-1 text-black/80\">${escapeHtml(matchProject.goal)}</div>`);
+      if (names.length) parts.push(`<div class=\"mt-2\"><span class=\"font-semibold\">Team:</span> ${escapeHtml(names.join(", "))}</div>`);
+      parts.push(`<div class=\"mt-2\">Open: ${formatProjectLink(matchProject)}</div>`);
+      return parts.join("");
+    }
+
+    const matchProfessor = professors.find((p) => p && p.name && chatIncludes(p.name, q)) || professors.find((p) => p && p.name && q.includes(normalizeChatText(p.name)));
+    if (matchProfessor) {
+      const parts = [];
+      parts.push(`<div><span class=\"font-semibold\">${escapeHtml(matchProfessor.name || "")}</span>${matchProfessor.title ? ` <span class=\"text-black/60\">• ${escapeHtml(matchProfessor.title)}</span>` : ""}</div>`);
+      if (matchProfessor.desc) parts.push(`<div class=\"mt-1 text-black/80\">${escapeHtml(matchProfessor.desc)}</div>`);
+      return parts.join("");
+    }
+
+    const fewProjects = projects
+      .filter((p) => p && p.title && (chatIncludes(p.title, q) || chatIncludes(p.category, q) || chatIncludes(p.owner, q)))
+      .slice(0, 5);
+    const fewMembers = members.filter((m) => m && m.name && (chatIncludes(m.name, q) || chatIncludes(m.role, q))).slice(0, 5);
+
+    if (fewProjects.length || fewMembers.length) {
+      const parts = [];
+      if (fewProjects.length) {
+        parts.push(`<div class=\"font-semibold\">Projects</div>`);
+        parts.push(fewProjects.map((p) => `- ${formatProjectLink(p)}`).join("<br/>"));
+      }
+      if (fewMembers.length) {
+        parts.push(`<div class=\"mt-3 font-semibold\">Team</div>`);
+        parts.push(fewMembers.map((m) => `- ${formatMemberLink(m)}${m.role ? ` <span class=\"text-black/60\">(${escapeHtml(m.role)})</span>` : ""}`).join("<br/>"));
+      }
+      return parts.join("<br/>");
+    }
+
+    return "I couldn't find an exact match. Try a project name, a team member name, or 'list projects'.";
   }
 
   function toast(title, message, type = "success") {
@@ -661,6 +800,22 @@
   }
 
   function renderChatAssistant() {
+    const messages = Array.isArray(state.chat.messages) ? state.chat.messages : [];
+
+    const renderMsg = (m) => {
+      const from = String(m?.from || "bot");
+      const isUser = from === "user";
+      const wrap = isUser ? "justify-end" : "justify-start";
+      const bubble = isUser ? "bg-black text-white" : "bg-black/5 text-black";
+      return `
+        <div class="flex ${wrap}">
+          <div class="max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${bubble}" style="font-family:Poppins, ui-sans-serif">
+            ${m?.html || ""}
+          </div>
+        </div>
+      `;
+    };
+
     chatEl.innerHTML = `
       <button id="chatBtn"
         class="fixed bottom-6 right-6 z-[9999] rounded-full bg-black text-white px-5 py-3 shadow-lg hover:bg-gray-900"
@@ -669,15 +824,26 @@
       </button>
 
       <div id="chatModal" class="${state.chat.open ? "" : "hidden"} fixed inset-0 z-[9998]">
-        <div class="absolute inset-0 bg-black/60"></div>
+        <div id="chatBackdrop" class="absolute inset-0 bg-black/60"></div>
         <div class="absolute bottom-24 right-6 w-[92vw] max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
           <div class="px-4 py-3 border-b flex items-center justify-between">
             <div class="font-semibold" style="font-family:Poppins, ui-sans-serif">Chat Assistant</div>
             <button id="chatClose" class="px-2 py-1 text-gray-600 hover:text-black">✕</button>
           </div>
-          <div class="p-4 text-sm text-gray-700" style="font-family:Poppins, ui-sans-serif">
-            This is a lightweight placeholder for your React ChatAssistant component.
-            <div class="mt-2 text-gray-500">Wire your assistant logic here when ready.</div>
+
+          <div id="chatMessages" class="p-4 space-y-3 max-h-[55vh] overflow-y-auto">
+            ${messages.map(renderMsg).join("")}
+          </div>
+
+          <div class="p-3 border-t flex items-center gap-2">
+            <input id="chatInput" type="text" placeholder="Ask about projects, team, professors..."
+              class="flex-1 rounded-full border border-black/10 px-4 py-2 text-sm outline-none focus:border-black/30"
+              style="font-family:Poppins, ui-sans-serif"
+              value="${escapeHtml(state.chat.draft)}" />
+            <button id="chatSend" class="rounded-full bg-black text-white px-4 py-2 text-sm hover:bg-black/90"
+              style="font-family:Poppins, ui-sans-serif">
+              Send
+            </button>
           </div>
         </div>
       </div>
@@ -686,6 +852,9 @@
     const btn = document.getElementById("chatBtn");
     const close = document.getElementById("chatClose");
     const modal = document.getElementById("chatModal");
+    const input = document.getElementById("chatInput");
+    const send = document.getElementById("chatSend");
+    const messagesEl = document.getElementById("chatMessages");
 
     btn?.addEventListener("click", () => {
       state.chat.open = true;
@@ -695,12 +864,48 @@
       state.chat.open = false;
       renderChatAssistant();
     });
+
     modal?.addEventListener("click", (e) => {
-      if (e.target === modal) {
+      const backdrop = document.getElementById("chatBackdrop");
+      if (e.target === modal || e.target === backdrop) {
         state.chat.open = false;
         renderChatAssistant();
       }
     });
+
+    const doSend = () => {
+      const text = String(input?.value || "").trim();
+      state.chat.draft = text;
+      if (!text) return;
+
+      state.chat.messages.push({ from: "user", html: escapeHtml(text) });
+      const reply = answerChat(text);
+      state.chat.messages.push({ from: "bot", html: reply });
+      state.chat.draft = "";
+      renderChatAssistant();
+    };
+
+    input?.addEventListener("input", (e) => {
+      state.chat.draft = e.target.value;
+    });
+
+    send?.addEventListener("click", doSend);
+
+    input?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        doSend();
+      }
+    });
+
+    if (state.chat.open) {
+      setTimeout(() => {
+        try {
+          input?.focus();
+          if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight;
+        } catch {}
+      }, 0);
+    }
   }
 
   // -----------------------------

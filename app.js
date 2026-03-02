@@ -2755,21 +2755,55 @@
     const renderProjectCaseStudyCard = (p) => {
       const title = escapeHtml(p?.title || "Untitled");
       const meta = [p?.category, p?.owner].filter(Boolean).map((x) => escapeHtml(x)).join(" • ");
+
+      const rawUrl = p && p.caseStudyUrl ? String(p.caseStudyUrl) : "";
+      let embedUrl = "";
+      const deckMatch = rawUrl.match(/docs\.google\.com\/presentation\/d\/([^/]+)/i);
+      if (deckMatch && deckMatch[1]) {
+        let slideFragment = "";
+        const hashIdx = rawUrl.indexOf("#");
+        if (hashIdx >= 0) {
+          slideFragment = rawUrl.slice(hashIdx);
+        } else {
+          const slideQueryMatch = rawUrl.match(/[?&](slide=[^&#]+)/i);
+          if (slideQueryMatch && slideQueryMatch[1]) slideFragment = `#${slideQueryMatch[1]}`;
+        }
+
+        embedUrl = `https://docs.google.com/presentation/d/${deckMatch[1]}/embed?start=false&loop=false&delayms=3000${slideFragment}`;
+      }
+
       return `
-        <a href="${escapeHtml(p.caseStudyUrl)}" target="_blank" rel="noreferrer"
-          class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-3 relative group cursor-pointer hover:shadow-md transition-shadow">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4 relative group hover:shadow-md transition-shadow">
           <div class="flex items-start justify-between gap-4">
             <div class="min-w-0">
               <h3 class="text-xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">
                 ${title}
               </h3>
               ${meta ? `<div class="mt-1 text-xs text-gray-600" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${meta}</div>` : ""}
-              <div class="mt-3 inline-flex items-center justify-center rounded-full bg-black text-white px-3 py-1 text-[11px] sm:text-xs hover:bg-black/90">
+            </div>
+            ${rawUrl ? `
+              <a href="${escapeHtml(rawUrl)}" target="_blank" rel="noreferrer"
+                class="shrink-0 inline-flex items-center justify-center rounded-full bg-black text-white px-3 py-1 text-[11px] sm:text-xs hover:bg-black/90"
+                style="font-family:Poppins, ui-sans-serif">
                 Open case study
+              </a>
+            ` : ""}
+          </div>
+
+          ${embedUrl ? `
+            <div class="w-full overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+              <div class="aspect-[16/9]">
+                <iframe
+                  title="${title} case study preview"
+                  src="${escapeHtml(embedUrl)}"
+                  class="w-full h-full"
+                  frameborder="0"
+                  allowfullscreen
+                ></iframe>
               </div>
             </div>
-          </div>
-        </a>
+          ` : ""}
+        </div>
       `;
     };
 

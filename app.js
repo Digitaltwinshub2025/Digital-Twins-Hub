@@ -305,8 +305,6 @@
       ],
       experience: ["Team member on Shade LA.", "Team member on Pando Populus.", "Team member on PUHC Innovation Alleys."],
     },
-    { name: "Priya N", role: "Systems", img: "https://placehold.co/254x240", slug: "priya-n" },
-    { name: "John Appleseed", role: "Architecture", img: "https://placehold.co/254x240", slug: "john-appleseed" },
   ];
 
   const state = {

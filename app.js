@@ -2741,6 +2741,21 @@
     const currentDetail = state.learning.currentDetail;
     const projects = Array.isArray(state.projects) ? state.projects : [];
 
+    const learningCardMeta = {
+      courses: { icon: "🐍", iconBg: "bg-blue-100 text-blue-700", barBg: "bg-blue-500", progress: 45 },
+      videos: { icon: "🎥", iconBg: "bg-emerald-100 text-emerald-700", barBg: "bg-emerald-500", progress: 60 },
+      tutorials: { icon: "📘", iconBg: "bg-indigo-100 text-indigo-700", barBg: "bg-indigo-500", progress: 35 },
+      labs: { icon: "🧪", iconBg: "bg-amber-100 text-amber-700", barBg: "bg-amber-500", progress: 25 },
+      templates: { icon: "🧩", iconBg: "bg-purple-100 text-purple-700", barBg: "bg-purple-500", progress: 50 },
+      caseStudies: { icon: "📊", iconBg: "bg-slate-100 text-slate-700", barBg: "bg-slate-800", progress: 80 },
+    };
+
+    const learningPathKeys = ["caseStudies", "tutorials", "videos", "courses", "labs"];
+    const learningPath = learningPathKeys.map((k) => ({
+      key: k,
+      title: (sections && sections[k] && sections[k].title) ? String(sections[k].title) : k,
+    }));
+
     const caseStudyProjects = projects
       .filter((p) => p && p.caseStudyUrl)
       .map((p) => ({
@@ -2755,6 +2770,7 @@
     const renderProjectCaseStudyCard = (p) => {
       const title = escapeHtml(p?.title || "Untitled");
       const meta = [p?.category, p?.owner].filter(Boolean).map((x) => escapeHtml(x)).join(" • ");
+      const img = p && p.image ? String(p.image) : "";
 
       const rawUrl = p && p.caseStudyUrl ? String(p.caseStudyUrl) : "";
       let embedUrl = "";
@@ -2773,36 +2789,59 @@
       }
 
       return `
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4 relative group hover:shadow-md transition-shadow">
-          <div class="flex items-start justify-between gap-4">
-            <div class="min-w-0">
-              <h3 class="text-xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">
-                ${title}
-              </h3>
-              ${meta ? `<div class="mt-1 text-xs text-gray-600" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${meta}</div>` : ""}
+        <div class="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative">
+            <div class="aspect-[16/7] bg-gradient-to-br from-slate-200 via-slate-100 to-white">
+              ${img ? `<img src="${escapeHtml(img)}" alt="${title}" class="w-full h-full object-cover" />` : ""}
             </div>
-            ${rawUrl ? `
-              <a href="${escapeHtml(rawUrl)}" target="_blank" rel="noreferrer"
-                class="shrink-0 inline-flex items-center justify-center rounded-full bg-black text-white px-3 py-1 text-[11px] sm:text-xs hover:bg-black/90"
-                style="font-family:Poppins, ui-sans-serif">
-                Open case study
-              </a>
-            ` : ""}
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+            <div class="absolute left-5 right-5 bottom-4 flex items-end justify-between gap-4">
+              <div class="min-w-0">
+                <h3 class="text-white text-xl sm:text-2xl font-semibold leading-tight drop-shadow" style="font-family:Poppins, ui-sans-serif, system-ui">
+                  ${title}
+                </h3>
+                ${meta ? `<div class="mt-1 text-xs text-white/85" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${meta}</div>` : ""}
+              </div>
+              ${rawUrl ? `
+                <a href="${escapeHtml(rawUrl)}" target="_blank" rel="noreferrer"
+                  class="shrink-0 inline-flex items-center justify-center rounded-full bg-white/95 text-black px-4 py-2 text-xs font-semibold hover:bg-white"
+                  style="font-family:Poppins, ui-sans-serif">
+                  Open
+                </a>
+              ` : ""}
+            </div>
           </div>
 
-          ${embedUrl ? `
-            <div class="w-full overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
-              <div class="aspect-[16/9]">
-                <iframe
-                  title="${title} case study preview"
-                  src="${escapeHtml(embedUrl)}"
-                  class="w-full h-full"
-                  frameborder="0"
-                  allowfullscreen
-                ></iframe>
-              </div>
+          <div class="p-5 sm:p-6 space-y-4">
+            <div class="flex flex-wrap gap-2">
+              ${p?.category ? `<span class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-3 py-1 text-[11px] font-medium" style="font-family:Poppins, ui-sans-serif">${escapeHtml(p.category)}</span>` : ""}
+              ${p?.owner ? `<span class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-3 py-1 text-[11px] font-medium" style="font-family:Poppins, ui-sans-serif">${escapeHtml(p.owner)}</span>` : ""}
+              <span class="inline-flex items-center rounded-full bg-slate-900 text-white px-3 py-1 text-[11px] font-medium" style="font-family:Poppins, ui-sans-serif">Slides</span>
             </div>
-          ` : ""}
+
+            ${embedUrl ? `
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="text-xs font-semibold text-slate-700" style="font-family:Poppins, ui-sans-serif">Preview</div>
+                </div>
+                <div class="mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
+                  <div class="aspect-[16/9]">
+                    <iframe
+                      title="${title} case study preview"
+                      src="${escapeHtml(embedUrl)}"
+                      class="w-full h-full"
+                      frameborder="0"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+                </div>
+              </div>
+            ` : `
+              <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                Preview unavailable for this case study link.
+              </div>
+            `}
+          </div>
         </div>
       `;
     };
@@ -2874,23 +2913,98 @@
             <h1 class="text-3xl font-bold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Learning Hub</h1>
           </div>
 
+          <section class="rounded-3xl border border-black/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white overflow-hidden">
+            <div class="p-6 sm:p-8">
+              <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                  <h2 class="text-xl sm:text-2xl font-semibold" style="font-family:Poppins, ui-sans-serif, system-ui">Learning Path</h2>
+                  <p class="mt-2 text-white/70 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                    Explore sections in a suggested flow. Use the cards below to open any section.
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <div class="relative h-[160px]">
+                    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 900 140" preserveAspectRatio="none" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="learningWave" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0" stop-color="#f59e0b" />
+                          <stop offset="0.5" stop-color="#eab308" />
+                          <stop offset="1" stop-color="#f97316" />
+                        </linearGradient>
+                      </defs>
+                      <path id="learningWavePathBase" d="M0,70 C110,10 210,10 320,70 C430,130 540,130 650,70 C760,10 840,10 900,70" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3" />
+                      <path id="learningWavePath" d="M0,70 C110,10 210,10 320,70 C430,130 540,130 650,70 C760,10 840,10 900,70" fill="none" stroke="url(#learningWave)" stroke-width="4" stroke-linecap="round" />
+
+                      <g id="learningWaveDots">
+                        <circle data-wave-dot="0.10" r="7" fill="#fb923c" stroke="rgba(255,255,255,0.18)" stroke-width="6">
+                          <animate attributeName="r" values="7;9;7" dur="2.8s" repeatCount="indefinite" begin="0s" />
+                        </circle>
+                        <circle data-wave-dot="0.30" r="7" fill="#fde047" stroke="rgba(255,255,255,0.18)" stroke-width="6">
+                          <animate attributeName="r" values="7;9;7" dur="2.8s" repeatCount="indefinite" begin="0.2s" />
+                        </circle>
+                        <circle data-wave-dot="0.52" r="7" fill="#fdba74" stroke="rgba(255,255,255,0.18)" stroke-width="6">
+                          <animate attributeName="r" values="7;9;7" dur="2.8s" repeatCount="indefinite" begin="0.4s" />
+                        </circle>
+                        <circle data-wave-dot="0.74" r="7" fill="#fde047" stroke="rgba(255,255,255,0.18)" stroke-width="6">
+                          <animate attributeName="r" values="7;9;7" dur="2.8s" repeatCount="indefinite" begin="0.6s" />
+                        </circle>
+                        <circle data-wave-dot="0.92" r="7" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.18)" stroke-width="6">
+                          <animate attributeName="r" values="7;9;7" dur="2.8s" repeatCount="indefinite" begin="0.8s" />
+                        </circle>
+                      </g>
+                    </svg>
+
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[0]?.key || "caseStudies")}" class="absolute left-[10%] top-[1px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                      ${escapeHtml(learningPath[0]?.title || "")}
+                    </button>
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[1]?.key || "tutorials")}" class="absolute left-[30%] top-[62px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                      ${escapeHtml(learningPath[1]?.title || "")}
+                    </button>
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[2]?.key || "videos")}" class="absolute left-[52%] top-[89px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                      ${escapeHtml(learningPath[2]?.title || "")}
+                    </button>
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[3]?.key || "courses")}" class="absolute left-[75%] top-[66px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                      ${escapeHtml(learningPath[3]?.title || "")}
+                    </button>
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[4]?.key || "labs")}" class="absolute left-[95%] top-[-25px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                      ${escapeHtml(learningPath[4]?.title || "")}
+                    </button>
+
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section class="space-y-4">
             <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Browse Learning Materials</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               ${Object.entries(sections)
                 .map(([key, s]) => {
+                  const meta = learningCardMeta[key] || { icon: "📚", iconBg: "bg-slate-100 text-slate-700", barBg: "bg-slate-800", progress: 40 };
+                  const progress = Number.isFinite(meta.progress) ? Math.max(0, Math.min(100, meta.progress)) : 0;
                   return `
                     <div data-open-learning="${escapeHtml(key)}"
-                      class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-3 relative group cursor-pointer hover:shadow-md transition-shadow">
-                      <h2 class="text-xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">
-                        ${escapeHtml(s.title)}
-                      </h2>
-                      <p class="text-gray-600 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                        ${escapeHtml(s.description)}
-                      </p>
-                      <ul class="list-disc pl-5 space-y-1 text-xs text-gray-700">
-                        ${(Array.isArray(s.items) ? s.items : []).map((it) => `<li>${escapeHtml(it)}</li>`).join("")}
-                      </ul>
+                      class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4 relative group cursor-pointer hover:shadow-md transition-shadow">
+                      <div>
+                        <h2 class="text-xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">
+                          ${escapeHtml(s.title)}
+                        </h2>
+                        <p class="mt-2 text-gray-600 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                          ${escapeHtml(s.description)}
+                        </p>
+                      </div>
+
+                      <div class="space-y-3">
+                        <div class="bg-gray-100 h-2 rounded-full overflow-hidden">
+                          <div class="h-full ${meta.barBg}" style="width:${progress}%;"></div>
+                        </div>
+                        <button type="button" data-open-learning-btn="${escapeHtml(key)}" class="w-full rounded-lg border-2 border-blue-500 bg-transparent text-blue-600 px-4 py-2 text-sm font-semibold hover:bg-blue-50"
+                          style="font-family:Poppins, ui-sans-serif">
+                          Open
+                        </button>
+                      </div>
                     </div>
                   `;
                 })
@@ -2899,6 +3013,22 @@
           </section>
         </div>
       `;
+
+    const positionWaveDots = () => {
+      const path = appEl.querySelector("#learningWavePath");
+      if (!path || typeof path.getTotalLength !== "function") return;
+      const svg = path.ownerSVGElement;
+      if (!svg) return;
+
+      const total = path.getTotalLength();
+      svg.querySelectorAll("circle[data-wave-dot]").forEach((c) => {
+        const t = Number(c.getAttribute("data-wave-dot"));
+        const clamped = Number.isFinite(t) ? Math.max(0, Math.min(1, t)) : 0;
+        const pt = path.getPointAtLength(total * clamped);
+        c.setAttribute("cx", String(pt.x));
+        c.setAttribute("cy", String(pt.y));
+      });
+    };
 
     document.querySelectorAll("[data-open-learning]").forEach((el) => {
       el.addEventListener("click", () => {
@@ -2913,6 +3043,47 @@
         render();
       });
     });
+
+    document.querySelectorAll("[data-open-learning-btn]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const key = btn.getAttribute("data-open-learning-btn");
+        const s = state.learning.sections[key];
+        state.learning.currentDetail = {
+          key,
+          title: s?.title || "Untitled",
+          description: s?.description || "",
+          items: Array.isArray(s?.items) ? s.items : [],
+        };
+        render();
+      });
+    });
+
+    document.querySelectorAll("[data-learning-wave]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-learning-wave");
+        const s = state.learning.sections[key];
+        if (!s) return;
+        state.learning.currentDetail = {
+          key,
+          title: s?.title || "Untitled",
+          description: s?.description || "",
+          items: Array.isArray(s?.items) ? s.items : [],
+        };
+        render();
+      });
+    });
+
+    if (!currentDetail) {
+      positionWaveDots();
+      if (!state.learning._waveResizeBound) {
+        state.learning._waveResizeBound = true;
+        window.addEventListener("resize", () => {
+          if (parseRoute().name !== "learning") return;
+          positionWaveDots();
+        });
+      }
+    }
 
     document.getElementById("learningBackBtn")?.addEventListener("click", () => {
       state.learning.currentDetail = null;

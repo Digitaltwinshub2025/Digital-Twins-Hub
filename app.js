@@ -2739,84 +2739,151 @@
   function renderLearningHub() {
     const sections = state.learning.sections || {};
     const currentDetail = state.learning.currentDetail;
+    const projects = Array.isArray(state.projects) ? state.projects : [];
 
-    appEl.innerHTML = `
-      <div class="space-y-10 relative p-6">
-        <div class="pointer-events-none absolute inset-x-0 -top-10 bottom-0 -z-10 opacity-50">
-          <div class="h-full w-full bg-gradient-to-br from-sky-200/40 via-emerald-200/40 to-purple-200/40 blur-3xl animate-pulse"></div>
-        </div>
+    const caseStudyProjects = projects
+      .filter((p) => p && p.caseStudyUrl)
+      .map((p) => ({
+        id: p.id,
+        title: p.title,
+        category: p.category,
+        owner: p.owner,
+        image: p.image,
+        caseStudyUrl: p.caseStudyUrl,
+      }));
 
-        <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Learning Hub</h1>
-        </div>
-
-        <section class="space-y-4">
-          <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Browse Learning Materials</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            ${Object.entries(sections)
-              .map(([key, s]) => {
-                return `
-                  <div data-open-learning="${escapeHtml(key)}"
-                    class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-3 relative group cursor-pointer hover:shadow-md transition-shadow">
-                    <h2 class="text-xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">
-                      ${escapeHtml(s.title)}
-                    </h2>
-                    <p class="text-gray-600 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                      ${escapeHtml(s.description)}
-                    </p>
-                    <ul class="list-disc pl-5 space-y-1 text-xs text-gray-700">
-                      ${(Array.isArray(s.items) ? s.items : []).map((it) => `<li>${escapeHtml(it)}</li>`).join("")}
-                    </ul>
-                  </div>
-                `;
-              })
-              .join("")}
+    const renderProjectCaseStudyCard = (p) => {
+      const title = escapeHtml(p?.title || "Untitled");
+      const meta = [p?.category, p?.owner].filter(Boolean).map((x) => escapeHtml(x)).join(" • ");
+      return `
+        <a href="${escapeHtml(p.caseStudyUrl)}" target="_blank" rel="noreferrer"
+          class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-3 relative group cursor-pointer hover:shadow-md transition-shadow">
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <h3 class="text-xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">
+                ${title}
+              </h3>
+              ${meta ? `<div class="mt-1 text-xs text-gray-600" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${meta}</div>` : ""}
+              <div class="mt-3 inline-flex items-center justify-center rounded-full bg-black text-white px-3 py-1 text-[11px] sm:text-xs hover:bg-black/90">
+                Open case study
+              </div>
+            </div>
           </div>
-        </section>
+        </a>
+      `;
+    };
 
-        ${currentDetail ? renderLearningDetailModal(currentDetail) : ""}
-      </div>
-    `;
+    const renderLearningDetailPage = (detail) => {
+      const key = String(detail?.key || "");
+      const s = sections[key] || {};
+      const title = detail?.title || s?.title || "Untitled";
+      const description = detail?.description || s?.description || "";
+      const items = Array.isArray(detail?.items) ? detail.items : Array.isArray(s?.items) ? s.items : [];
+
+      return `
+        <div class="space-y-6 relative p-6">
+          <div class="pointer-events-none absolute inset-x-0 -top-10 bottom-0 -z-10 opacity-50">
+            <div class="h-full w-full bg-gradient-to-br from-sky-200/40 via-emerald-200/40 to-purple-200/40 blur-3xl animate-pulse"></div>
+          </div>
+
+          <div class="flex items-center justify-between gap-4">
+            <button id="learningBackBtn" class="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm hover:bg-white"
+              style="font-family:Poppins, ui-sans-serif">
+              Back
+            </button>
+            <div class="flex-1"></div>
+          </div>
+
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">${escapeHtml(title)}</h1>
+            ${description ? `<p class="mt-3 text-gray-700 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${escapeHtml(description)}</p>` : ""}
+          </div>
+
+          ${
+            key === "caseStudies"
+              ? `
+                <section class="space-y-4">
+                  <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Project Case Studies</h2>
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${caseStudyProjects.map(renderProjectCaseStudyCard).join("")}
+                  </div>
+                </section>
+              `
+              : ""
+          }
+
+          ${
+            items.length
+              ? `
+                <section class="space-y-3">
+                  <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Overview</h2>
+                  <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                    ${items.map((it) => `<li>${escapeHtml(it)}</li>`).join("")}
+                  </ul>
+                </section>
+              `
+              : ""
+          }
+        </div>
+      `;
+    };
+
+    appEl.innerHTML = currentDetail
+      ? renderLearningDetailPage(currentDetail)
+      : `
+        <div class="space-y-10 relative p-6">
+          <div class="pointer-events-none absolute inset-x-0 -top-10 bottom-0 -z-10 opacity-50">
+            <div class="h-full w-full bg-gradient-to-br from-sky-200/40 via-emerald-200/40 to-purple-200/40 blur-3xl animate-pulse"></div>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Learning Hub</h1>
+          </div>
+
+          <section class="space-y-4">
+            <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Browse Learning Materials</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              ${Object.entries(sections)
+                .map(([key, s]) => {
+                  return `
+                    <div data-open-learning="${escapeHtml(key)}"
+                      class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-3 relative group cursor-pointer hover:shadow-md transition-shadow">
+                      <h2 class="text-xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">
+                        ${escapeHtml(s.title)}
+                      </h2>
+                      <p class="text-gray-600 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                        ${escapeHtml(s.description)}
+                      </p>
+                      <ul class="list-disc pl-5 space-y-1 text-xs text-gray-700">
+                        ${(Array.isArray(s.items) ? s.items : []).map((it) => `<li>${escapeHtml(it)}</li>`).join("")}
+                      </ul>
+                    </div>
+                  `;
+                })
+                .join("")}
+            </div>
+          </section>
+        </div>
+      `;
 
     document.querySelectorAll("[data-open-learning]").forEach((el) => {
       el.addEventListener("click", () => {
         const key = el.getAttribute("data-open-learning");
         const s = state.learning.sections[key];
         state.learning.currentDetail = {
+          key,
           title: s?.title || "Untitled",
-          body: s?.content?.body || s?.description || "",
+          description: s?.description || "",
+          items: Array.isArray(s?.items) ? s.items : [],
         };
         render();
       });
     });
 
-    document.getElementById("closeLearningDetail")?.addEventListener("click", () => {
+    document.getElementById("learningBackBtn")?.addEventListener("click", () => {
       state.learning.currentDetail = null;
       render();
     });
-    document.getElementById("learningDetailBackdrop")?.addEventListener("click", () => {
-      state.learning.currentDetail = null;
-      render();
-    });
-  }
-
-  function renderLearningDetailModal(detail) {
-    return `
-      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div id="learningDetailBackdrop" class="absolute inset-0"></div>
-        <div class="relative bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-          <div class="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
-            <h2 class="text-2xl font-semibold">${escapeHtml(detail.title)}</h2>
-            <button id="closeLearningDetail" class="p-2 text-gray-500 hover:text-gray-700">✕</button>
-          </div>
-          <div class="p-6">
-            <div class="prose max-w-none">
-              <p>${escapeHtml(detail.body)}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
   }
 
   // -----------------------------

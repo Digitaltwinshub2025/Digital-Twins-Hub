@@ -92,3 +92,12 @@ body {
 .prose p {
   margin: 0.75rem 0;
 }
+
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}

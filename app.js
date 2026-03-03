@@ -2804,7 +2804,7 @@
               </div>
               ${rawUrl ? `
                 <a href="${escapeHtml(rawUrl)}" target="_blank" rel="noreferrer"
-                  class="shrink-0 inline-flex items-center justify-center rounded-full bg-white/95 text-black px-4 py-2 text-xs font-semibold hover:bg-white"
+                  class="shrink-0 inline-flex items-center justify-center rounded-full bg-white/95 text-black px-4 py-2 text-xs font-semibold hover:bg-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 active:translate-y-0 active:scale-[0.98] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                   style="font-family:Poppins, ui-sans-serif">
                   Open
                 </a>
@@ -2956,19 +2956,19 @@
                       </g>
                     </svg>
 
-                    <button type="button" data-learning-wave="${escapeHtml(learningPath[0]?.key || "caseStudies")}" class="absolute left-[10%] top-[1px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[0]?.key || "caseStudies")}" class="absolute left-[10%] top-[1px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" style="font-family:Poppins, ui-sans-serif">
                       ${escapeHtml(learningPath[0]?.title || "")}
                     </button>
-                    <button type="button" data-learning-wave="${escapeHtml(learningPath[1]?.key || "tutorials")}" class="absolute left-[30%] top-[62px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[1]?.key || "tutorials")}" class="absolute left-[30%] top-[62px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" style="font-family:Poppins, ui-sans-serif">
                       ${escapeHtml(learningPath[1]?.title || "")}
                     </button>
-                    <button type="button" data-learning-wave="${escapeHtml(learningPath[2]?.key || "videos")}" class="absolute left-[52%] top-[89px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[2]?.key || "videos")}" class="absolute left-[52%] top-[89px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" style="font-family:Poppins, ui-sans-serif">
                       ${escapeHtml(learningPath[2]?.title || "")}
                     </button>
-                    <button type="button" data-learning-wave="${escapeHtml(learningPath[3]?.key || "courses")}" class="absolute left-[75%] top-[66px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[3]?.key || "courses")}" class="absolute left-[75%] top-[66px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" style="font-family:Poppins, ui-sans-serif">
                       ${escapeHtml(learningPath[3]?.title || "")}
                     </button>
-                    <button type="button" data-learning-wave="${escapeHtml(learningPath[4]?.key || "labs")}" class="absolute left-[95%] top-[-25px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium" style="font-family:Poppins, ui-sans-serif">
+                    <button type="button" data-learning-wave="${escapeHtml(learningPath[4]?.key || "labs")}" class="absolute left-[95%] top-[-25px] -translate-x-1/2 px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-xs sm:text-sm font-medium transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900" style="font-family:Poppins, ui-sans-serif">
                       ${escapeHtml(learningPath[4]?.title || "")}
                     </button>
 
@@ -2980,8 +2980,16 @@
           <section class="space-y-4">
             <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Browse Learning Materials</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              ${Object.entries(sections)
-                .map(([key, s]) => {
+              ${(() => {
+                const baseOrder = ["caseStudies", "videos", "tutorials", "labs", "templates", "courses"];
+                const orderedKeys = [
+                  ...baseOrder.filter((k) => sections && sections[k]),
+                  ...Object.keys(sections || {}).filter((k) => !baseOrder.includes(k)),
+                ];
+
+                return orderedKeys
+                .map((key) => {
+                  const s = sections[key];
                   const meta = learningCardMeta[key] || { icon: "📚", iconBg: "bg-slate-100 text-slate-700", barBg: "bg-slate-800", progress: 40 };
                   const progress = Number.isFinite(meta.progress) ? Math.max(0, Math.min(100, meta.progress)) : 0;
                   return `
@@ -3000,7 +3008,7 @@
                         <div class="bg-gray-100 h-2 rounded-full overflow-hidden">
                           <div class="h-full ${meta.barBg}" style="width:${progress}%;"></div>
                         </div>
-                        <button type="button" data-open-learning-btn="${escapeHtml(key)}" class="w-full rounded-lg border-2 border-blue-500 bg-transparent text-blue-600 px-4 py-2 text-sm font-semibold hover:bg-blue-50"
+                        <button type="button" data-open-learning-btn="${escapeHtml(key)}" class="w-full rounded-lg border-2 border-black/15 bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-black/5 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10 active:translate-y-0 active:scale-[0.98] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                           style="font-family:Poppins, ui-sans-serif">
                           Open
                         </button>
@@ -3008,7 +3016,8 @@
                     </div>
                   `;
                 })
-                .join("")}
+                .join("");
+              })()}
             </div>
           </section>
         </div>

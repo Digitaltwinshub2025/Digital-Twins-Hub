@@ -2904,17 +2904,37 @@
     appEl.innerHTML = currentDetail
       ? renderLearningDetailPage(currentDetail)
       : `
-        <div class="space-y-10 relative p-6">
-          <div class="pointer-events-none absolute inset-x-0 -top-10 bottom-0 -z-10 opacity-50">
-            <div class="h-full w-full bg-gradient-to-br from-sky-200/40 via-emerald-200/40 to-purple-200/40 blur-3xl animate-pulse"></div>
-          </div>
+        <div class="space-y-10">
+          <section class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen min-h-[100vh] overflow-hidden">
+            <div class="absolute inset-0 bg-center bg-cover" style="background-image:url('./assets/learning-hub-hero.jpg');"></div>
+            <div class="absolute inset-0 bg-black/55"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/55 to-black/80"></div>
+            <div class="relative h-full flex items-center">
+              <div class="max-w-7xl mx-auto w-full px-6 py-20">
+                <div class="max-w-3xl">
+                  <h1 class="text-4xl sm:text-5xl md:text-6xl font-semibold text-white" style="font-family:Poppins, ui-sans-serif, system-ui">
+                    Learning Hub
+                  </h1>
+                  <p class="mt-4 text-white/85 text-base sm:text-lg md:text-xl leading-relaxed" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                    Learning Hub — your space to explore resources, gain new skills, and grow your knowledge.
+                  </p>
+                  <div class="mt-10">
+                    <a href="#learning-path" class="inline-flex items-center rounded-full bg-white/10 hover:bg-white/15 border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 active:translate-y-0 active:scale-[0.98] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" style="font-family:Poppins, ui-sans-serif">
+                      Explore
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-          <div class="flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Learning Hub</h1>
-          </div>
+          <div id="learning-path" class="space-y-10 relative p-6">
+            <div class="pointer-events-none absolute inset-x-0 -top-10 bottom-0 -z-10 opacity-50">
+              <div class="h-full w-full bg-gradient-to-br from-sky-200/40 via-emerald-200/40 to-purple-200/40 blur-3xl animate-pulse"></div>
+            </div>
 
-          <section class="rounded-3xl border border-black/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white overflow-hidden">
-            <div class="p-6 sm:p-8">
+            <section class="rounded-3xl border border-black/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white overflow-hidden">
+              <div class="p-6 sm:p-8">
               <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0">
                   <h2 class="text-xl sm:text-2xl font-semibold" style="font-family:Poppins, ui-sans-serif, system-ui">Learning Path</h2>
@@ -3020,6 +3040,7 @@
               })()}
             </div>
           </section>
+          </div>
         </div>
       `;
 

@@ -13,10 +13,11 @@
   const FALLBACK_MEMBERS = [
     {
       name: "Meri Sargsian",
-      role: "Computer Science • Web Development & UX",
+      role: " Web Development ",
       img: "Team Members/Meri%20Sargsian.png",
       slug: "meri-sargsian",
       sortOrder: 14,
+      project: "Shade LA",
       bio:
         "Computer Science student at Los Angeles Valley College, planning to transfer to a UC in 2026. Experienced in web development and UX design with skills in React.js, ASP.NET, WordPress, HTML, CSS, and JavaScript. Previously worked as a full-stack developer and web development instructor, and contributed to website design improvements for nonprofit organizations.",
       skills: ["React.js", "ASP.NET", "WordPress", "HTML", "CSS", "JavaScript", "UX Design"],
@@ -2418,6 +2419,7 @@
                   <div class="p-4">
                     <div class="text-white text-2xl" style="font-family:Poppins, ui-sans-serif">${escapeHtml(m.name)}</div>
                     <div class="text-white/60 text-base leading-8" style="font-family:Poppins, ui-sans-serif">${escapeHtml(m.role)}</div>
+                    ${m.project ? `<div class="text-white/50 text-sm leading-6" style="font-family:Poppins, ui-sans-serif">Project: ${escapeHtml(m.project)}</div>` : ""}
                   </div>
                 </div>
               </a>

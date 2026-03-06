@@ -1768,6 +1768,16 @@
       });
     });
 
+    // If modal is open, ensure the user lands at the top of the content
+    if (previewing) {
+      requestAnimationFrame(() => {
+        const scroller = document.getElementById("previewScroll");
+        scroller?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        const title = document.getElementById("previewTitle");
+        title?.focus?.({ preventScroll: true });
+      });
+    }
+
     // Modal buttons
     document.getElementById("closePreview")?.addEventListener("click", () => {
       state.projectsPage.previewingId = null;
@@ -1919,7 +1929,7 @@
             <div class="px-5 py-4 md:px-7 md:py-5 lg:px-8 lg:py-6">
               <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-6">
                 <div class="min-w-0">
-                  <h3 class="text-2xl sm:text-3xl lg:text-4xl text-black font-semibold break-words" style="font-family:Poppins, ui-sans-serif">
+                  <h3 id="previewTitle" tabindex="-1" class="text-2xl sm:text-3xl lg:text-4xl text-black font-semibold break-words" style="font-family:Poppins, ui-sans-serif">
                     ${escapeHtml(p.title || "")}
                   </h3>
                   <div class="text-sm sm:text-base text-black/70 mt-1">
@@ -2112,7 +2122,7 @@
       <div class="min-h-screen bg-[#DFDFDF]">
         <div class="max-w-6xl mx-auto px-6 py-10">
           <div class="flex items-center justify-between gap-4 mb-6">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-black font-semibold break-words" style="font-family:Poppins, ui-sans-serif">
+            <h1 id="projectDetailTitle" tabindex="-1" class="text-3xl sm:text-4xl md:text-5xl text-black font-semibold break-words" style="font-family:Poppins, ui-sans-serif">
               ${escapeHtml(project.title || "Untitled Project")}
             </h1>
             <a href="#/projects" class="shrink-0 rounded-full border border-black/15 px-4 py-2 text-xs sm:text-sm text-black"
@@ -2861,10 +2871,10 @@
             </div>
 
             <div class="md:w-1/2 flex flex-col justify-center p-5 sm:p-8">
-              <h3 class="text-white/75 text-3xl sm:text-4xl font-semibold leading-tight text-shadow-soft" style="font-family:Poppins, ui-sans-serif, system-ui">
+              <h3 class="text-white/70 text-3xl sm:text-4xl font-semibold leading-tight text-shadow-soft" style="font-family:Poppins, ui-sans-serif, system-ui">
                 ${title}
               </h3>
-              ${shortDesc ? `<p class="mt-4 text-white/65 text-sm sm:text-base leading-relaxed text-shadow-soft" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${escapeHtml(shortDesc)}</p>` : ""}
+              ${shortDesc ? `<p class="mt-4 text-white/60 text-sm sm:text-base leading-relaxed text-shadow-soft" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${escapeHtml(shortDesc)}</p>` : ""}
               ${meta ? `<div class="mt-3 text-white/55 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${meta}</div>` : ""}
 
               <div class="mt-8 flex items-center gap-3">

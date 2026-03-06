@@ -26,7 +26,18 @@
         "Web development + UX design experience across React.js and modern front-end tooling.",
         "Project team member on Shade LA.",
       ],
-      projects: [{ title: "Shade LA", subtitle: "Team Member" }],
+      projects: [
+        {
+          openPreviewId: "03",
+          title: "Shade LA",
+          subtitle: "Urban Heat Mitigation • Saron",
+          img: "gitlogos/ShadeLA.png",
+          teamLine: "Team: Volodymyr Balan, Saron Feyisa, Monica Kaye +1 more",
+          browserUrl: "https://digitaltwinshub2025.github.io/Shade-LA/",
+          description:
+            "To demonstrate and communicate effective shade planning strategies in Los Angeles by using interactive maps, 3D simulations, and data analytics that support informed decision-making for urban heat mitigation.",
+        },
+      ],
       skills: ["React.js", "ASP.NET", "WordPress", "HTML", "CSS", "JavaScript", "UX Design"],
       experience: ["Previously worked as a full-stack developer and web development instructor.", "Contributed to website design improvements for nonprofit organizations.", "Project: Shade LA."],
       education: ["Los Angeles Valley College — Computer Science"],
@@ -258,7 +269,7 @@
     },
     {
       name: "Eddie Cortez",
-      role: "Architectural Technology Designer",
+      role: "Architectural Designer",
       img: "Team Members/Eddie%20Cortez.jpeg",
       slug: "eddie-cortez",
       sortOrder: 10,
@@ -2660,10 +2671,46 @@
                       ${projectsToShow
                         .slice(0, 4)
                         .map((p) => {
+                          const openPreviewId = p?.openPreviewId ? String(p.openPreviewId) : "";
                           const href = p && (p.href || p.url || p.demoUrl || p.repoUrl) ? String(p.href || p.url || p.demoUrl || p.repoUrl) : "";
                           const title = p && p.title ? String(p.title) : "Untitled";
                           const subtitle = p && p.subtitle ? String(p.subtitle) : "";
                           const img = p && (p.image || p.img) ? String(p.image || p.img) : "";
+                          const teamLine = p?.teamLine ? String(p.teamLine) : "";
+                          const browserUrl = p?.browserUrl ? String(p.browserUrl) : "";
+                          const description = p?.description ? String(p.description) : "";
+
+                          if (openPreviewId) {
+                            return `
+                              <div data-open-preview="${escapeHtml(openPreviewId)}" class="group relative rounded-2xl bg-white/60 backdrop-blur-sm overflow-hidden cursor-pointer transition-transform transition-shadow duration-300 hover:-translate-y-1 hover:shadow-xl" style="box-shadow: inset 0 4px 6px rgba(255,255,255,0.6);">
+                                <div class="h-44 w-full overflow-hidden bg-white/40 flex items-center justify-center text-black/50">
+                                  ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105">` : ""}
+                                </div>
+                                <div class="p-5">
+                                  <div class="flex items-center justify-between gap-2">
+                                    <div class="text-2xl font-bold text-black" style="font-family: Istok Web, Poppins, ui-sans-serif">
+                                      ${escapeHtml(title)}
+                                    </div>
+                                  </div>
+                                  ${subtitle ? `<div class="mt-1 text-sm text-black" style="font-family: Istok Web, Poppins, ui-sans-serif">${escapeHtml(subtitle)}</div>` : ""}
+                                  ${teamLine ? `<div class="mt-1 text-xs text-black/70" style="font-family: Istok Web, Poppins, ui-sans-serif">${escapeHtml(teamLine)}</div>` : ""}
+                                  ${browserUrl
+                                    ? `
+                                      <div class="mt-2 flex flex-col gap-1 text-xs">
+                                        <a href="${escapeHtml(browserUrl)}" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center rounded-full bg-black text-white px-3 py-1 text-[11px] hover:bg-black/90" onclick="event.stopPropagation()">
+                                          Open in Browser
+                                        </a>
+                                      </div>
+                                    `
+                                    : ""}
+                                  ${description
+                                    ? `<p class="mt-3 text-xs text-black" style="font-family: Istok Web, Poppins, ui-sans-serif">${escapeHtml(description)}</p>`
+                                    : ""}
+                                </div>
+                              </div>
+                            `;
+                          }
+
                           const card = `
                             <div class="rounded-2xl overflow-hidden border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.55)]">
                               <div class="aspect-[16/9] bg-white/10">
@@ -2713,6 +2760,17 @@
         </div>
       </div>
     `;
+
+    appEl.querySelectorAll("[data-open-preview]").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        const id = String(e.currentTarget?.getAttribute("data-open-preview") || "").trim();
+        if (!id) return;
+        state.projectsPage.previewingId = id;
+        state.projectsPage.showEmbeddedProject = false;
+        window.location.hash = "#/projects";
+        render();
+      });
+    });
   }
 
   // -----------------------------

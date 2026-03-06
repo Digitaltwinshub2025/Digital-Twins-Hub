@@ -18,8 +18,15 @@
       slug: "meri-sargsian",
       sortOrder: 14,
       project: "Shade LA",
+      cardObjectPosition: "50% 20%",
       bio:
         "Computer Science student at Los Angeles Valley College, planning to transfer to a UC in 2026. Experienced in web development and UX design with skills in React.js, ASP.NET, WordPress, HTML, CSS, and JavaScript. Previously worked as a full-stack developer and web development instructor, and contributed to website design improvements for nonprofit organizations.",
+      highlights: [
+        "Computer Science student at Los Angeles Valley College (transfer goal: UC in 2026).",
+        "Web development + UX design experience across React.js and modern front-end tooling.",
+        "Project team member on Shade LA.",
+      ],
+      projects: [{ title: "Shade LA", subtitle: "Team Member" }],
       skills: ["React.js", "ASP.NET", "WordPress", "HTML", "CSS", "JavaScript", "UX Design"],
       experience: ["Previously worked as a full-stack developer and web development instructor.", "Contributed to website design improvements for nonprofit organizations.", "Project: Shade LA."],
       education: ["Los Angeles Valley College — Computer Science"],

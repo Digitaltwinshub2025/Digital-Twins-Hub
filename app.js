@@ -3037,6 +3037,12 @@
       const videoItems = key === "videos" ? items.filter((it) => it && typeof it === "object" && it.url && it.title) : [];
       const textItems = key === "videos" ? items.filter((it) => typeof it === "string") : items;
 
+      const selectedVideoUrlRaw = key === "videos" ? String(state.learning.selectedVideoUrl || "") : "";
+      const selectedVideo =
+        key === "videos"
+          ? (videoItems.find((v) => String(v.url || "") === selectedVideoUrlRaw) || videoItems[0] || null)
+          : null;
+
       const renderLearningItem = (it) => {
         if (!it) return "";
         if (typeof it === "string") return `<li>${escapeHtml(it)}</li>`;
@@ -3095,42 +3101,64 @@
                   ${
                     key === "videos" && videoItems.length
                       ? `
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          ${videoItems
-                            .map((v) => {
-                              const vTitle = escapeHtml(String(v.title || "Video"));
-                              const vUrl = escapeHtml(String(v.url || ""));
-                              return `
-                                <div class="rounded-3xl overflow-hidden border border-black/10 bg-white/80 shadow-sm">
-                                  <div class="p-5">
-                                    <div class="text-lg font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">${vTitle}</div>
-                                  </div>
-                                  <div class="px-5 pb-6">
-                                    <div class="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black">
-                                      <video data-learning-video="1" data-learning-video-url="${vUrl}" controls playsinline preload="metadata" class="w-full h-full" src="${vUrl}"></video>
-                                    </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                          <div class="lg:col-span-2 rounded-3xl overflow-hidden border border-black/10 bg-white/80 shadow-sm">
+                            <div class="p-5">
+                              <div class="text-lg font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">${escapeHtml(String(selectedVideo?.title || "Video"))}</div>
+                            </div>
+                            <div class="px-5 pb-6">
+                              <div class="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black">
+                                <video data-learning-video="1" data-learning-video-url="${escapeHtml(String(selectedVideo?.url || ""))}" controls playsinline preload="metadata" class="w-full h-full" src="${escapeHtml(String(selectedVideo?.url || ""))}"></video>
+                              </div>
 
-                                    <div class="mt-4">
-                                      <div class="h-2 w-full rounded-full bg-black/10 overflow-hidden">
-                                        <div data-learning-video-progress="${vUrl}" class="h-full bg-emerald-600" style="width:0%"></div>
-                                      </div>
-                                      <div class="mt-3 flex items-center justify-between gap-3">
-                                        <div data-learning-video-label="${vUrl}" class="text-xs text-black/60" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">Not started</div>
-                                        <div class="flex items-center gap-2">
-                                          <button type="button" data-learning-video-resume="${vUrl}" class="rounded-full bg-black text-white px-3 py-1.5 text-xs hover:bg-black/90" style="font-family:Poppins, ui-sans-serif">
-                                            Resume
-                                          </button>
-                                          <button type="button" data-learning-video-watched="${vUrl}" class="rounded-full border border-black/20 bg-white/70 px-3 py-1.5 text-xs text-black hover:bg-white" style="font-family:Poppins, ui-sans-serif">
-                                            Mark watched
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
+                              <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-black/10 overflow-hidden">
+                                  <div data-learning-video-progress="${escapeHtml(String(selectedVideo?.url || ""))}" class="h-full bg-emerald-600" style="width:0%"></div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-between gap-3">
+                                  <div data-learning-video-label="${escapeHtml(String(selectedVideo?.url || ""))}" class="text-xs text-black/60" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">Not started</div>
+                                  <div class="flex items-center gap-2">
+                                    <button type="button" data-learning-video-resume="${escapeHtml(String(selectedVideo?.url || ""))}" class="rounded-full bg-black text-white px-3 py-1.5 text-xs hover:bg-black/90" style="font-family:Poppins, ui-sans-serif">
+                                      Resume
+                                    </button>
+                                    <button type="button" data-learning-video-watched="${escapeHtml(String(selectedVideo?.url || ""))}" class="rounded-full border border-black/20 bg-white/70 px-3 py-1.5 text-xs text-black hover:bg-white" style="font-family:Poppins, ui-sans-serif">
+                                      Mark watched
+                                    </button>
                                   </div>
                                 </div>
-                              `;
-                            })
-                            .join("")}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="lg:col-span-1 space-y-3">
+                            <div class="text-sm font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">Playlist</div>
+                            <div class="space-y-3">
+                              ${videoItems
+                                .map((v) => {
+                                  const vTitle = escapeHtml(String(v.title || "Video"));
+                                  const vUrl = escapeHtml(String(v.url || ""));
+                                  const isActive = selectedVideo && String(v.url || "") === String(selectedVideo.url || "");
+                                  return `
+                                    <button type="button" data-learning-video-select="${vUrl}" class="w-full text-left rounded-2xl border ${isActive ? "border-emerald-600" : "border-black/10"} bg-white/80 hover:bg-white px-4 py-3 shadow-sm transition-colors">
+                                      <div class="flex items-start justify-between gap-3">
+                                        <div class="min-w-0">
+                                          <div class="text-sm font-semibold text-gray-900 truncate" style="font-family:Poppins, ui-sans-serif">${vTitle}</div>
+                                          <div data-learning-video-label="${vUrl}" class="mt-1 text-xs text-black/60" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">Not started</div>
+                                        </div>
+                                        <div class="shrink-0 flex items-center gap-2">
+                                          <span data-learning-video-watched-badge="${vUrl}" class="hidden rounded-full bg-emerald-600 px-2 py-0.5 text-[11px] font-semibold text-white" style="font-family:Poppins, ui-sans-serif">Watched</span>
+                                          <span class="text-xs ${isActive ? "text-emerald-700" : "text-black/50"}" style="font-family:Poppins, ui-sans-serif">${isActive ? "Playing" : "Play"}</span>
+                                        </div>
+                                      </div>
+                                      <div class="mt-2 h-2 w-full rounded-full bg-black/10 overflow-hidden">
+                                        <div data-learning-video-progress="${vUrl}" class="h-full bg-emerald-600" style="width:0%"></div>
+                                      </div>
+                                    </button>
+                                  `;
+                                })
+                                .join("")}
+                            </div>
+                          </div>
                         </div>
                       `
                       : ""
@@ -3412,6 +3440,7 @@
         const progressEl = appEl.querySelector(`[data-learning-video-progress="${CSS.escape(videoUrl)}"]`);
         const labelEl = appEl.querySelector(`[data-learning-video-label="${CSS.escape(videoUrl)}"]`);
         const watchedBtn = appEl.querySelector(`[data-learning-video-watched="${CSS.escape(videoUrl)}"]`);
+        const watchedBadgeEl = appEl.querySelector(`[data-learning-video-watched-badge="${CSS.escape(videoUrl)}"]`);
 
         const duration = Number(progress?.duration || 0);
         const currentTime = Number(progress?.currentTime || 0);
@@ -3434,6 +3463,11 @@
           watchedBtn.classList.toggle("bg-white/70", !watched);
           watchedBtn.classList.toggle("text-black", !watched);
           watchedBtn.classList.toggle("border-black/20", !watched);
+        }
+
+        if (watchedBadgeEl) {
+          watchedBadgeEl.textContent = watched ? "Watched" : "";
+          watchedBadgeEl.classList.toggle("hidden", !watched);
         }
       } catch (_) {
         // no-op
@@ -3530,6 +3564,7 @@
       });
 
       appEl.querySelectorAll("[data-learning-video-resume]").forEach((btn) => {
+        if (String(btn?.tagName || "").toUpperCase() !== "BUTTON") return;
         btn.addEventListener("click", () => {
           const url = String(btn.getAttribute("data-learning-video-resume") || "");
           if (!url) return;
@@ -3549,6 +3584,7 @@
       });
 
       appEl.querySelectorAll("[data-learning-video-watched]").forEach((btn) => {
+        if (String(btn?.tagName || "").toUpperCase() !== "BUTTON") return;
         btn.addEventListener("click", () => {
           const url = String(btn.getAttribute("data-learning-video-watched") || "");
           if (!url) return;
@@ -3559,6 +3595,16 @@
         });
       });
     };
+
+    appEl.querySelectorAll("[data-learning-video-select]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!currentDetail || currentDetail.key !== "videos") return;
+        const url = String(btn.getAttribute("data-learning-video-select") || "");
+        if (!url) return;
+        state.learning.selectedVideoUrl = url;
+        render();
+      });
+    });
 
     wireLearningVideosProgress();
 

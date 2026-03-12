@@ -2779,7 +2779,11 @@
   function initLearningData() {
     const savedSections = localStorage.getItem("learningHubSections");
     if (savedSections) {
-      state.learning.sections = JSON.parse(savedSections);
+      try {
+        state.learning.sections = JSON.parse(savedSections);
+      } catch {
+        state.learning.sections = {};
+      }
     } else {
       state.learning.sections = {
         courses: {
@@ -2841,6 +2845,41 @@
           ],
         },
       };
+    }
+
+    const puhcWalkthroughItem = {
+      title: "PUHC website walkthrough",
+      url: "./assets/Learning%20Hub/puhc%20website%20walkthrough.mp4",
+    };
+
+    if (!state.learning.sections || typeof state.learning.sections !== "object") {
+      state.learning.sections = {};
+    }
+
+    if (!state.learning.sections.videos || typeof state.learning.sections.videos !== "object") {
+      state.learning.sections.videos = {
+        title: "Video lessons",
+        description: "Curate or embed video explainers that walk through core ideas and example digital twin builds.",
+        items: [],
+      };
+    }
+
+    if (!Array.isArray(state.learning.sections.videos.items) || state.learning.sections.videos.items.length === 0) {
+      state.learning.sections.videos.items = [
+        '"What is a Digital Twin?" concept video.',
+        "Screen-recorded tutorial building a campus energy map.",
+        "Walkthrough of a full student project presentation.",
+        puhcWalkthroughItem,
+      ];
+    } else {
+      const hasPuhc = state.learning.sections.videos.items.some(
+        (it) =>
+          it &&
+          typeof it === "object" &&
+          (String(it.title || "").trim().toLowerCase() === "puhc website walkthrough" ||
+            String(it.url || "").includes("puhc%20website%20walkthrough.mp4"))
+      );
+      if (!hasPuhc) state.learning.sections.videos.items.push(puhcWalkthroughItem);
     }
 
     const savedPathways = localStorage.getItem("learningHubPathways");

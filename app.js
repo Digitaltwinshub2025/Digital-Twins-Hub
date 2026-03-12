@@ -3034,6 +3034,9 @@
       const description = detail?.description || s?.description || "";
       const items = Array.isArray(detail?.items) ? detail.items : Array.isArray(s?.items) ? s.items : [];
 
+      const videoItems = key === "videos" ? items.filter((it) => it && typeof it === "object" && it.url && it.title) : [];
+      const textItems = key === "videos" ? items.filter((it) => typeof it === "string") : items;
+
       const renderLearningItem = (it) => {
         if (!it) return "";
         if (typeof it === "string") return `<li>${escapeHtml(it)}</li>`;
@@ -3088,9 +3091,43 @@
               ? `
                 <section class="space-y-3">
                   <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Overview</h2>
-                  <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                    ${items.map((it) => renderLearningItem(it)).join("")}
-                  </ul>
+
+                  ${
+                    key === "videos" && videoItems.length
+                      ? `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          ${videoItems
+                            .map((v) => {
+                              const vTitle = escapeHtml(String(v.title || "Video"));
+                              const vUrl = escapeHtml(String(v.url || ""));
+                              return `
+                                <div class="rounded-3xl overflow-hidden border border-black/10 bg-white/80 shadow-sm">
+                                  <div class="p-5">
+                                    <div class="text-lg font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">${vTitle}</div>
+                                  </div>
+                                  <div class="px-5 pb-6">
+                                    <div class="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black">
+                                      <video controls playsinline preload="metadata" class="w-full h-full" src="${vUrl}"></video>
+                                    </div>
+                                  </div>
+                                </div>
+                              `;
+                            })
+                            .join("")}
+                        </div>
+                      `
+                      : ""
+                  }
+
+                  ${
+                    textItems.length
+                      ? `
+                        <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                          ${textItems.map((it) => renderLearningItem(it)).join("")}
+                        </ul>
+                      `
+                      : ""
+                  }
                 </section>
               `
               : ""

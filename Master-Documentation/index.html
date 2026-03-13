@@ -152,13 +152,37 @@
       margin-bottom: 24px;
     }
 
-    h1 {
+    .hero-left h1{
+      font-family: Taygiacs, Poppins, ui-sans-serif;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      font-size: clamp(48px, 6vw, 86px);
+      line-height: 0.92;
       margin: 0;
-      font-size: clamp(3.6rem, 8vw, 8rem);
-      line-height: 0.9;
-      letter-spacing: -0.06em;
-      font-weight: 700;
-      max-width: 780px;
+    }
+
+    .scroll-title {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .scroll-title h1 {
+      white-space: nowrap;
+      display: inline-block;
+      font-size: 60px;
+      font-weight: bold;
+      animation: scrollTitle 18s linear infinite;
+      line-height: 1;
+      margin: 0;
+    }
+
+    @keyframes scrollTitle {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
     }
 
     .hero-copy {
@@ -852,7 +876,9 @@
 
     <section class="hero" id="home">
       <div class="hero-left">
-        <h1>Master<br>Documentation</h1>
+        <div class="scroll-title">
+          <h1>Master Documentation</h1>
+        </div>
         <p class="hero-copy">
         </p>
         <div class="hero-actions">

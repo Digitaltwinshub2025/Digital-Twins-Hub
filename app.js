@@ -578,46 +578,7 @@
   }
 
   function renderDocumentation() {
-    appEl.innerHTML = `
-      <div class="min-h-screen bg-[#DFDFDF]">
-        <div class="max-w-6xl mx-auto px-6 py-12">
-          <h1 class="text-4xl sm:text-5xl font-semibold text-black" style="font-family:Poppins, ui-sans-serif">Documentation</h1>
-          <p class="mt-4 text-black/75 max-w-3xl" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-            Guides, references, and standards for building and contributing to Digital Twins Hub projects.
-          </p>
-
-          <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="rounded-3xl border border-black/10 bg-white/70 p-6 shadow-sm">
-              <div class="text-xl font-semibold text-black" style="font-family:Poppins, ui-sans-serif">Getting Started</div>
-              <div class="mt-2 text-black/70 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                How to navigate the hub, publish a project, and use the Learning Hub resources.
-              </div>
-            </div>
-
-            <div class="rounded-3xl border border-black/10 bg-white/70 p-6 shadow-sm">
-              <div class="text-xl font-semibold text-black" style="font-family:Poppins, ui-sans-serif">Project Standards</div>
-              <div class="mt-2 text-black/70 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                Recommended structure for README files, assets, and demo links.
-              </div>
-            </div>
-
-            <div class="rounded-3xl border border-black/10 bg-white/70 p-6 shadow-sm">
-              <div class="text-xl font-semibold text-black" style="font-family:Poppins, ui-sans-serif">Templates</div>
-              <div class="mt-2 text-black/70 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                Proposal templates, slide decks, and reporting formats.
-              </div>
-            </div>
-
-            <div class="rounded-3xl border border-black/10 bg-white/70 p-6 shadow-sm">
-              <div class="text-xl font-semibold text-black" style="font-family:Poppins, ui-sans-serif">FAQ</div>
-              <div class="mt-2 text-black/70 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                Common questions about collaboration, publishing, and getting access.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    location.href = "./Master-Documentation/index.html";
   }
 
   window.__dtVideoFallback = function (videoEl) {

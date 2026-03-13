@@ -278,6 +278,9 @@
       flex-direction: column;
       justify-content: flex-end;
       overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       border: 0;
       text-align: left;
       cursor: pointer;
@@ -292,6 +295,18 @@
       transform: translateY(-7px) scale(1.01);
       box-shadow: 0 30px 80px rgba(0,0,0,0.70);
       filter: brightness(1.06);
+    }
+
+    .showcase-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.62)),
+        radial-gradient(circle at 30% 15%, rgba(255,255,255,0.10), transparent 40%);
+      opacity: 1;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .showcase-card:active {
@@ -329,6 +344,7 @@
       z-index: 1;
       font-size: 1.25rem;
       font-weight: 600;
+      text-shadow: 0 16px 28px rgba(0,0,0,0.65);
     }
 
     .section {
@@ -862,10 +878,10 @@
       <div class="hero-right">
         <div class="showcase">
           <div class="showcase-grid" id="showcaseGrid">
-            <button type="button" class="showcase-card" data-scroll-project="ShadeLA"><small>Featured</small><strong>ShadeLA</strong></button>
-            <button type="button" class="showcase-card" data-scroll-project="Pando"><small>Research</small><strong>Pando</strong></button>
-            <button type="button" class="showcase-card" data-scroll-project="USGBC"><small>Community</small><strong>USGBC</strong></button>
-            <button type="button" class="showcase-card" data-scroll-project="Baldwin Hills"><small>Landscape</small><strong>Baldwin Hills</strong></button>
+            <button type="button" class="showcase-card" data-scroll-project="ShadeLA" style="background-image:url('assets/ShadeLAA.png');"><small>Featured</small><strong>ShadeLA</strong></button>
+            <button type="button" class="showcase-card" data-scroll-project="Pando" style="background-image:url('assets/Pandoo.png');"><small>Research</small><strong>Pando</strong></button>
+            <button type="button" class="showcase-card" data-scroll-project="USGBC" style="background-image:url('assets/USGBC.png');"><small>Community</small><strong>USGBC</strong></button>
+            <button type="button" class="showcase-card" data-scroll-project="Baldwin Hills" style="background-image:url('assets/Baldwin%20Hills.png');"><small>Landscape</small><strong>Baldwin Hills</strong></button>
           </div>
         </div>
       </div>

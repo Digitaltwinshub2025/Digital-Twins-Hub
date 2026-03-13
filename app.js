@@ -578,36 +578,7 @@
   }
 
   function renderDocumentation() {
-    const mountedClass = state.projectsPage.mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4";
-    const docSrc = "./Master-Documentation/index.html";
-    appEl.innerHTML = `
-      <div class="min-h-screen bg-[#DFDFDF] transition-all duration-500 ease-out ${mountedClass}">
-        <div class="max-w-7xl mx-auto px-6 py-10 relative">
-          <div class="flex items-end justify-between gap-6">
-            <h1 class="text-black text-4xl sm:text-5xl md:text-7xl"
-              style="font-family:Taygiacs, Poppins, ui-sans-serif; font-weight:400; line-height:1">
-              Documentation
-            </h1>
-
-            <a href="${escapeHtml(docSrc)}" target="_blank" rel="noreferrer"
-              class="px-4 py-2 rounded-full bg-black text-white hover:bg-black/90 shadow-[inset_0_4px_6px_rgba(255,255,255,0.25)]"
-              style="font-family:Poppins, ui-sans-serif">
-              Open Full Page
-            </a>
-          </div>
-
-          <div class="mt-8 rounded-3xl overflow-hidden border border-black/10 shadow-lg bg-white">
-            <iframe
-              title="Documentation"
-              src="${escapeHtml(docSrc)}"
-              class="w-full"
-              style="height: calc(100vh - 240px); border:0"
-              loading="eager"
-            ></iframe>
-          </div>
-        </div>
-      </div>
-    `;
+    location.href = "./Master-Documentation/index.html";
   }
 
   window.__dtVideoFallback = function (videoEl) {

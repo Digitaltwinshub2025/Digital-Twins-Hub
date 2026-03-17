@@ -1417,6 +1417,21 @@
 
   function getProjectImage(project) {
     if (!project) return "";
+
+    const title = String(project.title || "").trim();
+    const titleKey = title.toLowerCase();
+    const localDocAssetsByTitle = [
+      { match: "baldwin", path: "Master-Documentation/assets/Baldwin Hills.png" },
+      { match: "puhc", path: "Master-Documentation/assets/ALLYBOOM.png" },
+      { match: "p u h c", path: "Master-Documentation/assets/ALLYBOOM.png" },
+      { match: "ally", path: "Master-Documentation/assets/ALLYBOOM.png" },
+      { match: "as u", path: "Master-Documentation/assets/ASU RE.png" },
+      { match: "asu", path: "Master-Documentation/assets/ASU RE.png" },
+      { match: "reclamation", path: "Master-Documentation/assets/ASU RE.png" },
+    ];
+    const localHit = localDocAssetsByTitle.find((r) => titleKey.includes(r.match));
+    if (localHit) return localHit.path;
+
     if (project.image) return project.image.replace(/^\//, ""); // allow "/gitlogos/x.png" -> "gitlogos/x.png"
     if (project.repoUrl) return getGitHubOgImage(project.repoUrl);
     return "";
@@ -2424,12 +2439,24 @@
             gap: 14px;
           }
 
+          .dtp-panel{
+            border-radius: 22px;
+            border: 1px solid rgba(0,0,0,0.10);
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(10px);
+            padding: 14px 14px 12px;
+            box-shadow:
+              0 18px 50px rgba(0,0,0,0.12),
+              inset 0 2px 6px rgba(255,255,255,0.6);
+          }
+
           .dtp-title{
             font-size: 26px;
             line-height: 1.05;
             letter-spacing: -0.02em;
             font-weight: 700;
             color: rgba(0,0,0,0.92);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.45);
           }
 
           .dtp-meta{
@@ -2682,27 +2709,29 @@
       <div data-open-preview="${escapeHtml(String(p.id))}" class="dtp-card cursor-pointer">
         <div class="dtp-visual" style="${imageUrl ? `background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22)), radial-gradient(circle at top right, rgba(255,255,255,0.35), transparent 30%), radial-gradient(circle at 15% 80%, rgba(255,255,255,0.22), transparent 28%), url('${escapeHtml(imageUrl)}');` : ""}"></div>
         <div class="dtp-content" style="font-family: Istok Web, Poppins, ui-sans-serif">
-          <div class="flex items-end justify-between gap-3">
-            <div class="min-w-0">
-              <div class="dtp-title break-words">${escapeHtml(p.title || "Untitled")}</div>
-              <div class="dtp-meta mt-1">${escapeHtml(p.category || "")}${p.owner ? ` • ${escapeHtml(p.owner)}` : ""}</div>
+          <div class="dtp-panel">
+            <div class="flex items-end justify-between gap-3">
+              <div class="min-w-0">
+                <div class="dtp-title break-words">${escapeHtml(p.title || "Untitled")}</div>
+                <div class="dtp-meta mt-1">${escapeHtml(p.category || "")}${p.owner ? ` • ${escapeHtml(p.owner)}` : ""}</div>
+                ${
+                  cardTeamNames.length
+                    ? `<div class="dtp-meta mt-1">Team: ${escapeHtml(cardTeamPreview.join(", "))}${cardTeamRemaining ? ` +${cardTeamRemaining} more` : ""}</div>`
+                    : ""
+                }
+              </div>
+              <div class="dtp-pill">Project</div>
+            </div>
+
+            ${p.goal ? `<div class="dtp-goal mt-3">${escapeHtml(p.goal || "")}</div>` : ""}
+
+            <div class="mt-3 flex flex-wrap gap-2">
               ${
-                cardTeamNames.length
-                  ? `<div class="dtp-meta mt-1">Team: ${escapeHtml(cardTeamPreview.join(", "))}${cardTeamRemaining ? ` +${cardTeamRemaining} more` : ""}</div>`
+                p.repoUrl
+                  ? `<a href="${escapeHtml(p.repoUrl)}" target="_blank" rel="noreferrer" class="dtp-btn" onclick="event.stopPropagation()">Open in Browser</a>`
                   : ""
               }
             </div>
-            <div class="dtp-pill">Project</div>
-          </div>
-
-          ${p.goal ? `<div class="dtp-goal">${escapeHtml(p.goal || "")}</div>` : ""}
-
-          <div class="flex flex-wrap gap-2">
-            ${
-              p.repoUrl
-                ? `<a href="${escapeHtml(p.repoUrl)}" target="_blank" rel="noreferrer" class="dtp-btn" onclick="event.stopPropagation()">Open in Browser</a>`
-                : ""
-            }
           </div>
         </div>
       </div>

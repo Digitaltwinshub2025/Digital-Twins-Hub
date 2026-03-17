@@ -32,94 +32,7 @@
       overflow-x: hidden;
     }
 
-    body {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity .8s cubic-bezier(.2,.9,.2,1), transform .9s cubic-bezier(.2,.9,.2,1);
-    }
-
-    body.is-loaded {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @keyframes flashGlow {
-      0% { box-shadow: 0 0 0 rgba(214,179,106,0); transform: translateY(-6px) scale(1); }
-      35% { box-shadow: 0 0 0 6px rgba(214,179,106,.16); transform: translateY(-8px) scale(1.008); }
-      100% { box-shadow: 0 0 0 rgba(214,179,106,0); transform: translateY(-6px) scale(1); }
-    }
-
-    .project.is-flash {
-      animation: flashGlow 1.1s cubic-bezier(.2,.9,.2,1) 1;
-      border-color: rgba(214,179,106,.42);
-    }
-
     a { color: inherit; }
-
-    .hero-left :where(h1,h2,h3,h4,h5,h6,p,small,strong,span),
-    .section :where(h2,h3,p,li),
-    .project :where(h3,p,li),
-    .meta-card :where(strong,span) {
-      transition:
-        transform .42s cubic-bezier(.2,.9,.2,1),
-        text-shadow .42s cubic-bezier(.2,.9,.2,1),
-        opacity .42s cubic-bezier(.2,.9,.2,1);
-      will-change: transform;
-    }
-
-    .hero-left :where(h1,h2,h3,h4,h5,h6,p,small,strong,span):hover,
-    .section :where(h2,h3,p,li):hover,
-    .project :where(h3,p,li):hover,
-    .meta-card :where(strong,span):hover {
-      transform: translateY(-2px);
-      text-shadow: 0 18px 46px rgba(0,0,0,0.55);
-      opacity: 0.98;
-    }
-
-    .section-head h2,
-    .project-content h3,
-    .hero-left h1 {
-      position: relative;
-      display: inline-block;
-    }
-
-    .section-head h2::after,
-    .project-content h3::after,
-    .hero-left h1::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -10px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.38), transparent);
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform .55s cubic-bezier(.2,.9,.2,1);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .section-head h2:hover::after,
-    .project-content h3:hover::after,
-    .hero-left h1:hover::after {
-      transform: scaleX(1);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-left :where(h1,h2,h3,h4,h5,h6,p,small,strong,span),
-      .section :where(h2,h3,p,li),
-      .project :where(h3,p,li),
-      .meta-card :where(strong,span) {
-        transition: none;
-      }
-
-      .section-head h2::after,
-      .project-content h3::after,
-      .hero-left h1::after {
-        transition: none;
-      }
-    }
 
     .noise {
       position: fixed;
@@ -217,37 +130,13 @@
       margin-bottom: 24px;
     }
 
-    .hero-left h1{
-      font-family: Taygiacs, Poppins, ui-sans-serif;
-      font-weight: 400;
-      letter-spacing: -0.03em;
-      font-size: clamp(48px, 6vw, 86px);
-      line-height: 0.92;
+    h1 {
       margin: 0;
-    }
-
-    .scroll-title {
-      width: 100%;
-      overflow: hidden;
-    }
-
-    .scroll-title h1 {
-      white-space: nowrap;
-      display: inline-block;
-      font-size: clamp(48px, 6vw, 86px);
-      font-weight: bold;
-      animation: scrollTitle 18s linear infinite;
-      line-height: 1;
-      margin: 0;
-    }
-
-    @keyframes scrollTitle {
-      0% {
-        transform: translateX(100%);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
+      font-size: clamp(3.6rem, 8vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+      font-weight: 700;
+      max-width: 780px;
     }
 
     .hero-copy {
@@ -367,44 +256,6 @@
       flex-direction: column;
       justify-content: flex-end;
       overflow: hidden;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border: 0;
-      text-align: left;
-      cursor: pointer;
-      transform: translateY(0) scale(1);
-      transition:
-        transform .38s cubic-bezier(.2,.9,.2,1),
-        box-shadow .38s cubic-bezier(.2,.9,.2,1),
-        filter .38s cubic-bezier(.2,.9,.2,1);
-    }
-
-    .showcase-card:hover {
-      transform: translateY(-7px) scale(1.01);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.70);
-      filter: brightness(1.06);
-    }
-
-    .showcase-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.62)),
-        radial-gradient(circle at 30% 15%, rgba(255,255,255,0.10), transparent 40%);
-      opacity: 1;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .showcase-card:active {
-      transform: translateY(-3px) scale(0.995);
-    }
-
-    .showcase-card:focus-visible {
-      outline: 2px solid rgba(214,179,106,.55);
-      outline-offset: 3px;
     }
 
     .showcase-card::after {
@@ -433,7 +284,6 @@
       z-index: 1;
       font-size: 1.25rem;
       font-weight: 600;
-      text-shadow: 0 16px 28px rgba(0,0,0,0.65);
     }
 
     .section {
@@ -482,13 +332,12 @@
       overflow: hidden;
       background: linear-gradient(180deg, #15151b, #0f1014);
       box-shadow: var(--shadow);
-      transition: transform .34s cubic-bezier(.2,.9,.2,1), border-color .34s cubic-bezier(.2,.9,.2,1), box-shadow .34s cubic-bezier(.2,.9,.2,1);
+      transition: transform .28s ease, border-color .28s ease;
     }
 
     .project:hover {
       transform: translateY(-6px);
       border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 34px 90px rgba(0,0,0,.70);
     }
 
     .project-visual {
@@ -626,15 +475,9 @@
       justify-content:center;
       padding:18px;
       z-index:10;
-      opacity: 0;
-      transition: opacity .26s ease;
     }
 
     .modal[open]{ display:flex; }
-
-    .modal[open]{
-      opacity: 1;
-    }
 
     .modal-card{
       width:min(1100px, 100%);
@@ -650,26 +493,6 @@
       display:flex;
       flex-direction:column;
       backdrop-filter: blur(10px);
-      transform: translateY(12px) scale(.985);
-      opacity: 0;
-      transition: transform .30s cubic-bezier(.2,.9,.2,1), opacity .22s ease;
-    }
-
-    .modal[open] .modal-card{
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-
-    .reveal{
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity .70s cubic-bezier(.2,.9,.2,1), transform .95s cubic-bezier(.2,.9,.2,1);
-      will-change: transform, opacity;
-    }
-
-    .reveal.is-visible{
-      opacity: 1;
-      transform: translateY(0);
     }
 
     .modal-top{
@@ -931,24 +754,26 @@
   <div class="site">
     <header class="topbar">
       <div class="brand">
-        <span class="brand-mark"></span>
+        <div class="brand-mark"></div>
         <span>Digital Twins Documentation</span>
       </div>
       <nav class="nav">
-        <a href="../index.html" class="active">Back to Website</a>
+        <a href="#home" class="active">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="https://digitaltwinshub2025.github.io/Master-Documentation/" target="_blank" rel="noreferrer">Current Site</a>
       </nav>
     </header>
 
     <section class="hero" id="home">
       <div class="hero-left">
-        <div class="scroll-title">
-          <h1>Master</h1>
-          <h1>Documentation</h1>
-        </div>
+        <div class="kicker">Trigger-style full screen portfolio</div>
+        <h1>Master<br>Documentation</h1>
         <p class="hero-copy">
+          A darker, more cinematic portfolio layout inspired by the Trigger AJAX look: fullscreen composition, strong typography, minimal navigation, immersive project panels, and a sleek editorial presentation for your documentation hub.
         </p>
         <div class="hero-actions">
           <a class="btn primary" href="#projects">View Projects</a>
+          <a class="btn secondary" href="https://digitaltwinshub2025.github.io/Master-Documentation/" target="_blank" rel="noreferrer">Open Current Site</a>
         </div>
         <div class="hero-meta">
           <div class="meta-card">
@@ -969,10 +794,10 @@
       <div class="hero-right">
         <div class="showcase">
           <div class="showcase-grid" id="showcaseGrid">
-            <button type="button" class="showcase-card" data-scroll-project="ShadeLA" style="background-image:url('assets/ShadeLAA.png');"><small>Featured</small><strong>ShadeLA</strong></button>
-            <button type="button" class="showcase-card" data-scroll-project="Pando" style="background-image:url('assets/Pandoo.png');"><small>Research</small><strong>Pando</strong></button>
-            <button type="button" class="showcase-card" data-scroll-project="USGBC" style="background-image:url('assets/USGBC.png');"><small>Community</small><strong>USGBC</strong></button>
-            <button type="button" class="showcase-card" data-scroll-project="Baldwin Hills" style="background-image:url('assets/Baldwin%20Hills.png');"><small>Landscape</small><strong>Baldwin Hills</strong></button>
+            <div class="showcase-card"><small>Featured</small><strong>ShadeLA</strong></div>
+            <div class="showcase-card"><small>Research</small><strong>Pando</strong></div>
+            <div class="showcase-card"><small>Community</small><strong>USGBC</strong></div>
+            <div class="showcase-card"><small>Landscape</small><strong>Baldwin Hills</strong></div>
           </div>
         </div>
       </div>
@@ -994,23 +819,9 @@
     <footer class="footer">
       <div class="footer-inner">
         <span>Digital Twins Master Documentation</span>
+        <span>Trigger-inspired dark portfolio layout</span>
       </div>
     </footer>
-  </div>
-
-  <div class="scroll-card is-hidden" id="scrollCard" aria-hidden="true">
-    <div class="sc-shell">
-      <div class="sc-top">
-        <div class="sc-title">
-          <strong>Quick Jump</strong>
-          <span id="scActive">Select a project</span>
-        </div>
-        <button class="sc-toggle" type="button" id="scToggle">Open</button>
-      </div>
-      <div class="sc-panel">
-        <div class="sc-panel-inner" id="scPanel"></div>
-      </div>
-    </div>
   </div>
 
   <div class="modal" id="pdfModal" aria-hidden="true">
@@ -1031,23 +842,14 @@
 
     const pdfByCard = new WeakMap();
 
-    function escapeHtml(value){
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
     const auraPdfByProject = {
-      "Altadena": "Altadena Fire Rebuild_ Resilient, Equitable, and Community-Oriented Recovery Plan V100.pdf",
-      "Baldwin Hills": "Baldwin Hills 6-Mile Corridor Land Context and Infrastructure Report.pdf",
-      "PUHC PUEDE": "PUHC PUEDE Alleys_ Architecture and Urban Design for Environmental Justice, Climate Resilience, and Community Health in South Los Angeles Census Tracts 2098.10 and 2095.20.pdf",
-      "Pando": "Pando Populus_ Comprehensive Environmental and Social Resilience Assessment for Census Tract 1397.02 Images.pdf",
-      "Reclamation": "Reclamation Site 2_ Holistic Ecosystem Restoration for Climate-Resilient Urban Equity in Census Tract 6017.pdf",
-      "ShadeLA": "Shade LA_ Transforming Urban Heat Islands in South Los Angeles Census Tracts 5351.01, 2430, 2382, and 2240.10 through Equitable Shade Structures and Regenerative Design.pdf",
-      "USGBC": ""
+      "Altadena": "Files/Altadena%20Fire%20Rebuild_%20Resilient,%20Equitable,%20and%20Community-Oriented%20Recovery%20Plan%20V100.pdf",
+      "Baldwin Hills": "Files/Baldwin%20Hills%206-Mile%20Corridor%20Land%20Context%20and%20Infrastructure%20Report.pdf",
+      "PUHC PUEDE": "Files/PUHC%20PUEDE%20Alleys_%20Architecture%20and%20Urban%20Design%20for%20Environmental%20Justice,%20Climate%20Resilience,%20and%20Community%20Health%20in%20South%20Los%20Angeles%20Census%20Tracts%202098.10%20and%202095.20.pdf",
+      "Pando": "Files/Pando%20Populus_%20Comprehensive%20Environmental%20and%20Social%20Resilience%20Assessment%20for%20Census%20Tract%201397.02%20Images.pdf",
+      "Reclamation": "Files/Reclamation%20Site%202_%20Holistic%20Ecosystem%20Restoration%20for%20Climate-Resilient%20Urban%20Equity%20in%20Census%20Tract%206017.pdf",
+      "ShadeLA": "Files/Shade%20LA_%20Transforming%20Urban%20Heat%20Islands%20in%20South%20Los%20Angeles%20Census%20Tracts%205351.01,%202430,%202382,%20and%202240.10%20through%20Equitable%20Shade%20Structures%20and%20Regenerative%20Design.pdf",
+      "USGBC": "Files/Altadena%20Fire%20Rebuild_%20Resilient,%20Equitable,%20and%20Community-Oriented%20Recovery%20Plan%20V100.pdf"
     };
 
     const pixelStreamingUrlByProject = {
@@ -1096,7 +898,7 @@
 
     function openModal(title, url){
       modalTitle.textContent = title;
-      modalFrame.src = encodeURI(url);
+      modalFrame.src = url;
       modal.setAttribute('open','');
       modal.setAttribute('aria-hidden','false');
     }
@@ -1169,10 +971,6 @@
     const projectsGrid = document.getElementById('projectsGrid');
     const metaProjectCount = document.getElementById('metaProjectCount');
 
-    requestAnimationFrame(() => {
-      document.body.classList.add('is-loaded');
-    });
-
     const projectMeta = [
       { name: 'ShadeLA', label: 'Urban Shade Study', status: 'Active', desc: 'Climate, shade, and urban digital twin content presented in a more immersive fullscreen-style portfolio card.' },
       { name: 'Pando', label: 'Forest / Ecology', status: 'Active', desc: 'A portfolio-led project card with bold type, dark surfaces, and clear actions for every documentation asset.' },
@@ -1187,78 +985,6 @@
       metaProjectCount.textContent = String(projectMeta.length).padStart(2, '0');
     }
 
-    const scrollCard = document.getElementById('scrollCard');
-    const scPanel = document.getElementById('scPanel');
-    const scToggle = document.getElementById('scToggle');
-    const scActive = document.getElementById('scActive');
-
-    function scrollCardSetHidden(hidden){
-      if(!scrollCard) return;
-      scrollCard.classList.toggle('is-hidden', Boolean(hidden));
-      scrollCard.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-    }
-
-    function scrollCardSetOpen(open){
-      if(!scrollCard || !scToggle) return;
-      scrollCard.classList.toggle('is-open', Boolean(open));
-      scToggle.textContent = open ? 'Close' : 'Open';
-    }
-
-    function jumpToProject(name){
-      const slug = String(name)
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9\-]/g, '');
-      const target = document.getElementById(`project-${slug}`);
-      if(!target) return;
-
-      if(scActive) scActive.textContent = name;
-      scrollCardSetOpen(false);
-
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.querySelectorAll('.project').forEach(el => el.classList.toggle('is-active', el === target));
-      target.classList.remove('is-flash');
-      void target.offsetWidth;
-      target.classList.add('is-flash');
-    }
-
-    if(scPanel){
-      scPanel.innerHTML = projectMeta
-        .map((p) => {
-          const safeName = String(p.name || '');
-          const safeLabel = String(p.label || '');
-          return `
-            <div class="sc-item" data-sc-project="${escapeHtml(safeName)}">
-              <div class="sc-item-label">
-                <b>${escapeHtml(safeName)}</b>
-                <i>${escapeHtml(safeLabel)}</i>
-              </div>
-              <button class="sc-jump" type="button" data-sc-jump="${escapeHtml(safeName)}">Jump</button>
-            </div>
-          `;
-        })
-        .join('');
-
-      scPanel.querySelectorAll('[data-sc-jump]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const name = btn.getAttribute('data-sc-jump') || '';
-          if(name) jumpToProject(name);
-        });
-      });
-    }
-
-    if(scToggle){
-      scToggle.addEventListener('click', () => {
-        const open = scrollCard ? scrollCard.classList.contains('is-open') : false;
-        scrollCardSetOpen(!open);
-      });
-    }
-
-    window.addEventListener('scroll', () => {
-      scrollCardSetHidden(window.scrollY < 260);
-    }, { passive: true });
-
     function createAction(label, kind, enabled){
       const a = document.createElement('a');
       a.className = 'action' + (enabled ? '' : ' is-disabled');
@@ -1272,12 +998,6 @@
       if(!projectsGrid) return;
       projectsGrid.innerHTML = '';
 
-      const slugify = (s) => String(s || '')
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9\-]/g, '');
-
       projectMeta.forEach((p) => {
         const arcUrl = arcGisUrlByProject[p.name] || '';
         const auraUrl = auraPdfByProject[p.name] || '';
@@ -1287,8 +1007,6 @@
         const article = document.createElement('article');
         article.className = 'project';
         article.setAttribute('data-project', p.name);
-        article.id = `project-${slugify(p.name)}`;
-        article.classList.add('reveal');
 
         const visual = document.createElement('div');
         visual.className = 'project-visual';
@@ -1364,51 +1082,6 @@
     }
 
     renderProjects();
-
-    const revealObserver = (() => {
-      try {
-        const obs = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                obs.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.14, rootMargin: '0px 0px -12% 0px' }
-        );
-        return obs;
-      } catch {
-        return null;
-      }
-    })();
-
-    if(revealObserver){
-      document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
-    }else{
-      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
-    }
-
-    document.querySelectorAll('[data-scroll-project]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const name = btn.getAttribute('data-scroll-project') || '';
-        if(!name) return;
-        const slug = String(name)
-          .trim()
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9\-]/g, '');
-        const target = document.getElementById(`project-${slug}`);
-        if(!target) return;
-
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        document.querySelectorAll('.project').forEach(el => el.classList.toggle('is-active', el === target));
-        target.classList.remove('is-flash');
-        void target.offsetWidth;
-        target.classList.add('is-flash');
-      });
-    });
 
     document.addEventListener('click', (e) => {
       const actionEl = e.target && e.target.closest ? e.target.closest('.action[data-action]') : null;

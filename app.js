@@ -580,8 +580,35 @@
   function renderDocumentation() {
     const mountedClass = state.projectsPage.mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4";
     appEl.innerHTML = `
-      <div class="min-h-screen bg-[#DFDFDF] transition-all duration-500 ease-out ${mountedClass}">
-        <div class="max-w-7xl mx-auto px-6 py-4 relative"></div>
+      <div class="min-h-screen transition-all duration-500 ease-out ${mountedClass}" style="background:#111; color:white; font-family:Arial, sans-serif">
+        <style>
+          .dt-doc-scroll-container{
+            width:100%;
+            overflow:hidden;
+            padding:40px 0;
+          }
+
+          .dt-doc-scroll-text{
+            font-size:80px;
+            font-weight:700;
+            white-space:nowrap;
+            display:inline-block;
+            animation:dtDocScrollText 18s linear infinite;
+          }
+
+          @keyframes dtDocScrollText{
+            0%{ transform:translateX(100%); }
+            100%{ transform:translateX(-100%); }
+          }
+
+          @media (max-width: 640px){
+            .dt-doc-scroll-text{ font-size:48px; }
+          }
+        </style>
+
+        <div class="dt-doc-scroll-container">
+          <div class="dt-doc-scroll-text">DIGITAL TWIN HUB</div>
+        </div>
       </div>
     `;
   }

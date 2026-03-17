@@ -1206,6 +1206,37 @@
         </div>
       </div>
     `;
+
+    const root = appEl.querySelector('.dt-doc');
+    if (!root) return;
+
+    const imageByProjectName = {
+      "ShadeLA": "./Master-Documentation/assets/ShadeLAA.png",
+      "Pando": "./Master-Documentation/assets/Pandoo.png",
+      "USGBC": "./Master-Documentation/assets/USGBC.png",
+      "Baldwin Hills": "./Master-Documentation/assets/Baldwin Hills.png",
+      "Altadena": "./Master-Documentation/assets/Altadena Fire Rebuild_ Resilient, Equitable, and Community-Oriented Recovery Plan V100.png",
+      "PUHC PUEDE": "./Master-Documentation/assets/ALLYBOOM.png",
+      "Reclamation": "./Master-Documentation/assets/ASU RE.png"
+    };
+
+    root.querySelectorAll('.project').forEach((card) => {
+      const name = card.querySelector('h3')?.textContent?.trim() || '';
+      const visual = card.querySelector('.project-visual');
+      const img = imageByProjectName[name];
+      if (!visual || !img) return;
+
+      const imageUrl = encodeURI(img);
+      visual.style.backgroundImage = [
+        'linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.48))',
+        'radial-gradient(circle at top right, rgba(255,255,255,0.11), transparent 24%)',
+        'radial-gradient(circle at 15% 80%, rgba(255,255,255,0.07), transparent 22%)',
+        `url("${imageUrl}")`
+      ].join(', ');
+      visual.style.backgroundSize = 'auto, auto, auto, cover';
+      visual.style.backgroundPosition = '0 0, 0 0, 0 0, center';
+      visual.style.backgroundRepeat = 'no-repeat, no-repeat, no-repeat, no-repeat';
+    });
   }
 
   window.__dtVideoFallback = function (videoEl) {

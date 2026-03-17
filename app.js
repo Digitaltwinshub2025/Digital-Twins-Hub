@@ -1418,6 +1418,26 @@
   function getProjectImage(project) {
     if (!project) return "";
     if (project.image) return project.image.replace(/^\//, ""); // allow "/gitlogos/x.png" -> "gitlogos/x.png"
+
+    const titleKey = String(project.title || "")
+      .trim()
+      .toLowerCase();
+
+    const gitLogoByTitle = [
+      { match: "shade", path: "gitlogos/ShadeLA.png" },
+      { match: "pando", path: "gitlogos/Pando.jpeg" },
+      { match: "usgbc", path: "gitlogos/USGBC.png" },
+      { match: "baldwin hills 6", path: "gitlogos/Baldwin hills 6 Miles.png" },
+      { match: "baldwin", path: "gitlogos/Baldwin hills.png" },
+      { match: "alley bloom", path: "gitlogos/Alley Bloom.png" },
+      { match: "ally bloom", path: "gitlogos/Alley Bloom.png" },
+      { match: "reclamation", path: "gitlogos/ASU RECLAMATION.png" },
+      { match: "asu", path: "gitlogos/ASU RECLAMATION.png" },
+    ];
+
+    const gitLogoHit = gitLogoByTitle.find((r) => titleKey.includes(r.match));
+    if (gitLogoHit) return gitLogoHit.path;
+
     if (project.repoUrl) return getGitHubOgImage(project.repoUrl);
     return "";
   }

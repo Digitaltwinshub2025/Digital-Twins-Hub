@@ -611,24 +611,12 @@
         );
         if (h && Number.isFinite(h)) iframe.style.height = `${h}px`;
       } catch (_) {
-        if (!iframe.style.height || iframe.style.height === "1200px") {
-          iframe.style.height = "8000px";
-        }
+        // no-op
       }
     };
 
     iframe.addEventListener('load', () => {
       setHeight();
-
-      const start = Date.now();
-      const pollId = window.setInterval(() => {
-        if (Date.now() - start > 3500) {
-          window.clearInterval(pollId);
-          return;
-        }
-        setHeight();
-      }, 250);
-
       try {
         const doc = iframe.contentDocument;
         if (!doc || !doc.body) return;
@@ -641,7 +629,7 @@
 
         iframe.dataset._dtDocResizeBound = '1';
       } catch (_) {
-        setHeight();
+        // no-op
       }
     }, { once: true });
   }

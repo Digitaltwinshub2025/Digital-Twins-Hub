@@ -2718,7 +2718,7 @@
         <div id="previewBackdrop" class="absolute inset-0 bg-black/60"></div>
 
         <div id="previewScroll"
-          class="relative z-10 w-[99vw] max-w-[96rem] max-h-[97vh] bg-white rounded-2xl overflow-y-auto flex flex-col transform transition-transform duration-300 ease-out scale-100">
+          class="relative z-10 w-screen h-screen max-w-none max-h-none bg-white rounded-none overflow-y-auto flex flex-col transform transition-transform duration-300 ease-out scale-100">
 
           <div class="bg-white/95 backdrop-blur border-b border-black/10">
             ${img ? `<div class="h-36 sm:h-44 lg:h-48 w-full overflow-hidden bg-black/5"><img src="${escapeHtml(img)}" class="w-full h-full object-cover" /></div>` : ""}

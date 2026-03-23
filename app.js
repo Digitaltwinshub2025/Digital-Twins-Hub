@@ -419,7 +419,7 @@
     const id = p && p.id != null ? String(p.id) : "";
     const title = escapeHtml(p?.title || "Untitled Project");
     if (!id) return title;
-    return `<a href="#/projects?id=${encodeURIComponent(id)}" class="underline" onclick="event.stopPropagation()">${title}</a>`;
+    return `<a href="#/projects/${encodeURIComponent(id)}" class="underline" onclick="event.stopPropagation()">${title}</a>`;
   }
 
   function formatMemberLink(m) {
@@ -1373,11 +1373,18 @@
     // #/documentation
     // #/contact
     const raw = (location.hash || "#/").replace(/^#/, "");
-    const parts = raw.split("/").filter(Boolean);
+    const pathOnly = raw.split("?")[0] || "";
+    const queryOnly = raw.includes("?") ? raw.split("?").slice(1).join("?") : "";
+
+    const parts = pathOnly.split("/").filter(Boolean);
     const base = parts[0] || "";
     const param = parts[1] || null;
 
+    const qs = new URLSearchParams(queryOnly);
+    const qid = qs.get("id");
+
     if (!base) return { name: "home" };
+    if (base === "projects" && !param && qid) return { name: "projectDetail", id: qid };
     if (base === "projects" && !param) return { name: "projects" };
     if (base === "projects" && param) return { name: "projectDetail", id: param };
     if (base === "team" && !param) return { name: "team" };
@@ -2397,8 +2404,6 @@
       ? members.filter((m) => ((m.name || "").toLowerCase().includes(normalizedQuery) || (m.role || "").toLowerCase().includes(normalizedQuery)))
       : [];
 
-    const previewing = state.projectsPage.previewingId ? getProjectById(state.projectsPage.previewingId) : null;
-
     appEl.innerHTML = `
       <div class="min-h-screen bg-[#DFDFDF] transition-all duration-500 ease-out ${mountedClass}">
         <style>
@@ -2620,19 +2625,8 @@
           </div>
         </div>
 
-        ${previewing ? renderProjectPreviewModal(previewing) : ""}
       </div>
     `;
-
-    if (previewing) {
-      if (state.projectsPage._prevBodyOverflow == null) state.projectsPage._prevBodyOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-    } else {
-      if (state.projectsPage._prevBodyOverflow != null) {
-        document.body.style.overflow = state.projectsPage._prevBodyOverflow;
-        state.projectsPage._prevBodyOverflow = null;
-      }
-    }
 
     // Wire search input
     const search = document.getElementById("projectsSearch");
@@ -2646,74 +2640,9 @@
       el.addEventListener("click", () => {
         const pid = el.getAttribute("data-open-preview");
         if (!pid) return;
-        state.projectsPage.previewingId = pid;
-        state.projectsPage.showEmbeddedProject = false;
-        render();
+        window.location.hash = `#/projects/${encodeURIComponent(pid)}`;
       });
     });
-
-    // If modal is open, ensure the user lands at the top of the content
-    if (previewing) {
-      const scrollPreviewToTop = () => {
-        const scroller = document.getElementById("previewScroll");
-        if (scroller) {
-          scroller.scrollTop = 0;
-          scroller.scrollLeft = 0;
-          scroller.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        }
-        const title = document.getElementById("previewTitle");
-        title?.focus?.({ preventScroll: true });
-      };
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          scrollPreviewToTop();
-          setTimeout(scrollPreviewToTop, 0);
-        });
-      });
-    }
-
-    // Modal buttons
-    document.getElementById("closePreview")?.addEventListener("click", () => {
-      state.projectsPage.previewingId = null;
-      render();
-    });
-    document.getElementById("previewBackdrop")?.addEventListener("click", () => {
-      state.projectsPage.previewingId = null;
-      render();
-    });
-    document.getElementById("exportPdfBtn")?.addEventListener("click", () => {
-      const p = state.projectsPage.previewingId ? getProjectById(state.projectsPage.previewingId) : null;
-      if (p) exportPDF(p);
-    });
-
-    // Esc closes the preview
-    if (state.projectsPage._escHandler) {
-      window.removeEventListener("keydown", state.projectsPage._escHandler);
-      state.projectsPage._escHandler = null;
-    }
-
-    if (state.projectsPage.previewingId) {
-      state.projectsPage._escHandler = (e) => {
-        if (e && (e.key === "Escape" || e.key === "Esc")) {
-          state.projectsPage.previewingId = null;
-          render();
-        }
-      };
-      window.addEventListener("keydown", state.projectsPage._escHandler);
-    }
-
-    // If URL has ?id=, open it once
-    const qs = new URLSearchParams(location.hash.split("?")[1] || "");
-    const qid = qs.get("id");
-    if (qid && !state.projectsPage.previewingId) {
-      const exists = getProjectById(qid);
-      if (exists) {
-        state.projectsPage.previewingId = qid;
-        state.projectsPage.showEmbeddedProject = false;
-        render();
-      }
-    }
   }
 
   function renderProjectCard(p) {

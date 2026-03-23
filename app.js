@@ -1417,11 +1417,23 @@
 
   function getProjectImage(project) {
     if (!project) return "";
-    if (project.image) return project.image.replace(/^\//, ""); // allow "/gitlogos/x.png" -> "gitlogos/x.png"
 
-    const titleKey = String(project.title || "")
-      .trim()
-      .toLowerCase();
+    const normalizeLocalPath = (p) => {
+      const raw = String(p || "").trim();
+      if (!raw) return "";
+      const noHash = raw.split("#")[0] || "";
+      const noQuery = (noHash.split("?")[0] || "").trim();
+      const trimmed = noQuery.replace(/^\//, "");
+      try {
+        return decodeURIComponent(trimmed);
+      } catch {
+        return trimmed;
+      }
+    };
+
+    if (project.image) return normalizeLocalPath(project.image); // allow "/gitlogos/x.png?v=1" -> "gitlogos/x.png"
+
+    const titleKey = String(project.title || "").trim().toLowerCase();
 
     const gitLogoByTitle = [
       { match: "shade", path: "gitlogos/ShadeLA.png" },

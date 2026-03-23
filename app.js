@@ -2439,6 +2439,24 @@
             text-overflow: ellipsis;
           }
 
+          .dtp-teamlist{
+            position: absolute;
+            left: 18px;
+            bottom: 18px;
+            z-index: 2;
+            max-width: calc(100% - 140px);
+            max-height: 64px;
+            overflow: auto;
+            padding: 8px 10px;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.10);
+            background: rgba(255,255,255,0.65);
+            color: rgba(0,0,0,0.78);
+            backdrop-filter: blur(8px);
+            font-size: 11px;
+            line-height: 1.25;
+          }
+
           .dtp-card:hover{
             transform: translateY(-6px);
             border-color: rgba(0,0,0,0.14);
@@ -2662,6 +2680,22 @@
       if (p) exportPDF(p);
     });
 
+    // Esc closes the preview
+    if (state.projectsPage._escHandler) {
+      window.removeEventListener("keydown", state.projectsPage._escHandler);
+      state.projectsPage._escHandler = null;
+    }
+
+    if (state.projectsPage.previewingId) {
+      state.projectsPage._escHandler = (e) => {
+        if (e && (e.key === "Escape" || e.key === "Esc")) {
+          state.projectsPage.previewingId = null;
+          render();
+        }
+      };
+      window.addEventListener("keydown", state.projectsPage._escHandler);
+    }
+
     // If URL has ?id=, open it once
     const qs = new URLSearchParams(location.hash.split("?")[1] || "");
     const qid = qs.get("id");
@@ -2679,6 +2713,58 @@
     const img = getProjectImage(p);
     const pid = p && p.id != null ? String(p.id) : "";
 
+    const cardTeamNames = (() => {
+      const names = [];
+      const tmFirst = String(p?.teamMemberFirstName || "").trim();
+      const tmLast = String(p?.teamMemberLastName || "").trim();
+      const tmFull = `${tmFirst} ${tmLast}`.trim();
+      if (tmFull) names.push(tmFull);
+
+      const teamMembers = Array.isArray(p?.team?.members) ? p.team.members : [];
+      teamMembers.forEach((m) => {
+        const n = String(m?.name || "").trim();
+        if (n) names.push(n);
+      });
+
+      const canonical = (s) =>
+        String(s || "")
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9\s]/g, "")
+          .replace(/\s+/g, " ");
+
+      const byPreferred = [...names]
+        .map((n) => String(n || "").trim())
+        .filter(Boolean)
+        .sort((a, b) => {
+          const aTokens = a.split(/\s+/).filter(Boolean).length;
+          const bTokens = b.split(/\s+/).filter(Boolean).length;
+          if (aTokens !== bTokens) return bTokens - aTokens;
+          return b.length - a.length;
+        });
+
+      const seenFull = new Set();
+      const seenFirst = new Set();
+      const deduped = [];
+      byPreferred.forEach((n) => {
+        const key = canonical(n);
+        if (!key) return;
+        if (seenFull.has(key)) return;
+
+        const first = key.split(" ")[0] || "";
+        const isSingle = !key.includes(" ");
+
+        if (isSingle && first && seenFirst.has(first)) return;
+
+        seenFull.add(key);
+        if (first) seenFirst.add(first);
+        deduped.push(n);
+      });
+      return deduped;
+    })();
+
+    const cardTeamLine = cardTeamNames.length ? cardTeamNames.join(", ") : "";
+
     const imageUrl = img ? encodeURI(String(img)) : "";
 
     return `
@@ -2688,6 +2774,7 @@
           <div class="dtp-visual" style="${imageUrl ? `background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22)), radial-gradient(circle at top right, rgba(255,255,255,0.35), transparent 30%), radial-gradient(circle at 15% 80%, rgba(255,255,255,0.22), transparent 28%), url('${escapeHtml(imageUrl)}');` : ""}"></div>
           <div class="dtp-content" style="font-family: Istok Web, Poppins, ui-sans-serif">
             <div class="dtp-pill">Projects Detalis</div>
+            ${cardTeamLine ? `<div class="dtp-teamlist">${escapeHtml(cardTeamLine)}</div>` : ""}
 
             <div class="flex flex-wrap gap-2">
               ${

@@ -2657,10 +2657,6 @@
       state.projectsPage.previewingId = null;
       render();
     });
-    document.getElementById("previewBackdrop")?.addEventListener("click", () => {
-      state.projectsPage.previewingId = null;
-      render();
-    });
     document.getElementById("exportPdfBtn")?.addEventListener("click", () => {
       const p = state.projectsPage.previewingId ? getProjectById(state.projectsPage.previewingId) : null;
       if (p) exportPDF(p);
@@ -2714,11 +2710,9 @@
     const previewSummary =
       (p && p.summary ? String(p.summary) : "") || (p && p.description ? String(p.description).split("\n")[0] : "");
     return `
-      <div class="fixed inset-0 z-50 flex items-center justify-center">
-        <div id="previewBackdrop" class="absolute inset-0 bg-black/60"></div>
-
+      <div class="fixed inset-0 z-50">
         <div id="previewScroll"
-          class="relative z-10 w-screen h-screen max-w-none max-h-none bg-white rounded-none overflow-y-auto flex flex-col transform transition-transform duration-300 ease-out scale-100">
+          class="relative w-screen h-screen max-w-none max-h-none bg-white overflow-y-auto flex flex-col transform transition-transform duration-300 ease-out scale-100">
 
           <div class="bg-white/95 backdrop-blur border-b border-black/10">
             ${img ? `<div class="h-36 sm:h-44 lg:h-48 w-full overflow-hidden bg-black/5"><img src="${escapeHtml(img)}" class="w-full h-full object-cover" /></div>` : ""}

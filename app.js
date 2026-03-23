@@ -2414,6 +2414,31 @@
             transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
           }
 
+          .dtp-wrap{
+            position: relative;
+          }
+
+          .dtp-tab{
+            position: absolute;
+            top: -14px;
+            left: 18px;
+            z-index: 3;
+            max-width: calc(100% - 36px);
+            padding: 10px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.10);
+            background: rgba(255,255,255,0.92);
+            color: rgba(0,0,0,0.92);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.14);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
           .dtp-card:hover{
             transform: translateY(-6px);
             border-color: rgba(0,0,0,0.14);
@@ -2715,29 +2740,20 @@
     const imageUrl = img ? encodeURI(String(img)) : "";
 
     return `
-      <div data-open-preview="${escapeHtml(String(p.id))}" class="dtp-card cursor-pointer">
-        <div class="dtp-visual" style="${imageUrl ? `background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22)), radial-gradient(circle at top right, rgba(255,255,255,0.35), transparent 30%), radial-gradient(circle at 15% 80%, rgba(255,255,255,0.22), transparent 28%), url('${escapeHtml(imageUrl)}');` : ""}"></div>
-        <div class="dtp-content" style="font-family: Istok Web, Poppins, ui-sans-serif">
-          <div class="dtp-pill">Projects Detalis</div>
+      <div class="dtp-wrap">
+        <div data-open-preview="${escapeHtml(String(p.id))}" class="dtp-tab cursor-pointer">${escapeHtml(p.title || "Untitled")}</div>
+        <div data-open-preview="${escapeHtml(String(p.id))}" class="dtp-card cursor-pointer">
+          <div class="dtp-visual" style="${imageUrl ? `background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22)), radial-gradient(circle at top right, rgba(255,255,255,0.35), transparent 30%), radial-gradient(circle at 15% 80%, rgba(255,255,255,0.22), transparent 28%), url('${escapeHtml(imageUrl)}');` : ""}"></div>
+          <div class="dtp-content" style="font-family: Istok Web, Poppins, ui-sans-serif">
+            <div class="dtp-pill">Projects Detalis</div>
 
-          <div class="min-w-0 text-center">
-            <div class="dtp-title break-words">${escapeHtml(p.title || "Untitled")}</div>
-            <div class="dtp-meta mt-1">${escapeHtml(p.category || "")}${p.owner ? ` • ${escapeHtml(p.owner)}` : ""}</div>
-            ${
-              cardTeamNames.length
-                ? `<div class="dtp-meta mt-1">Team: ${escapeHtml(cardTeamPreview.join(", "))}${cardTeamRemaining ? ` +${cardTeamRemaining} more` : ""}</div>`
-                : ""
-            }
-          </div>
-
-          ${p.goal ? `<div class="dtp-goal">${escapeHtml(p.goal || "")}</div>` : ""}
-
-          <div class="flex flex-wrap gap-2">
-            ${
-              p.repoUrl
-                ? `<a href="${escapeHtml(p.repoUrl)}" target="_blank" rel="noreferrer" class="dtp-btn" onclick="event.stopPropagation()">Open in Browser</a>`
-                : ""
-            }
+            <div class="flex flex-wrap gap-2">
+              ${
+                p.repoUrl
+                  ? `<a href="${escapeHtml(p.repoUrl)}" target="_blank" rel="noreferrer" class="dtp-btn" onclick="event.stopPropagation()">Open in Browser</a>`
+                  : ""
+              }
+            </div>
           </div>
         </div>
       </div>

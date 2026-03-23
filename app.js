@@ -2456,6 +2456,19 @@
             gap: 14px;
           }
 
+          .dtp-headbox{
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            text-align: center;
+            border-radius: 18px;
+            padding: 12px 14px;
+            border: 1px solid rgba(0,0,0,0.10);
+            background: rgba(255,255,255,0.70);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+          }
+
           .dtp-title{
             font-size: 26px;
             line-height: 1.05;
@@ -2479,6 +2492,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            position: absolute;
+            top: 18px;
+            right: 18px;
             border-radius: 999px;
             padding: clamp(4px, 0.45vw, 6px) clamp(8px, 0.75vw, 10px);
             font-size: clamp(8px, 0.70vw, 10px);
@@ -2714,7 +2730,9 @@
       <div data-open-preview="${escapeHtml(String(p.id))}" class="dtp-card cursor-pointer">
         <div class="dtp-visual" style="${imageUrl ? `background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22)), radial-gradient(circle at top right, rgba(255,255,255,0.35), transparent 30%), radial-gradient(circle at 15% 80%, rgba(255,255,255,0.22), transparent 28%), url('${escapeHtml(imageUrl)}');` : ""}"></div>
         <div class="dtp-content" style="font-family: Istok Web, Poppins, ui-sans-serif">
-          <div class="flex items-end justify-between gap-3">
+          <div class="dtp-pill">Projects Detalis</div>
+
+          <div class="dtp-headbox">
             <div class="min-w-0">
               <div class="dtp-title break-words">${escapeHtml(p.title || "Untitled")}</div>
               <div class="dtp-meta mt-1">${escapeHtml(p.category || "")}${p.owner ? ` • ${escapeHtml(p.owner)}` : ""}</div>
@@ -2724,7 +2742,6 @@
                   : ""
               }
             </div>
-            <div class="dtp-pill">Projects Detalis</div>
           </div>
 
           ${p.goal ? `<div class="dtp-goal">${escapeHtml(p.goal || "")}</div>` : ""}

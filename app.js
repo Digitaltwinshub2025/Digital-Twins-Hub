@@ -1210,6 +1210,14 @@
     const root = appEl.querySelector('.dt-doc');
     if (!root) return;
 
+    requestAnimationFrame(() => {
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      } catch (_) {
+        window.scrollTo(0, 0);
+      }
+    });
+
     const imageByProjectName = {
       "ShadeLA": "./Master-Documentation/assets/ShadeLAA.png",
       "Pando": "./Master-Documentation/assets/Pandoo.png",

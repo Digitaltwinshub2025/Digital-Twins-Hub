@@ -2942,6 +2942,7 @@
       return;
     }
 
+    const pid = project && project.id != null ? String(project.id) : "";
     const projectImage = project.image ? project.image.replace(/^\//, "") : (project.repoUrl ? getGitHubOgImage(project.repoUrl) : "");
 
     appEl.innerHTML = `
@@ -3001,6 +3002,43 @@
             ${project.description ? detailCard("Overview", renderTextBlock(project.description)) : ""}
             ${project.goal ? detailCard("Goal", renderTextBlock(project.goal)) : ""}
             ${project.structureCapabilities ? detailCard("Structure & Capabilities", renderTextBlock(project.structureCapabilities)) : ""}
+
+            ${
+              project.videoEmbedUrl
+                ? detailCard(
+                    "Video",
+                    `<div class="aspect-video w-full overflow-hidden rounded-xl bg-black/5 border border-black/10">
+                      ${(() => {
+                        if (pid === "02") {
+                          return `<video class="w-full h-full" autoplay muted loop playsinline controls>
+                            <source src="Featured Projects/Baldwin Hills.mp4" type="video/mp4" />
+                          </video>`;
+                        }
+                        if (isDriveUrl(project.videoEmbedUrl)) {
+                          return driveOpenInNewTabCta(project.videoEmbedUrl);
+                        }
+                        const direct = driveDirectVideoUrl(project.videoEmbedUrl);
+                        if (direct) {
+                          return `<video class="w-full h-full" autoplay muted loop playsinline controls src="${escapeHtml(direct)}" data-embed-url="${escapeHtml(String(project.videoEmbedUrl))}" onloadstart="window.__dtVideoWatchdog(this)" onloadeddata="window.__dtVideoClearWatchdog(this)" oncanplay="window.__dtVideoClearWatchdog(this)" onerror="window.__dtVideoFallback(this)"></video>`;
+                        }
+                        return `<iframe class="w-full h-full" src="${escapeHtml(withAutoplayParam(String(project.videoEmbedUrl)))}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                      })()}
+                    </div>
+                    ${
+                      project.videoTitle
+                        ? `<div class="mt-2 text-xs sm:text-sm text-black/70" style="font-family:Poppins, ui-sans-serif">
+                            ${escapeHtml(String(project.videoTitle))}
+                          </div>`
+                        : ""
+                    }
+                    <a href="${escapeHtml(String(project.videoUrl || project.videoEmbedUrl))}" target="_blank" rel="noreferrer"
+                      class="mt-2 inline-flex items-center text-sm text-black/70 hover:text-black underline-offset-4 hover:underline"
+                      style="font-family:Poppins, ui-sans-serif">
+                      Open video in new tab
+                    </a>`
+                  )
+                : ""
+            }
 
             ${project.techStack ? detailCard("Technical Stack", renderTechStack(project.techStack)) : ""}
             ${Array.isArray(project.features) && project.features.length ? detailCard("Key Features", renderFeatures(project.features)) : ""}

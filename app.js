@@ -4085,14 +4085,14 @@
                   <h1 class="text-4xl sm:text-5xl md:text-6xl font-semibold text-white" style="font-family:Poppins, ui-sans-serif, system-ui">
                     Learning Hub
                   </h1>
-                  <p class="mt-4 text-white/85 text-base sm:text-lg md:text-xl leading-relaxed" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
-                    Learning Hub — your space to explore resources, gain new skills, and grow your knowledge.
-                  </p>
                   <div class="mt-10">
                     <button type="button" data-scroll-to="learning-cards" class="inline-flex items-center rounded-full bg-white/10 hover:bg-white/15 border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 active:translate-y-0 active:scale-[0.98] outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" style="font-family:Poppins, ui-sans-serif">
                       Explore
                     </button>
                   </div>
+                  <p id="learningHeroSentence" class="mt-6 text-white/90 text-lg sm:text-xl md:text-2xl leading-relaxed origin-left" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; transform: scale(1); will-change: transform; transition: transform 120ms linear;">
+                    Learning Hub — your space to explore resources, gain new skills, and grow your knowledge.
+                  </p>
                 </div>
               </div>
             </div>
@@ -4246,6 +4246,40 @@
           target.scrollIntoView({ behavior: "smooth", block: "start" });
         });
       });
+
+      // Scroll-driven hero sentence scale
+      if (state.learning._heroScrollHandler) {
+        window.removeEventListener("scroll", state.learning._heroScrollHandler);
+        state.learning._heroScrollHandler = null;
+      }
+
+      const sentenceEl = document.getElementById("learningHeroSentence");
+      if (sentenceEl) {
+        let rafId = 0;
+
+        const update = () => {
+          rafId = 0;
+          const rect = sentenceEl.getBoundingClientRect();
+          const viewportH = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+
+          // Progress increases as the user scrolls down; anchored to sentence position.
+          const start = viewportH * 0.75;
+          const end = viewportH * 0.15;
+          const t = (start - rect.top) / Math.max(1, start - end);
+          const progress = Math.max(0, Math.min(1, t));
+          const scale = 1 + progress * 0.65;
+          sentenceEl.style.transform = `scale(${scale.toFixed(3)})`;
+        };
+
+        const onScroll = () => {
+          if (rafId) return;
+          rafId = requestAnimationFrame(update);
+        };
+
+        state.learning._heroScrollHandler = onScroll;
+        window.addEventListener("scroll", onScroll, { passive: true });
+        requestAnimationFrame(update);
+      }
     }
 
     const positionWaveDots = () => {

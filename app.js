@@ -4081,7 +4081,7 @@
           <section class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen min-h-[100vh] overflow-hidden">
             <div class="relative h-full flex items-center">
               <div class="max-w-7xl mx-auto w-full px-6 py-20">
-                <div class="max-w-3xl">
+                <div class="max-w-4xl mx-auto flex flex-col items-center text-center">
                   <h1 class="text-4xl sm:text-5xl md:text-6xl font-semibold text-white" style="font-family:Poppins, ui-sans-serif, system-ui">
                     Learning Hub
                   </h1>
@@ -4090,7 +4090,7 @@
                       Explore
                     </button>
                   </div>
-                  <p id="learningHeroSentence" class="mt-10 max-w-3xl text-white/90 text-lg sm:text-xl md:text-2xl leading-relaxed text-center mx-auto origin-center" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; transform: scale(1); will-change: transform; transition: transform 120ms linear;">
+                  <p id="learningHeroSentence" class="mt-12 max-w-4xl text-white/95 text-2xl sm:text-3xl md:text-4xl leading-snug text-center mx-auto origin-center" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; transform: scale(1); will-change: transform; transition: transform 120ms linear;">
                     Learning Hub — your space to explore resources, gain new skills, and grow your knowledge.
                   </p>
                 </div>

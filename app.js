@@ -1252,6 +1252,29 @@
       visual.style.backgroundPosition = '0 0, 0 0, 0 0, center';
       visual.style.backgroundRepeat = 'no-repeat, no-repeat, no-repeat, no-repeat';
     });
+
+    const docNameToProjectId = {
+      "ShadeLA": "03",
+      "Reclamation": "05",
+      "Baldwin Hills": "02",
+    };
+
+    root.querySelectorAll('.project').forEach((card) => {
+      const name = card.querySelector('h3')?.textContent?.trim() || '';
+      const pid = docNameToProjectId[name];
+      if (!pid) return;
+
+      const project = getProjectById(pid);
+      const videoUrl = String(project?.videoUrl || project?.videoEmbedUrl || "").trim();
+      if (!videoUrl) return;
+
+      const videoLink = Array.from(card.querySelectorAll('.actions a.action')).find((a) => (a.textContent || "").toLowerCase().includes('video'));
+      if (!videoLink) return;
+
+      videoLink.setAttribute('href', videoUrl);
+      videoLink.setAttribute('target', '_blank');
+      videoLink.setAttribute('rel', 'noreferrer');
+    });
   }
 
   window.__dtVideoFallback = function (videoEl) {

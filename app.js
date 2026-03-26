@@ -1612,18 +1612,24 @@
       </nav>
     `;
 
-    const learningLink = navbarEl.querySelector('a[data-nav-key="learning"]');
-    if (learningLink) {
-      learningLink.addEventListener("click", (e) => {
-        state.learning.currentDetail = null;
-        if (location.hash !== "#/learning-hub") {
-          return;
+    // If the user clicks the *current* tab, the hash won't change, so hashchange won't fire.
+    // Force a re-render so animations and page setup re-run.
+    const navLinks = navbarEl.querySelectorAll("a[data-nav-key]");
+    navLinks.forEach((a) => {
+      a.addEventListener("click", (e) => {
+        const key = a.getAttribute("data-nav-key") || "";
+        const href = a.getAttribute("href") || "";
+
+        if (key === "learning") {
+          state.learning.currentDetail = null;
         }
-        e.preventDefault();
-        renderLearningHub();
-        renderNavbar();
+
+        if (href && location.hash === href) {
+          e.preventDefault();
+          renderWithTransition();
+        }
       });
-    }
+    });
   }
 
   function renderChatAssistant() {

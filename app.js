@@ -3826,8 +3826,15 @@
 
     // Clean up any previous hero scroll handler (important when navigating between routes or detail views)
     if (state.learning._heroScrollHandler) {
-      window.removeEventListener("scroll", state.learning._heroScrollHandler);
+      const prevTarget = state.learning._heroScrollTarget || window;
+      try {
+        if (prevTarget === window) window.removeEventListener("scroll", state.learning._heroScrollHandler);
+        else prevTarget.removeEventListener("scroll", state.learning._heroScrollHandler);
+      } catch (_) {
+        // no-op
+      }
       state.learning._heroScrollHandler = null;
+      state.learning._heroScrollTarget = null;
     }
 
     const learningCardMeta = {
@@ -4278,10 +4285,38 @@
       if (sentenceEl) {
         let rafId = 0;
 
+        const getScrollTarget = () => {
+          const candidates = [
+            document.scrollingElement,
+            document.documentElement,
+            document.body,
+            document.querySelector("main"),
+            appEl,
+          ].filter(Boolean);
+
+          for (const el of candidates) {
+            try {
+              if ((el.scrollHeight || 0) > (el.clientHeight || 0) + 2) return el;
+            } catch (_) {
+              // no-op
+            }
+          }
+          return window;
+        };
+
+        const scrollTarget = getScrollTarget();
+
         const update = () => {
           rafId = 0;
           const viewportH = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
-          const y = Math.max(0, window.scrollY || window.pageYOffset || 0);
+          const y = (() => {
+            try {
+              if (scrollTarget === window) return Math.max(0, window.scrollY || window.pageYOffset || 0);
+              return Math.max(0, scrollTarget.scrollTop || 0);
+            } catch {
+              return Math.max(0, window.scrollY || window.pageYOffset || 0);
+            }
+          })();
           const progress = Math.max(0, Math.min(1, y / (viewportH * 1.1)));
           const scale = 1 + progress * 0.65;
           sentenceEl.style.transform = `scale(${scale.toFixed(3)})`;
@@ -4293,7 +4328,14 @@
         };
 
         state.learning._heroScrollHandler = onScroll;
-        window.addEventListener("scroll", onScroll, { passive: true });
+        state.learning._heroScrollTarget = scrollTarget;
+        try {
+          if (scrollTarget === window) window.addEventListener("scroll", onScroll, { passive: true });
+          else scrollTarget.addEventListener("scroll", onScroll, { passive: true });
+        } catch (_) {
+          window.addEventListener("scroll", onScroll, { passive: true });
+          state.learning._heroScrollTarget = window;
+        }
         requestAnimationFrame(update);
       }
     }
@@ -4615,8 +4657,15 @@
     const route = parseRoute();
 
     if (route.name !== "learning" && state.learning?._heroScrollHandler) {
-      window.removeEventListener("scroll", state.learning._heroScrollHandler);
+      const prevTarget = state.learning._heroScrollTarget || window;
+      try {
+        if (prevTarget === window) window.removeEventListener("scroll", state.learning._heroScrollHandler);
+        else prevTarget.removeEventListener("scroll", state.learning._heroScrollHandler);
+      } catch (_) {
+        // no-op
+      }
       state.learning._heroScrollHandler = null;
+      state.learning._heroScrollTarget = null;
     }
 
     if (!state.home.featuredProjects.length) initHomeData();

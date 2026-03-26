@@ -1216,19 +1216,19 @@
       } catch (_) {
         window.scrollTo(0, 0);
       }
-    });
 
-    // Force-restart the marquee animation on each navigation (some browsers may keep it paused/stale)
-    try {
-      const titleEl = root.querySelector("h1");
-      if (titleEl) {
-        titleEl.style.animation = "none";
-        void titleEl.offsetHeight;
-        titleEl.style.animation = "";
+      // Force-restart the marquee animation on each navigation.
+      // Cloning the node is more reliable than toggling style.animation across browsers.
+      try {
+        const titleEl = root.querySelector("h1");
+        if (titleEl && titleEl.parentNode) {
+          const clone = titleEl.cloneNode(true);
+          titleEl.parentNode.replaceChild(clone, titleEl);
+        }
+      } catch (_) {
+        // no-op
       }
-    } catch (_) {
-      // no-op
-    }
+    });
 
     const imageByProjectName = {
       "ShadeLA": "./Master-Documentation/assets/ShadeLAA.png",
@@ -4610,6 +4610,11 @@
     renderChatAssistant();
 
     const route = parseRoute();
+
+    if (route.name !== "learning" && state.learning?._heroScrollHandler) {
+      window.removeEventListener("scroll", state.learning._heroScrollHandler);
+      state.learning._heroScrollHandler = null;
+    }
 
     if (!state.home.featuredProjects.length) initHomeData();
     if (!state.learning.sections) initLearningData();

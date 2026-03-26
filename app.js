@@ -1418,6 +1418,8 @@
     const max = 18;
     for (let i = 0; i < els.length && i < max; i++) {
       const el = els[i];
+      if (el && el.id === "learningHeroSentence") continue;
+      if (el && el.tagName === "H1" && el.closest && el.closest(".dt-doc")) continue;
       if (!el || el.classList.contains("enter-text") || el.classList.contains("enter-fade")) continue;
       const isFadeOnly = !!el.closest('[data-enter="fade"]');
       el.classList.add(isFadeOnly ? "enter-fade" : "enter-text");

@@ -866,7 +866,7 @@
           overflow: hidden;
           padding: 56px 52px;
           border-radius: 34px;
-          border: 1px solid rgba(255,255,255,0.10);
+          border: none;
           background: #020617;
           box-shadow: 0 28px 70px rgba(0,0,0,0.55);
         }

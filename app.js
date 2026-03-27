@@ -852,6 +852,12 @@
             letter-spacing: -0.05em;
             line-height: 0.95;
             text-transform: uppercase;
+            background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.55));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transform: translateY(14px);
           }
 
           .dt-doc .section-head p{
@@ -859,6 +865,27 @@
             max-width: 520px;
             color: #a9a9b3;
             line-height: 1.8;
+            opacity: 0;
+            transform: translateY(10px);
+          }
+
+          @keyframes dtDocSectionHeadIn{
+            from{ opacity: 0; transform: translateY(14px); filter: blur(6px); }
+            to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
+          }
+
+          @keyframes dtDocSectionCopyIn{
+            from{ opacity: 0; transform: translateY(10px); filter: blur(6px); }
+            to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
+          }
+
+          .dt-doc .section-head.is-anim h2{
+            animation: dtDocSectionHeadIn 780ms cubic-bezier(.2,.8,.2,1) forwards;
+          }
+
+          .dt-doc .section-head.is-anim p{
+            animation: dtDocSectionCopyIn 820ms cubic-bezier(.2,.8,.2,1) forwards;
+            animation-delay: 90ms;
           }
 
           .dt-doc .projects{ display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -1199,6 +1226,16 @@
         window.scrollTo(0, 0);
       }
 
+      try {
+        root.querySelectorAll('.section-head').forEach((el) => {
+          el.classList.remove('is-anim');
+          void el.offsetWidth;
+          el.classList.add('is-anim');
+        });
+      } catch (_) {
+        // no-op
+      }
+
       // Force-restart the marquee animation on each navigation.
       try {
         const titleEl = root.querySelector("h1");
@@ -1387,6 +1424,7 @@
       const el = els[i];
       if (el && el.id === "learningHeroSentence") continue;
       if (el && el.tagName === "H1" && el.closest && el.closest(".dt-doc")) continue;
+      if (el && el.closest && el.closest(".dt-doc .section-head")) continue;
       if (!el || el.classList.contains("enter-text") || el.classList.contains("enter-fade")) continue;
       const isFadeOnly = !!el.closest('[data-enter="fade"]');
       el.classList.add(isFadeOnly ? "enter-fade" : "enter-text");

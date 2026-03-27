@@ -772,11 +772,18 @@
               linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
               radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 58%);
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 110px 40px 40px;
           }
 
           .dt-doc .showcase{
-            position: absolute;
-            inset: 90px 40px 40px 40px;
+            position: relative;
+            inset: auto;
+            width: 100%;
+            max-width: 640px;
+            height: min(560px, calc(100vh - 190px));
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 28px;
             overflow: hidden;
@@ -981,7 +988,7 @@
 
           @media (max-width: 1100px) {
             .dt-doc .hero{ grid-template-columns: 1fr; }
-            .dt-doc .hero-right{ min-height: 58vh; border-left: 0; border-top: 1px solid rgba(255,255,255,0.08); }
+            .dt-doc .hero-right{ min-height: 58vh; border-left: 0; border-top: 1px solid rgba(255,255,255,0.08); padding: 40px 28px; }
             .dt-doc .projects{ grid-template-columns: 1fr; }
           }
 

@@ -3962,6 +3962,11 @@
       url: "./assets/Learning%20Hub/puhc%20website%20walkthrough.mp4",
     };
 
+    const ytLessonItem = {
+      title: "Digital Twin video lesson",
+      url: "https://youtu.be/BaDAIZ9jpuI",
+    };
+
     if (!state.learning.sections || typeof state.learning.sections !== "object") {
       state.learning.sections = {};
     }
@@ -3980,6 +3985,7 @@
         "Screen-recorded tutorial building a campus energy map.",
         "Walkthrough of a full student project presentation.",
         puhcWalkthroughItem,
+        ytLessonItem,
       ];
     } else {
       const hasPuhc = state.learning.sections.videos.items.some(
@@ -3990,6 +3996,16 @@
             String(it.url || "").includes("puhc%20website%20walkthrough.mp4"))
       );
       if (!hasPuhc) state.learning.sections.videos.items.push(puhcWalkthroughItem);
+
+      const hasYtLesson = state.learning.sections.videos.items.some(
+        (it) =>
+          it &&
+          typeof it === "object" &&
+          (String(it.url || "").includes("youtu.be/BaDAIZ9jpuI") ||
+            String(it.url || "").includes("youtube.com/watch") ||
+            String(it.url || "").includes("youtube.com/embed/BaDAIZ9jpuI"))
+      );
+      if (!hasYtLesson) state.learning.sections.videos.items.push(ytLessonItem);
     }
 
     const savedPathways = localStorage.getItem("learningHubPathways");
@@ -4175,6 +4191,31 @@
           ? (videoItems.find((v) => String(v.url || "") === selectedVideoUrlRaw) || videoItems[0] || null)
           : null;
 
+      const getYoutubeEmbedUrl = (rawUrl) => {
+        const u = String(rawUrl || "").trim();
+        if (!u) return "";
+        const lower = u.toLowerCase();
+        const isYt = lower.includes("youtube.com") || lower.includes("youtu.be");
+        if (!isYt) return "";
+
+        let id = "";
+        try {
+          if (lower.includes("youtu.be/")) {
+            id = u.split("youtu.be/")[1]?.split(/[?&#]/)[0] || "";
+          } else if (lower.includes("youtube.com/embed/")) {
+            id = u.split("youtube.com/embed/")[1]?.split(/[?&#]/)[0] || "";
+          } else {
+            const parsed = new URL(u);
+            id = parsed.searchParams.get("v") || "";
+          }
+        } catch (_) {
+          id = "";
+        }
+
+        if (!id) return "";
+        return `https://www.youtube.com/embed/${encodeURIComponent(id)}?rel=0`;
+      };
+
       const renderLearningItem = (it) => {
         if (!it) return "";
         if (typeof it === "string") return `<li>${escapeHtml(it)}</li>`;
@@ -4240,7 +4281,14 @@
                             </div>
                             <div class="px-5 pb-6">
                               <div class="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black">
-                                <video data-learning-video="1" data-learning-video-url="${escapeHtml(String(selectedVideo?.url || ""))}" controls playsinline preload="metadata" class="w-full h-full" src="${escapeHtml(String(selectedVideo?.url || ""))}"></video>
+                                ${(() => {
+                                  const vUrl = String(selectedVideo?.url || "");
+                                  const yt = getYoutubeEmbedUrl(vUrl);
+                                  if (yt) {
+                                    return `<iframe class="w-full h-full" src="${escapeHtml(yt)}" title="${escapeHtml(String(selectedVideo?.title || "Video"))}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+                                  }
+                                  return `<video data-learning-video="1" data-learning-video-url="${escapeHtml(vUrl)}" controls playsinline preload="metadata" class="w-full h-full" src="${escapeHtml(vUrl)}"></video>`;
+                                })()}
                               </div>
 
                               <div class="mt-4">

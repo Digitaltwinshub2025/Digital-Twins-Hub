@@ -10,6 +10,9 @@ window.PROJECTS_CATALOG = [
     repoUrl: 'https://digitaltwinshub2025.github.io/USGBC/',
     demoUrl: 'https://digitaltwinshub2025.github.io/USGBC/',
     caseStudyUrl: 'https://docs.google.com/presentation/d/1YuVNdtQKuQmZMVu-KDavVDxwae6hEi7JCUUqQqzyH84/edit?slide=id.g3a7397fbdee_0_0#slide=id.g3a7397fbdee_0_0',
+    videoTitle: 'USGBC — Project Video',
+    videoUrl: 'https://youtu.be/8dr-XNym5lU',
+    videoEmbedUrl: 'https://www.youtube.com/embed/8dr-XNym5lU',
     goal:
       'To create a practical, interactive digital twin guide that distills resilience and rebuilding strategies into clear, actionable steps, helping communities and planners understand risk, prioritize investments, and integrate sustainable design principles into recovery and long-term resilience workflows. This digital guide supports holistic planning by combining risk assessment, infrastructure considerations, equity measures, and green rebuilding best practices in one platform.',
     image: '/gitlogos/USGBC.png',

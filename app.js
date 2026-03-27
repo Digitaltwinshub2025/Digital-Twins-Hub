@@ -857,29 +857,21 @@
         }
 
         .dt-doc .section-head{
+          display: flex;
+          justify-content: space-between;
+          gap: 28px;
+          align-items: end;
+          margin-bottom: 36px;
           position: relative;
           overflow: hidden;
-          margin-bottom: 36px;
-          padding: 64px 52px;
+          padding: 56px 52px;
           border-radius: 34px;
           border: none;
-          background:
-            radial-gradient(circle at 20% 20%, rgba(125,211,252,0.10), transparent 30%),
-            radial-gradient(circle at 80% 15%, rgba(192,132,252,0.12), transparent 28%),
-            radial-gradient(circle at 50% 80%, rgba(59,130,246,0.08), transparent 30%),
-            linear-gradient(180deg, #0f172a, #020617);
+          background: #020617;
           box-shadow: 0 28px 70px rgba(0,0,0,0.55);
-          text-align: center;
         }
 
-        .dt-doc .projects-hero{
-          position: relative;
-          z-index: 2;
-          max-width: 920px;
-          margin: 0 auto;
-        }
-
-        .dt-doc .projects-hero-particles{
+        .dt-doc .orb-bg{
           position: absolute;
           inset: 0;
           overflow: hidden;
@@ -887,153 +879,76 @@
           z-index: 0;
         }
 
-        .dt-doc .projects-hero-particles span{
+        .dt-doc .orb{
           position: absolute;
-          display: block;
-          width: 4px;
-          height: 4px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.35);
-          box-shadow: 0 0 12px rgba(125,211,252,0.25);
-          animation: dtDocFloatParticle linear infinite;
+          filter: blur(20px);
+          opacity: 0.45;
+          animation: dtDocOrbFloat 10s infinite ease-in-out alternate;
         }
 
-        .dt-doc .projects-hero-particles span:nth-child(1)  { left: 8%;  top: 85%; animation-duration: 14s; animation-delay: 0s; }
-        .dt-doc .projects-hero-particles span:nth-child(2)  { left: 16%; top: 70%; animation-duration: 18s; animation-delay: 2s; }
-        .dt-doc .projects-hero-particles span:nth-child(3)  { left: 28%; top: 90%; animation-duration: 16s; animation-delay: 1s; }
-        .dt-doc .projects-hero-particles span:nth-child(4)  { left: 36%; top: 78%; animation-duration: 20s; animation-delay: 3s; }
-        .dt-doc .projects-hero-particles span:nth-child(5)  { left: 48%; top: 88%; animation-duration: 13s; animation-delay: 2s; }
-        .dt-doc .projects-hero-particles span:nth-child(6)  { left: 58%; top: 74%; animation-duration: 17s; animation-delay: 4s; }
-        .dt-doc .projects-hero-particles span:nth-child(7)  { left: 68%; top: 92%; animation-duration: 15s; animation-delay: 1s; }
-        .dt-doc .projects-hero-particles span:nth-child(8)  { left: 78%; top: 82%; animation-duration: 19s; animation-delay: 0s; }
-        .dt-doc .projects-hero-particles span:nth-child(9)  { left: 88%; top: 89%; animation-duration: 16s; animation-delay: 3s; }
-        .dt-doc .projects-hero-particles span:nth-child(10) { left: 94%; top: 76%; animation-duration: 14s; animation-delay: 2s; }
+        .dt-doc .orb1{ width: 220px; height: 220px; background: cyan; top: 10%; left: 15%; }
+        .dt-doc .orb2{ width: 300px; height: 300px; background: #8b5cf6; bottom: 10%; right: 15%; animation-duration: 14s; }
+        .dt-doc .orb3{ width: 160px; height: 160px; background: #22c55e; top: 55%; left: 55%; animation-duration: 12s; }
 
-        .dt-doc .projects-hero-title{
-          display: inline-block;
-          font-family: "Orbitron", Inter, Arial, Helvetica, sans-serif;
-          font-size: clamp(3rem, 8vw, 6rem);
-          font-weight: 800;
-          letter-spacing: 2px;
-          line-height: 1.05;
-          white-space: nowrap;
-          overflow: hidden;
-          width: 0;
-          border-right: 3px solid #7dd3fc;
-          background: linear-gradient(90deg, #ffffff, #7dd3fc, #c084fc, #ffffff);
-          background-size: 220% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow:
-            0 0 12px rgba(255,255,255,0.08),
-            0 0 24px rgba(125,211,252,0.16),
-            0 0 34px rgba(192,132,252,0.12);
-          animation:
-            dtDocTyping 2.2s steps(8, end) forwards,
-            dtDocBlink 0.8s step-end infinite,
-            dtDocShine 5s linear infinite;
+        @keyframes dtDocOrbFloat{
+          from{ transform: translateY(-20px) translateX(-10px) scale(1); }
+          to{ transform: translateY(20px) translateX(10px) scale(1.15); }
         }
 
-        .dt-doc .projects-hero-subtitle{
-          margin: 34px auto 0;
-          max-width: 760px;
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-          padding: 24px 28px;
-          border-radius: 22px;
-          background: rgba(255,255,255,0.035);
-          border: 1px solid rgba(255,255,255,0.08);
-          backdrop-filter: blur(14px);
-          box-shadow:
-            0 0 40px rgba(0,0,0,0.22),
-            0 0 50px rgba(192, 132, 252, 0.18),
-            inset 0 0 30px rgba(255,255,255,0.02);
-          opacity: 0;
-          transform: translateY(24px);
-          animation: dtDocFadeUp 1s ease forwards;
-          animation-delay: 2.25s;
-          transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-          text-align: left;
-          font-family: "Space Grotesk", Inter, Arial, Helvetica, sans-serif;
-        }
-
-        .dt-doc .projects-hero-subtitle:hover{
-          transform: translateY(-4px);
-          border-color: rgba(125,211,252,0.28);
-          box-shadow:
-            0 0 40px rgba(0,0,0,0.24),
-            0 0 70px rgba(125, 211, 252, 0.22),
-            0 0 90px rgba(192, 132, 252, 0.18),
-            inset 0 0 30px rgba(255,255,255,0.03);
-        }
-
-        .dt-doc .projects-hero-subtitle span{
-          font-size: clamp(1rem, 2vw, 1.2rem);
-          line-height: 1.9;
-          color: rgba(255,255,255,0.72);
+        .dt-doc .section-head h2{
+          margin: 0;
+          font-size: clamp(2rem, 4vw, 4rem);
+          letter-spacing: -0.06em;
+          line-height: 0.92;
+          text-transform: uppercase;
+          font-weight: 900;
+          color: #fff;
+          position: relative;
+          z-index: 2;
+          text-shadow: 0 0 20px rgba(0,255,255,0.30);
           opacity: 0;
           transform: translateY(14px);
-          animation: dtDocLineReveal 0.8s ease forwards;
+        }
+
+        .dt-doc .section-head p{
+          margin: 0;
+          max-width: 520px;
+          color: #cbd5e1;
+          line-height: 1.8;
           position: relative;
+          z-index: 2;
+          font-size: 14px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          opacity: 0;
+          transform: translateY(10px);
         }
 
-        .dt-doc .projects-hero-subtitle span:nth-child(1) { animation-delay: 2.45s; }
-        .dt-doc .projects-hero-subtitle span:nth-child(2) { animation-delay: 2.85s; }
-
-        .dt-doc .projects-hero-subtitle b{
-          font-weight: 600;
-          background: linear-gradient(90deg, #7dd3fc, #c084fc);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          position: relative;
-          animation: dtDocShine 4s linear infinite;
+        @keyframes dtDocSectionHeadIn{
+          from{ opacity: 0; transform: translateY(14px); filter: blur(6px); }
+          to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
         }
 
-        .dt-doc .projects-hero-subtitle b::after{
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: -4px;
-          width: 100%;
-          height: 2px;
-          border-radius: 999px;
-          background: linear-gradient(90deg, rgba(125,211,252,0.95), rgba(192,132,252,0.95));
-          opacity: 0.9;
-          box-shadow: 0 0 12px rgba(125,211,252,0.35);
-          transform: scaleX(0);
-          transform-origin: left;
-          animation: dtDocUnderlineGrow 0.9s ease forwards;
+        @keyframes dtDocSectionCopyIn{
+          from{ opacity: 0; transform: translateY(10px); filter: blur(6px); }
+          to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
         }
 
-        .dt-doc .projects-hero-subtitle b:nth-of-type(1)::after { animation-delay: 3s; }
-        .dt-doc .projects-hero-subtitle b:nth-of-type(2)::after { animation-delay: 3.2s; }
-        .dt-doc .projects-hero-subtitle b:nth-of-type(3)::after { animation-delay: 3.4s; }
-
-        @keyframes dtDocTyping { from { width: 0; } to { width: 8ch; } }
-        @keyframes dtDocBlink { 50% { border-color: transparent; } }
-        @keyframes dtDocShine { from { background-position: 0% center; } to { background-position: 220% center; } }
-        @keyframes dtDocFadeUp { to { opacity: 1; transform: translateY(0); } }
-        @keyframes dtDocLineReveal { to { opacity: 1; transform: translateY(0); } }
-        @keyframes dtDocUnderlineGrow { to { transform: scaleX(1); } }
-
-        @keyframes dtDocFloatParticle {
-          0% { transform: translateY(0) scale(1); opacity: 0; }
-          10% { opacity: 1; }
-          80% { opacity: 0.85; }
-          100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
+        @keyframes dtDocHeroPulse{
+          0%, 100%{ transform: scale(1); text-shadow: 0 0 20px rgba(0,255,255,0.25); }
+          50%{ transform: scale(1.03); text-shadow: 0 0 35px rgba(0,255,255,0.45); }
         }
 
-        @media (max-width: 640px) {
-          .dt-doc .projects-hero-subtitle{ padding: 20px 18px; text-align: left; }
-          .dt-doc .projects-hero-title{
-            white-space: normal;
-            width: auto;
-            border-right: none;
-            animation: dtDocShine 5s linear infinite, dtDocFadeUp 1s ease forwards;
-            opacity: 0;
-          }
+        .dt-doc .section-head.is-anim h2{
+          animation:
+            dtDocSectionHeadIn 780ms cubic-bezier(.2,.8,.2,1) forwards,
+            dtDocHeroPulse 3s ease-in-out 900ms infinite;
+        }
+
+        .dt-doc .section-head.is-anim p{
+          animation: dtDocSectionCopyIn 820ms cubic-bezier(.2,.8,.2,1) forwards;
+          animation-delay: 90ms;
         }
 
         @keyframes dtDocCardIn{
@@ -1122,17 +1037,15 @@
             <section class="section" id="projects">
               <div class="section-inner">
                 <div class="section-head">
-                  <div class="projects-hero-particles">
-                    <span></span><span></span><span></span><span></span><span></span>
-                    <span></span><span></span><span></span><span></span><span></span>
+                  <div class="orb-bg">
+                    <div class="orb orb1"></div>
+                    <div class="orb orb2"></div>
+                    <div class="orb orb3"></div>
                   </div>
-                  <div class="projects-hero">
-                    <h2 class="projects-hero-title">Projects</h2>
-                    <div class="projects-hero-subtitle">
-                      <span>Explore featured <b>digital twin</b> initiatives across disciplines.</span>
-                      <span>Dive into <b>simulations</b>, <b>analytics</b>, and <b>real-time models</b>.</span>
-                    </div>
-                  </div>
+                  <h2>Selected<br>Projects</h2>
+                  <p>
+                    Each card follows the same portfolio language and still supports your practical links for ArcGIS, AURA, Flipthrough, and project videos.
+                  </p>
                 </div>
 
                 <div class="projects">

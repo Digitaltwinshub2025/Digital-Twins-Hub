@@ -4216,6 +4216,109 @@
         return `https://www.youtube.com/embed/${encodeURIComponent(id)}?rel=0`;
       };
 
+      const getYoutubeThumbUrl = (rawUrl) => {
+        const u = String(rawUrl || "").trim();
+        if (!u) return "";
+        const lower = u.toLowerCase();
+        const isYt = lower.includes("youtube.com") || lower.includes("youtu.be");
+        if (!isYt) return "";
+
+        let id = "";
+        try {
+          if (lower.includes("youtu.be/")) {
+            id = u.split("youtu.be/")[1]?.split(/[?&#]/)[0] || "";
+          } else if (lower.includes("youtube.com/embed/")) {
+            id = u.split("youtube.com/embed/")[1]?.split(/[?&#]/)[0] || "";
+          } else {
+            const parsed = new URL(u);
+            id = parsed.searchParams.get("v") || "";
+          }
+        } catch (_) {
+          id = "";
+        }
+
+        if (!id) return "";
+        return `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
+      };
+
+      const getYoutubeWatchUrl = (rawUrl) => {
+        const u = String(rawUrl || "").trim();
+        if (!u) return "";
+        const lower = u.toLowerCase();
+        const isYt = lower.includes("youtube.com") || lower.includes("youtu.be");
+        if (!isYt) return "";
+
+        let id = "";
+        try {
+          if (lower.includes("youtu.be/")) {
+            id = u.split("youtu.be/")[1]?.split(/[?&#]/)[0] || "";
+          } else if (lower.includes("youtube.com/embed/")) {
+            id = u.split("youtube.com/embed/")[1]?.split(/[?&#]/)[0] || "";
+          } else {
+            const parsed = new URL(u);
+            id = parsed.searchParams.get("v") || "";
+          }
+        } catch (_) {
+          id = "";
+        }
+
+        if (!id) return "";
+        return `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`;
+      };
+
+      const getLearningVideoComments = (videoUrl) => {
+        const storageKey = "learningHubVideoComments";
+        let store = {};
+        try {
+          store = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        } catch {
+          store = {};
+        }
+        const list = store && typeof store === "object" ? store[videoUrl] : null;
+        return Array.isArray(list) ? list : [];
+      };
+
+      const renderLearningComments = (videoUrl) => {
+        const url = String(videoUrl || "");
+        if (!url) return "";
+        const comments = getLearningVideoComments(url);
+        const safeUrl = escapeHtml(url);
+        const itemsHtml = comments
+          .slice()
+          .sort((a, b) => Number(b?.ts || 0) - Number(a?.ts || 0))
+          .map((c) => {
+            const txt = escapeHtml(String(c?.text || "").trim());
+            if (!txt) return "";
+            const d = new Date(Number(c?.ts || 0) || Date.now());
+            const stamp = escapeHtml(d.toLocaleString());
+            return `<div class="rounded-2xl border border-black/10 bg-white/70 p-3">
+              <div class="text-sm text-gray-900" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${txt}</div>
+              <div class="mt-1 text-[11px] text-black/50" style="font-family:Poppins, ui-sans-serif">${stamp}</div>
+            </div>`;
+          })
+          .filter(Boolean)
+          .join("");
+
+        return `
+          <div class="mt-6">
+            <div class="text-sm font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">Comments</div>
+            <div class="mt-2 rounded-3xl border border-black/10 bg-white/80 shadow-sm overflow-hidden">
+              <div class="p-4">
+                <div class="flex flex-col gap-3">
+                  <textarea data-learning-video-comment-input="${safeUrl}" rows="3" class="w-full resize-none rounded-2xl border border-black/10 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Add a comment..." style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"></textarea>
+                  <div class="flex items-center justify-end">
+                    <button type="button" data-learning-video-comment-submit="${safeUrl}" class="rounded-full bg-emerald-600 text-white px-4 py-2 text-xs hover:bg-emerald-700" style="font-family:Poppins, ui-sans-serif">Post comment</button>
+                  </div>
+                </div>
+                <div data-learning-video-comments-list="${safeUrl}" class="mt-4 space-y-3">
+                  ${itemsHtml || `<div class="text-sm text-black/50" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">No comments yet.</div>`}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      };
+
       const renderLearningItem = (it) => {
         if (!it) return "";
         if (typeof it === "string") return `<li>${escapeHtml(it)}</li>`;
@@ -4274,10 +4377,57 @@
                   ${
                     key === "videos" && videoItems.length
                       ? `
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                          <div class="lg:col-span-2 rounded-3xl overflow-hidden border border-black/10 bg-white/80 shadow-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div class="md:col-span-1 space-y-3">
+                            <div class="text-sm font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">Playlist</div>
+                            <div class="space-y-2">
+                              ${videoItems
+                                .map((v) => {
+                                  const vTitle = escapeHtml(String(v.title || "Video"));
+                                  const vUrl = escapeHtml(String(v.url || ""));
+                                  const isActive = selectedVideo && String(v.url || "") === String(selectedVideo.url || "");
+                                  const rawUrl = String(v.url || "");
+                                  const thumbUrl = getYoutubeThumbUrl(rawUrl);
+                                  return `
+                                    <button type="button" data-learning-video-select="${vUrl}" class="w-full text-left rounded-2xl border ${isActive ? "border-emerald-600" : "border-black/10"} bg-white/80 hover:bg-white px-3 py-2 shadow-sm transition-colors">
+                                      <div class="flex items-center gap-3">
+                                        <div class="shrink-0 h-16 w-28 rounded-2xl bg-black border border-black/10 overflow-hidden">
+                                          ${thumbUrl
+                                            ? `<img src="${escapeHtml(thumbUrl)}" alt="${vTitle}" class="w-full h-full object-cover" loading="lazy" />`
+                                            : `<video class="w-full h-full object-cover" muted playsinline preload="metadata" src="${vUrl}"></video>`}
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                          <div class="text-sm font-semibold text-gray-900 truncate" style="font-family:Poppins, ui-sans-serif">${vTitle}</div>
+                                          <div class="mt-0.5 flex items-center justify-between gap-2">
+                                            <div data-learning-video-label="${vUrl}" class="text-xs text-black/60" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">Not started</div>
+                                            <div class="shrink-0 flex items-center gap-2">
+                                              <span data-learning-video-watched-badge="${vUrl}" class="hidden rounded-full bg-emerald-600 px-2 py-0.5 text-[11px] font-semibold text-white" style="font-family:Poppins, ui-sans-serif">Watched</span>
+                                              <span class="text-[11px] ${isActive ? "text-emerald-700" : "text-black/50"}" style="font-family:Poppins, ui-sans-serif">${isActive ? "Playing" : "Play"}</span>
+                                            </div>
+                                          </div>
+                                          <div class="mt-2 h-2 w-full rounded-full bg-black/10 overflow-hidden">
+                                            <div data-learning-video-progress="${vUrl}" class="h-full bg-emerald-600" style="width:0%"></div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </button>
+                                  `;
+                                })
+                                .join("")}
+                            </div>
+                          </div>
+
+                          <div class="md:col-span-2 rounded-3xl overflow-hidden border border-black/10 bg-white/80 shadow-sm">
                             <div class="p-5">
-                              <div class="text-lg font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">${escapeHtml(String(selectedVideo?.title || "Video"))}</div>
+                              <div class="flex items-start justify-between gap-3">
+                                <div class="text-lg font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">${escapeHtml(String(selectedVideo?.title || "Video"))}</div>
+                                ${(() => {
+                                  const vUrl = String(selectedVideo?.url || "");
+                                  const ytWatch = getYoutubeWatchUrl(vUrl);
+                                  if (!ytWatch) return "";
+                                  return `<a class="shrink-0 rounded-full border border-black/10 bg-white/70 px-3 py-1.5 text-xs text-gray-900 hover:bg-white" style="font-family:Poppins, ui-sans-serif" href="${escapeHtml(ytWatch)}" target="_blank" rel="noreferrer">Open on YouTube</a>`;
+                                })()}
+                              </div>
                             </div>
                             <div class="px-5 pb-6">
                               <div class="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black">
@@ -4307,36 +4457,8 @@
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
 
-                          <div class="lg:col-span-1 space-y-3">
-                            <div class="text-sm font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif">Playlist</div>
-                            <div class="space-y-3">
-                              ${videoItems
-                                .map((v) => {
-                                  const vTitle = escapeHtml(String(v.title || "Video"));
-                                  const vUrl = escapeHtml(String(v.url || ""));
-                                  const isActive = selectedVideo && String(v.url || "") === String(selectedVideo.url || "");
-                                  return `
-                                    <button type="button" data-learning-video-select="${vUrl}" class="w-full text-left rounded-2xl border ${isActive ? "border-emerald-600" : "border-black/10"} bg-white/80 hover:bg-white px-4 py-3 shadow-sm transition-colors">
-                                      <div class="flex items-start justify-between gap-3">
-                                        <div class="min-w-0">
-                                          <div class="text-sm font-semibold text-gray-900 truncate" style="font-family:Poppins, ui-sans-serif">${vTitle}</div>
-                                          <div data-learning-video-label="${vUrl}" class="mt-1 text-xs text-black/60" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">Not started</div>
-                                        </div>
-                                        <div class="shrink-0 flex items-center gap-2">
-                                          <span data-learning-video-watched-badge="${vUrl}" class="hidden rounded-full bg-emerald-600 px-2 py-0.5 text-[11px] font-semibold text-white" style="font-family:Poppins, ui-sans-serif">Watched</span>
-                                          <span class="text-xs ${isActive ? "text-emerald-700" : "text-black/50"}" style="font-family:Poppins, ui-sans-serif">${isActive ? "Playing" : "Play"}</span>
-                                        </div>
-                                      </div>
-                                      <div class="mt-2 h-2 w-full rounded-full bg-black/10 overflow-hidden">
-                                        <div data-learning-video-progress="${vUrl}" class="h-full bg-emerald-600" style="width:0%"></div>
-                                      </div>
-                                    </button>
-                                  `;
-                                })
-                                .join("")}
+                              ${renderLearningComments(String(selectedVideo?.url || ""))}
                             </div>
                           </div>
                         </div>
@@ -4893,6 +5015,79 @@
       });
     };
 
+    const wireLearningVideoComments = () => {
+      if (!currentDetail || currentDetail.key !== "videos") return;
+
+      const storageKey = "learningHubVideoComments";
+      let store = {};
+      try {
+        store = JSON.parse(localStorage.getItem(storageKey) || "{}");
+      } catch {
+        store = {};
+      }
+
+      const saveStore = () => {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(store));
+        } catch (_) {
+          // no-op
+        }
+      };
+
+      const renderListHtml = (videoUrl) => {
+        const url = String(videoUrl || "");
+        const list = store && typeof store === "object" ? store[url] : null;
+        const comments = Array.isArray(list) ? list : [];
+        const itemsHtml = comments
+          .slice()
+          .sort((a, b) => Number(b?.ts || 0) - Number(a?.ts || 0))
+          .map((c) => {
+            const txt = escapeHtml(String(c?.text || "").trim());
+            if (!txt) return "";
+            const d = new Date(Number(c?.ts || 0) || Date.now());
+            const stamp = escapeHtml(d.toLocaleString());
+            return `<div class="rounded-2xl border border-black/10 bg-white/70 p-3">
+              <div class="text-sm text-gray-900" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${txt}</div>
+              <div class="mt-1 text-[11px] text-black/50" style="font-family:Poppins, ui-sans-serif">${stamp}</div>
+            </div>`;
+          })
+          .filter(Boolean)
+          .join("");
+
+        return itemsHtml || `<div class="text-sm text-black/50" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">No comments yet.</div>`;
+      };
+
+      appEl.querySelectorAll("[data-learning-video-comment-submit]").forEach((btn) => {
+        if (String(btn?.tagName || "").toUpperCase() !== "BUTTON") return;
+        if (btn.dataset.commentWired === "1") return;
+        btn.dataset.commentWired = "1";
+
+        btn.addEventListener("click", () => {
+          try {
+            const url = String(btn.getAttribute("data-learning-video-comment-submit") || "");
+            if (!url) return;
+
+            const input = appEl.querySelector(`[data-learning-video-comment-input="${CSS.escape(url)}"]`);
+            const listEl = appEl.querySelector(`[data-learning-video-comments-list="${CSS.escape(url)}"]`);
+            if (!input || !listEl) return;
+
+            const text = String(input.value || "").trim();
+            if (!text) return;
+
+            if (!store || typeof store !== "object") store = {};
+            if (!Array.isArray(store[url])) store[url] = [];
+            store[url].push({ text, ts: Date.now() });
+            saveStore();
+
+            input.value = "";
+            listEl.innerHTML = renderListHtml(url);
+          } catch (_) {
+            // no-op
+          }
+        });
+      });
+    };
+
     appEl.querySelectorAll("[data-learning-video-select]").forEach((btn) => {
       btn.addEventListener("click", () => {
         if (!currentDetail || currentDetail.key !== "videos") return;
@@ -4904,6 +5099,7 @@
     });
 
     wireLearningVideosProgress();
+    wireLearningVideoComments();
 
     document.getElementById("learningBackBtn")?.addEventListener("click", () => {
       state.learning.currentDetail = null;

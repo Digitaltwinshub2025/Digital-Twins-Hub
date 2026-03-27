@@ -764,13 +764,6 @@
 
           }
 
-        .dt-doc .section-head p{
-          margin: 0;
-          max-width: 520px;
-          color: #a9a9b3;
-          line-height: 1.8;
-        }
-
         .dt-doc .projects{ display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
         .dt-doc .project{
@@ -841,158 +834,132 @@
 
         .dt-doc .project p{ margin: 0; max-width: 540px; color: #a9a9b3; line-height: 1.8; }
         .dt-doc .actions{ display:flex; flex-wrap: wrap; gap: 10px; }
-            gap: 28px;
-            align-items: end;
-            margin-bottom: 36px;
-          }
 
-          .dt-doc .section-head h2{
-            margin: 0;
-            font-size: clamp(2rem, 4vw, 4rem);
-            letter-spacing: -0.06em;
-            line-height: 0.92;
-            text-transform: uppercase;
-            font-weight: 700;
-            font-family: Inter, Arial, Helvetica, sans-serif;
-            background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.55));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            opacity: 0;
-            transform: translateY(14px);
-          }
+        .dt-doc .action{
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 14px;
+          border-radius: 999px;
+          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.03);
+          color: #fff;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          transition: background .22s ease, border-color .22s ease;
+        }
 
-          .dt-doc .section-head p{
-            margin: 0;
-            max-width: 520px;
-            color: #a9a9b3;
-            line-height: 1.8;
-            opacity: 0;
-            transform: translateY(10px);
-          }
+        .dt-doc .action:hover{
+          background: rgba(255,255,255,0.08);
+          border-color: rgba(255,255,255,0.24);
+        }
 
-          @keyframes dtDocSectionHeadIn{
-            from{ opacity: 0; transform: translateY(14px); filter: blur(6px); }
-            to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
-          }
+        .dt-doc .section-head{
+          display: flex;
+          justify-content: space-between;
+          gap: 28px;
+          align-items: end;
+          margin-bottom: 36px;
+          position: relative;
+          overflow: hidden;
+          padding: 56px 52px;
+          border-radius: 34px;
+          border: 1px solid rgba(255,255,255,0.10);
+          background: #020617;
+          box-shadow: 0 28px 70px rgba(0,0,0,0.55);
+        }
 
-          @keyframes dtDocSectionCopyIn{
-            from{ opacity: 0; transform: translateY(10px); filter: blur(6px); }
-            to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
-          }
+        .dt-doc .orb-bg{
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          pointer-events: none;
+          z-index: 0;
+        }
 
-          .dt-doc .section-head.is-anim h2{
-            animation: dtDocSectionHeadIn 780ms cubic-bezier(.2,.8,.2,1) forwards;
-          }
+        .dt-doc .orb{
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(20px);
+          opacity: 0.45;
+          animation: dtDocOrbFloat 10s infinite ease-in-out alternate;
+        }
 
-          .dt-doc .section-head.is-anim p{
-            animation: dtDocSectionCopyIn 820ms cubic-bezier(.2,.8,.2,1) forwards;
-            animation-delay: 90ms;
-          }
+        .dt-doc .orb1{ width: 220px; height: 220px; background: cyan; top: 10%; left: 15%; }
+        .dt-doc .orb2{ width: 300px; height: 300px; background: #8b5cf6; bottom: 10%; right: 15%; animation-duration: 14s; }
+        .dt-doc .orb3{ width: 160px; height: 160px; background: #22c55e; top: 55%; left: 55%; animation-duration: 12s; }
 
-          .dt-doc .projects{ display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @keyframes dtDocOrbFloat{
+          from{ transform: translateY(-20px) translateX(-10px) scale(1); }
+          to{ transform: translateY(20px) translateX(10px) scale(1.15); }
+        }
 
-          .dt-doc .project{
-            position: relative;
-            min-height: 420px;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 28px;
-            overflow: hidden;
-            background: linear-gradient(180deg, #15151b, #0f1014);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.45);
-            transition: transform .28s ease, border-color .28s ease;
-            opacity: 0;
-            transform: translateY(14px);
-          }
+        .dt-doc .section-head h2{
+          margin: 0;
+          font-size: clamp(2rem, 4vw, 4rem);
+          letter-spacing: -0.06em;
+          line-height: 0.92;
+          text-transform: uppercase;
+          font-weight: 900;
+          color: #fff;
+          position: relative;
+          z-index: 2;
+          text-shadow: 0 0 20px rgba(0,255,255,0.30);
+          opacity: 0;
+          transform: translateY(14px);
+        }
 
-          .dt-doc .project:hover{
-            transform: translateY(-6px);
-            border-color: rgba(255,255,255,0.18);
-          }
+        .dt-doc .section-head p{
+          margin: 0;
+          max-width: 520px;
+          color: #cbd5e1;
+          line-height: 1.8;
+          position: relative;
+          z-index: 2;
+          font-size: 14px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          opacity: 0;
+          transform: translateY(10px);
+        }
 
-          @keyframes dtDocCardIn{
-            from{ opacity: 0; transform: translateY(14px); filter: blur(6px); }
-            to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
-          }
+        @keyframes dtDocSectionHeadIn{
+          from{ opacity: 0; transform: translateY(14px); filter: blur(6px); }
+          to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
+        }
 
-          .dt-doc .project.is-anim{
-            animation: dtDocCardIn 760ms cubic-bezier(.2,.8,.2,1) forwards;
-            animation-delay: var(--doc-card-delay, 0ms);
-          }
+        @keyframes dtDocSectionCopyIn{
+          from{ opacity: 0; transform: translateY(10px); filter: blur(6px); }
+          to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
+        }
 
-          .dt-doc .project-visual{
-            position: absolute;
-            inset: 0;
-            background:
-              linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.48)),
-              radial-gradient(circle at top right, rgba(255,255,255,0.11), transparent 24%),
-              radial-gradient(circle at 15% 80%, rgba(255,255,255,0.07), transparent 22%),
-              linear-gradient(135deg, #1b1c24, #0e0f14 60%);
-          }
+        @keyframes dtDocHeroPulse{
+          0%, 100%{ transform: scale(1); text-shadow: 0 0 20px rgba(0,255,255,0.25); }
+          50%{ transform: scale(1.03); text-shadow: 0 0 35px rgba(0,255,255,0.45); }
+        }
 
-          .dt-doc .project-visual::before{
-            content: "";
-            position: absolute;
-            inset: 22px;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-          }
+        .dt-doc .section-head.is-anim h2{
+          animation:
+            dtDocSectionHeadIn 780ms cubic-bezier(.2,.8,.2,1) forwards,
+            dtDocHeroPulse 3s ease-in-out 900ms infinite;
+        }
 
-          .dt-doc .project-content{
-            position: absolute;
-            inset: 0;
-            padding: 28px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            gap: 18px;
-          }
+        .dt-doc .section-head.is-anim p{
+          animation: dtDocSectionCopyIn 820ms cubic-bezier(.2,.8,.2,1) forwards;
+          animation-delay: 90ms;
+        }
 
-          .dt-doc .project-top{ display:flex; justify-content: space-between; gap:16px; align-items:end; }
-          .dt-doc .project-label{ font-size: 11px; color: #c7c7cf; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 10px; }
+        @keyframes dtDocCardIn{
+          from{ opacity: 0; transform: translateY(14px); filter: blur(6px); }
+          to{ opacity: 1; transform: translateY(0); filter: blur(0px); }
+        }
 
-          .dt-doc .project h3{
-            margin: 0;
-            font-size: clamp(1.7rem, 3vw, 2.5rem);
-            letter-spacing: -0.04em;
-            line-height: 0.96;
-            text-transform: uppercase;
-          }
-
-          .dt-doc .status{
-            white-space: nowrap;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.16);
-            border-radius: 999px;
-            padding: 9px 12px;
-            font-size: 11px;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-          }
-
-          .dt-doc .project p{ margin: 0; max-width: 540px; color: #a9a9b3; line-height: 1.8; }
-          .dt-doc .actions{ display:flex; flex-wrap: wrap; gap: 10px; }
-
-          .dt-doc .action{
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px;
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: rgba(255,255,255,0.03);
-            color: #fff;
-            font-size: 11px;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            transition: background .22s ease, border-color .22s ease;
-          }
-
-          .dt-doc .action:hover{
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(255,255,255,0.24);
-          }
+        .dt-doc .project.is-anim{
+          animation: dtDocCardIn 760ms cubic-bezier(.2,.8,.2,1) forwards;
+          animation-delay: var(--doc-card-delay, 0ms);
+        }
 
           .dt-doc .footer{
             padding: 60px 28px 80px;
@@ -1070,6 +1037,11 @@
             <section class="section" id="projects">
               <div class="section-inner">
                 <div class="section-head">
+                  <div class="orb-bg">
+                    <div class="orb orb1"></div>
+                    <div class="orb orb2"></div>
+                    <div class="orb orb3"></div>
+                  </div>
                   <h2>Selected<br>Projects</h2>
                   <p>
                     Each card follows the same portfolio language and still supports your practical links for ArcGIS, AURA, Flipthrough, and project videos.

@@ -1924,7 +1924,8 @@
             animation: homeFadeUp 1s ease forwards;
             animation-delay: 2.25s;
             transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-            text-align: left;
+            text-align: center;
+            align-items: center;
             font-family: "Space Grotesk", Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
           }
 

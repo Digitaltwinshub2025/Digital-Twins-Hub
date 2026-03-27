@@ -1828,7 +1828,7 @@
               radial-gradient(circle at 80% 15%, rgba(192,132,252,0.12), transparent 28%),
               radial-gradient(circle at 50% 80%, rgba(59,130,246,0.08), transparent 30%),
               linear-gradient(180deg, #0f172a, #020617);
-            box-shadow: 0 28px 70px rgba(0,0,0,0.28);
+            box-shadow: 0 28px 70px rgba(0,0,0,0.38);
           }
 
           .home-projects-hero-particles{
@@ -1912,8 +1912,8 @@
             gap: 14px;
             padding: 24px 28px;
             border-radius: 22px;
-            background: rgba(255,255,255,0.035);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            border: none;
             backdrop-filter: blur(14px);
             box-shadow:
               0 0 40px rgba(0,0,0,0.22),
@@ -1930,7 +1930,6 @@
 
           .home-projects-hero-subtitle:hover{
             transform: translateY(-4px);
-            border-color: rgba(125,211,252,0.28);
             box-shadow:
               0 0 40px rgba(0,0,0,0.24),
               0 0 70px rgba(125, 211, 252, 0.22),
@@ -2127,7 +2126,8 @@
         </section>
 
         <!-- Projects Showcase -->
-        <section class="w-full bg-gray-950 text-white">
+        <section class="w-full bg-gray-950 text-white relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-0 opacity-80" style="background: radial-gradient(circle at 50% 0%, rgba(125,211,252,0.08), transparent 55%), radial-gradient(circle at 90% 20%, rgba(192,132,252,0.08), transparent 55%), linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.75));"></div>
           <div class="max-w-[90rem] mx-auto px-6 py-16 md:py-24">
             <div class="home-projects-hero">
               <div class="home-projects-hero-particles">
@@ -2144,16 +2144,16 @@
               </section>
             </div>
 
-            <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-[1]">
               ${showcase
                 .map((p, i) => {
                   const img = (p.image || p.img || "https://placehold.co/640x420").replace(/^\//, "");
                   const id = p.id ? String(p.id) : "";
                   return `
-                    <div class="group rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 overflow-hidden shadow-sm">
+                    <div class="group rounded-2xl bg-white/[0.04] backdrop-blur-sm overflow-hidden shadow-[0_10px_36px_rgba(0,0,0,0.45)]">
                       <div class="relative overflow-hidden">
                         <img src="${escapeHtml(img)}" alt="${escapeHtml(p.title || "Project preview")}" class="w-full h-56 object-cover" />
-                        <span class="absolute top-3 left-3 rounded-full bg-white/10 text-white text-xs px-3 py-1 border border-white/15" style="font-family:Poppins, ui-sans-serif">
+                        <span class="absolute top-3 left-3 rounded-full bg-white/10 text-white text-xs px-3 py-1" style="font-family:Poppins, ui-sans-serif">
                           ${escapeHtml(p.category || "Project")}
                         </span>
                       </div>
@@ -2178,7 +2178,7 @@
                 .join("")}
             </div>
 
-            <div class="mt-10 flex justify-center">
+            <div class="mt-10 flex justify-center relative z-[1]">
               <a href="#/projects">
                 <button class="rounded-full bg-white text-black px-6 py-3 hover:bg-gray-200 transition-colors text-base" style="font-family:Poppins, ui-sans-serif, system-ui">
                   Explore All Projects

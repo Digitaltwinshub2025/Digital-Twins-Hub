@@ -1638,111 +1638,146 @@
   }
 
   function renderChatAssistant() {
-    const messages = Array.isArray(state.chat.messages) ? state.chat.messages : [];
+    if (!chatEl) return;
+
+    if (!Array.isArray(state.chat.messages)) state.chat.messages = [];
+    if (state.chat.messages.length === 0) {
+      state.chat.messages.push({
+        from: "bot",
+        html: "Hi, I’m your Digital Twins Assistant. Ask me about projects, tools, maps, or AI features.",
+      });
+    }
 
     const renderMsg = (m) => {
       const from = String(m?.from || "bot");
       const isUser = from === "user";
-      const wrap = isUser ? "justify-end" : "justify-start";
-      const bubble = isUser ? "bg-black text-white" : "bg-black/5 text-black";
-      return `
-        <div class="flex ${wrap}">
-          <div class="max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${bubble}" style="font-family:Poppins, ui-sans-serif">
-            ${m?.html || ""}
-          </div>
-        </div>
-      `;
+      const cls = isUser ? "user" : "bot";
+      const text = String(m?.html || "");
+      return `<div class="chatbot-message ${cls}">${escapeHtml(text)}</div>`;
     };
 
     chatEl.innerHTML = `
-      <button id="chatBtn"
-        class="fixed bottom-6 right-6 z-[9999] rounded-full bg-black text-white px-5 py-3 shadow-lg hover:bg-gray-900"
-        style="font-family:Poppins, ui-sans-serif">
-        Chat
-      </button>
-
-      <div id="chatModal" class="${state.chat.open ? "" : "hidden"} fixed inset-0 z-[9998]">
-        <div id="chatBackdrop" class="absolute inset-0 bg-black/60"></div>
-        <div class="absolute bottom-24 right-6 w-[92vw] max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div class="px-4 py-3 border-b flex items-center justify-between">
-            <div class="font-semibold" style="font-family:Poppins, ui-sans-serif">Chat Assistant</div>
-            <button id="chatClose" class="px-2 py-1 text-gray-600 hover:text-black">✕</button>
+      <div class="chatbot-wrap">
+        <div class="chatbot-panel ${state.chat.open ? "open" : ""}" id="chatbotPanel">
+          <div class="chatbot-header">
+            <h3 class="chatbot-title">Digital Twins Assistant</h3>
+            <div class="chatbot-subtitle">Ask about projects, maps, visualization, and tools</div>
           </div>
 
-          <div id="chatMessages" class="p-4 space-y-3 max-h-[55vh] overflow-y-auto">
-            ${messages.map(renderMsg).join("")}
+          <div class="chatbot-messages" id="chatbotMessages">
+            ${state.chat.messages.map(renderMsg).join("")}
           </div>
 
-          <div class="p-3 border-t flex items-center gap-2">
-            <input id="chatInput" type="text" placeholder="Ask about projects, team, professors..."
-              class="flex-1 rounded-full border border-black/10 px-4 py-2 text-sm outline-none focus:border-black/30"
-              style="font-family:Poppins, ui-sans-serif"
-              value="${escapeHtml(state.chat.draft)}" />
-            <button id="chatSend" class="rounded-full bg-black text-white px-4 py-2 text-sm hover:bg-black/90"
-              style="font-family:Poppins, ui-sans-serif">
-              Send
-            </button>
+          <div class="chatbot-suggestions">
+            <button type="button" class="chatbot-chip">What is Digital Twins Hub?</button>
+            <button type="button" class="chatbot-chip">Show featured projects</button>
+            <button type="button" class="chatbot-chip">What tools do you support?</button>
+            <button type="button" class="chatbot-chip">How can I contact the team?</button>
+          </div>
+
+          <div class="chatbot-typing" id="chatbotTyping" style="display:none;">Assistant is typing...</div>
+
+          <div class="chatbot-input-area">
+            <input
+              id="chatbotInput"
+              class="chatbot-input"
+              type="text"
+              placeholder="Ask something..."
+              value="${escapeHtml(state.chat.draft)}"
+            />
+            <button type="button" id="chatbotSend" class="chatbot-send">Send</button>
           </div>
         </div>
+
+        <button type="button" class="chatbot-toggle" id="chatbotToggle" aria-label="Open chatbot">
+          💬
+        </button>
       </div>
     `;
 
-    const btn = document.getElementById("chatBtn");
-    const close = document.getElementById("chatClose");
-    const modal = document.getElementById("chatModal");
-    const input = document.getElementById("chatInput");
-    const send = document.getElementById("chatSend");
-    const messagesEl = document.getElementById("chatMessages");
+    const panel = document.getElementById("chatbotPanel");
+    const toggle = document.getElementById("chatbotToggle");
+    const messagesEl = document.getElementById("chatbotMessages");
+    const input = document.getElementById("chatbotInput");
+    const sendBtn = document.getElementById("chatbotSend");
+    const typingEl = document.getElementById("chatbotTyping");
+    const chips = chatEl.querySelectorAll(".chatbot-chip");
 
-    btn?.addEventListener("click", () => {
-      state.chat.open = true;
-      renderChatAssistant();
-    });
-    close?.addEventListener("click", () => {
-      state.chat.open = false;
-      renderChatAssistant();
-    });
-
-    modal?.addEventListener("click", (e) => {
-      const backdrop = document.getElementById("chatBackdrop");
-      if (e.target === modal || e.target === backdrop) {
-        state.chat.open = false;
-        renderChatAssistant();
+    const scrollToBottom = () => {
+      try {
+        if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight;
+      } catch (_) {
+        // no-op
       }
-    });
+    };
 
-    const doSend = () => {
-      const text = String(input?.value || "").trim();
+    const addToState = (text, from) => {
+      state.chat.messages.push({ from, html: String(text || "") });
+    };
+
+    const replyToUser = (textRaw) => {
+      const text = String(textRaw || "").trim();
       state.chat.draft = text;
       if (!text) return;
 
-      state.chat.messages.push({ from: "user", html: escapeHtml(text) });
-      const reply = answerChat(text);
-      state.chat.messages.push({ from: "bot", html: `Okay — let me take a look for you...<br/><br/>${reply}` });
+      addToState(text, "user");
       state.chat.draft = "";
       renderChatAssistant();
+
+      const typingNode = document.getElementById("chatbotTyping");
+      if (typingNode) typingNode.style.display = "block";
+
+      setTimeout(() => {
+        try {
+          const typingNode2 = document.getElementById("chatbotTyping");
+          if (typingNode2) typingNode2.style.display = "none";
+
+          const reply = answerChat(text);
+          addToState(reply, "bot");
+          renderChatAssistant();
+        } catch (_) {
+          // no-op
+        }
+      }, 700);
     };
 
-    input?.addEventListener("input", (e) => {
-      state.chat.draft = e.target.value;
+    toggle?.addEventListener("click", () => {
+      state.chat.open = !state.chat.open;
+      renderChatAssistant();
     });
 
-    send?.addEventListener("click", doSend);
+    sendBtn?.addEventListener("click", () => {
+      replyToUser(String(input?.value || ""));
+    });
+
+    input?.addEventListener("input", (e) => {
+      state.chat.draft = String(e?.target?.value || "");
+    });
 
     input?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        doSend();
+        replyToUser(String(input?.value || ""));
       }
+    });
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        replyToUser(String(chip.textContent || ""));
+      });
     });
 
     if (state.chat.open) {
       setTimeout(() => {
         try {
           input?.focus();
-          if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight;
-        } catch {}
+          scrollToBottom();
+        } catch (_) {
+          // no-op
+        }
       }, 0);
+    } else {
+      scrollToBottom();
     }
   }
 

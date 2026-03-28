@@ -15,7 +15,7 @@ window.PROJECTS_CATALOG = [
     videoEmbedUrl: 'https://www.youtube.com/embed/8dr-XNym5lU',
     goal:
       'To create a practical, interactive digital twin guide that distills resilience and rebuilding strategies into clear, actionable steps, helping communities and planners understand risk, prioritize investments, and integrate sustainable design principles into recovery and long-term resilience workflows. This digital guide supports holistic planning by combining risk assessment, infrastructure considerations, equity measures, and green rebuilding best practices in one platform.',
-    image: '/gitlogos/USGBC.png',
+    image: './gitlogos/USGBC.png',
     status: 'In Progress',
     projectType: 'flagship',
     lastUpdated: '2024-01-01',
@@ -160,7 +160,7 @@ window.PROJECTS_CATALOG = [
       'The Baldwin Hills 6-Mile Corridor Initiative is a digital twin project focused on modeling and visualizing the Baldwin Hills 6-Mile Corridor — a significant urban and environmental area in Los Angeles County. The initiative creates a spatially informed digital representation that supports planning, analysis, and community engagement by integrating environmental, social, and built-environment characteristics of the corridor.\n\nDigital twin technology enables a dynamic digital representation of real-world systems that can simulate conditions, analyze performance, and support data-driven decision-making using real datasets, analytical models, and interactive visualization tools.',
     goal:
       'To build a digital twin of the Baldwin Hills 6-Mile Corridor that serves as an interactive, data-rich platform for stakeholders — including planners, engineers, policymakers, and community members — to explore spatial dynamics, evaluate scenarios, and better understand environmental and urban conditions affecting the corridor.',
-    image: '/gitlogos/Baldwin%20hills%206%20Miles.png?v=3',
+    image: './gitlogos/Baldwin%20hills%206%20Miles.png?v=3',
     status: 'Active / Evolving Prototype',
     projectType: 'flagship',
     structureCapabilities:
@@ -275,7 +275,7 @@ window.PROJECTS_CATALOG = [
     videoEmbedUrl: 'https://www.youtube.com/embed/M01xOyR6grI',
     videoTitle: 'Shade LA — Project Video',
     goal: 'To demonstrate and communicate effective shade planning strategies in Los Angeles by using interactive maps, 3D simulations, and data analytics that support informed decision-making for urban heat mitigation.',
-    image: '/gitlogos/ShadeLA.png',
+    image: './gitlogos/ShadeLA.png',
     status: 'In Progress',
     projectType: 'flagship',
     description:
@@ -366,7 +366,7 @@ window.PROJECTS_CATALOG = [
     demoUrl: 'https://digitaltwinshub2025.github.io/Pando/',
     caseStudyUrl: 'https://docs.google.com/presentation/d/1xXRyw32_jODa1bqK6QqQS9SeV5uj-Fq_x9mVV-mM9Qc/edit?usp=sharing',
     goal: 'Provide clear, data-driven insights that help communities understand local climate and social risks and support planning decisions that enhance environmental and social resilience.',
-    image: '/gitlogos/Pando.jpeg',
+    image: './gitlogos/Pando.jpeg',
     status: 'In Progress',
     projectType: 'flagship',
     description:
@@ -459,7 +459,7 @@ window.PROJECTS_CATALOG = [
     videoUrl: 'https://youtu.be/QvzXpVYJPtc',
     videoEmbedUrl: 'https://www.youtube.com/embed/QvzXpVYJPtc',
     goal: 'To reclaim and repurpose urban spaces in Los Angeles by integrating architecture, environmental design, and community engagement, ultimately enhancing local ecology and social wellbeing through meaningful public space interventions.',
-    image: '/gitlogos/ASU%20RECLAMATION.png',
+    image: './gitlogos/ASU%20RECLAMATION.png',
     status: 'In Progress',
     projectType: 'flagship',
     description:
@@ -546,7 +546,7 @@ window.PROJECTS_CATALOG = [
     caseStudyUrl: 'https://docs.google.com/presentation/d/1s2cBJ4kS-AP2XAa2YtcGM4tVV9qV2JvCfkdn-R9tq-g/edit?usp=sharing',
     goal:
       'To visualize and communicate how data-informed design strategies—such as shade infrastructure, public art, and urban agriculture—can improve environmental performance, social use, and overall quality of life within dense urban alleyways.',
-    image: '/gitlogos/Alley%20Bloom.png',
+    image: './gitlogos/Alley%20Bloom.png',
     status: 'In Progress',
     projectType: 'flagship',
     description:

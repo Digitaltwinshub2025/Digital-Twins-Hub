@@ -3,7 +3,6 @@
 (function () {
   const appEl = document.getElementById("app");
   const navbarEl = document.getElementById("navbar");
-  const chatEl = document.getElementById("chat-assistant");
   const toastsEl = document.getElementById("toasts");
 
   const LEADER_FADE_MS = 700;
@@ -368,18 +367,6 @@
       sections: null,
       pathways: null,
     },
-    // Chat
-    chat: {
-      open: false,
-      draft: "",
-      messages: [
-        {
-          from: "bot",
-          html:
-            "Welcome to the Digital Twins Projects Hub — a space to create, share, and track projects across disciplines.",
-        },
-      ],
-    },
   };
 
   // -----------------------------
@@ -392,135 +379,6 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
-  }
-
-  function normalizeChatText(s) {
-    return String(s || "")
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, " ");
-  }
-
-  function chatIncludes(haystack, needle) {
-    const h = normalizeChatText(haystack);
-    const n = normalizeChatText(needle);
-    if (!h || !n) return false;
-    return h.includes(n);
-  }
-
-  function getChatKnowledge() {
-    const projects = Array.isArray(state.projects) ? state.projects : [];
-    const members = Array.isArray(state.projectsPage.teamMembers) ? state.projectsPage.teamMembers : [];
-    const professors = homeLeaders();
-    return { projects, members, professors };
-  }
-
-  function formatProjectLink(p) {
-    const id = p && p.id != null ? String(p.id) : "";
-    const title = escapeHtml(p?.title || "Untitled Project");
-    if (!id) return title;
-    return `<a href="#/projects/${encodeURIComponent(id)}" class="underline" onclick="event.stopPropagation()">${title}</a>`;
-  }
-
-  function formatMemberLink(m) {
-    const slug = String(m?.slug || "");
-    const name = escapeHtml(m?.name || "Unnamed");
-    if (!slug) return name;
-    return `<a href="#/team/${encodeURIComponent(slug)}" class="underline" onclick="event.stopPropagation()">${name}</a>`;
-  }
-
-  function answerChat(queryRaw) {
-    const q = normalizeChatText(queryRaw);
-    if (!q) return "Please type a question.";
-
-    const { projects, members, professors } = getChatKnowledge();
-
-    const wantsHelp = /^(help|\?)$/.test(q) || q.includes("what can you do");
-    if (wantsHelp) {
-      return (
-        "Try: <br/>" +
-        "- list projects<br/>" +
-        "- list team<br/>" +
-        "- list professors<br/>" +
-        "- Shade LA<br/>" +
-        "- who is Eddie Cortez<br/>" +
-        "- projects for Eden Olvera"
-      );
-    }
-
-    const wantsListProjects = (q.includes("list") || q.includes("show") || q.includes("all")) && q.includes("project");
-    if (wantsListProjects) {
-      const top = projects.slice(0, 12);
-      const items = top.map((p) => `- ${formatProjectLink(p)}`).join("<br/>");
-      return `Projects (${projects.length}):<br/>${items}${projects.length > top.length ? "<br/>…" : ""}`;
-    }
-
-    const wantsListTeam = (q.includes("list") || q.includes("show") || q.includes("all")) && (q.includes("team") || q.includes("members"));
-    if (wantsListTeam) {
-      const sorted = [...members]
-        .filter((m) => m && m.name)
-        .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
-      const top = sorted.slice(0, 16);
-      const items = top.map((m) => `- ${formatMemberLink(m)}${m.role ? ` <span class=\"text-black/60\">(${escapeHtml(m.role)})</span>` : ""}`).join("<br/>");
-      return `Team members (${sorted.length}):<br/>${items}${sorted.length > top.length ? "<br/>…" : ""}`;
-    }
-
-    const wantsListProfessors = (q.includes("list") || q.includes("show") || q.includes("all")) && (q.includes("prof") || q.includes("leader"));
-    if (wantsListProfessors) {
-      const items = professors
-        .map((p) => `- <span class=\"font-semibold\">${escapeHtml(p?.name || "")}</span>${p?.title ? ` <span class=\"text-black/60\">(${escapeHtml(p.title)})</span>` : ""}`)
-        .join("<br/>");
-      return `Professors / Leaders:<br/>${items}`;
-    }
-
-    const matchMember = members.find((m) => m && m.name && chatIncludes(m.name, q)) || members.find((m) => m && m.name && q.includes(normalizeChatText(m.name)));
-    if (matchMember) {
-      const parts = [];
-      parts.push(`<div><span class=\"font-semibold\">${escapeHtml(matchMember.name)}</span>${matchMember.role ? ` <span class=\"text-black/60\">• ${escapeHtml(matchMember.role)}</span>` : ""}</div>`);
-      if (matchMember.bio) parts.push(`<div class=\"mt-1 text-black/80\">${escapeHtml(matchMember.bio)}</div>`);
-      parts.push(`<div class=\"mt-2\">Open: ${formatMemberLink(matchMember)}</div>`);
-      return parts.join("");
-    }
-
-    const matchProject = projects.find((p) => p && p.title && chatIncludes(p.title, q)) || projects.find((p) => p && p.title && q.includes(normalizeChatText(p.title)));
-    if (matchProject) {
-      const teamMembers = Array.isArray(matchProject?.team?.members) ? matchProject.team.members : [];
-      const names = teamMembers.map((m) => String(m?.name || "").trim()).filter(Boolean);
-      const parts = [];
-      parts.push(`<div><span class=\"font-semibold\">${escapeHtml(matchProject.title || "")}</span>${matchProject.category ? ` <span class=\"text-black/60\">• ${escapeHtml(matchProject.category)}</span>` : ""}</div>`);
-      if (matchProject.goal) parts.push(`<div class=\"mt-1 text-black/80\">${escapeHtml(matchProject.goal)}</div>`);
-      if (names.length) parts.push(`<div class=\"mt-2\"><span class=\"font-semibold\">Team:</span> ${escapeHtml(names.join(", "))}</div>`);
-      parts.push(`<div class=\"mt-2\">Open: ${formatProjectLink(matchProject)}</div>`);
-      return parts.join("");
-    }
-
-    const matchProfessor = professors.find((p) => p && p.name && chatIncludes(p.name, q)) || professors.find((p) => p && p.name && q.includes(normalizeChatText(p.name)));
-    if (matchProfessor) {
-      const parts = [];
-      parts.push(`<div><span class=\"font-semibold\">${escapeHtml(matchProfessor.name || "")}</span>${matchProfessor.title ? ` <span class=\"text-black/60\">• ${escapeHtml(matchProfessor.title)}</span>` : ""}</div>`);
-      if (matchProfessor.desc) parts.push(`<div class=\"mt-1 text-black/80\">${escapeHtml(matchProfessor.desc)}</div>`);
-      return parts.join("");
-    }
-
-    const fewProjects = projects
-      .filter((p) => p && p.title && (chatIncludes(p.title, q) || chatIncludes(p.category, q) || chatIncludes(p.owner, q)))
-      .slice(0, 5);
-    const fewMembers = members.filter((m) => m && m.name && (chatIncludes(m.name, q) || chatIncludes(m.role, q))).slice(0, 5);
-
-    if (fewProjects.length || fewMembers.length) {
-      const parts = [];
-      if (fewProjects.length) {
-        parts.push(`<div class=\"font-semibold\">Projects</div>`);
-        parts.push(fewProjects.map((p) => `- ${formatProjectLink(p)}`).join("<br/>"));
-      }
-      if (fewMembers.length) {
-        parts.push(`<div class=\"mt-3 font-semibold\">Team</div>`);
-        parts.push(fewMembers.map((m) => `- ${formatMemberLink(m)}${m.role ? ` <span class=\"text-black/60\">(${escapeHtml(m.role)})</span>` : ""}`).join("<br/>"));
-      }
-      return parts.join("<br/>");
-    }
-
-    return "I couldn't find an exact match. Try a project name, a team member name, or 'list projects'.";
   }
 
   function toast(title, message, type = "success") {
@@ -1637,149 +1495,6 @@
     });
   }
 
-  function renderChatAssistant() {
-    if (!chatEl) return;
-
-    if (!Array.isArray(state.chat.messages)) state.chat.messages = [];
-    if (state.chat.messages.length === 0) {
-      state.chat.messages.push({
-        from: "bot",
-        html: "Hi, I’m your Digital Twins Assistant. Ask me about projects, tools, maps, or AI features.",
-      });
-    }
-
-    const renderMsg = (m) => {
-      const from = String(m?.from || "bot");
-      const isUser = from === "user";
-      const cls = isUser ? "user" : "bot";
-      const text = String(m?.html || "");
-      return `<div class="chatbot-message ${cls}">${escapeHtml(text)}</div>`;
-    };
-
-    chatEl.innerHTML = `
-      <div class="chatbot-wrap">
-        <div class="chatbot-panel ${state.chat.open ? "open" : ""}" id="chatbotPanel">
-          <div class="chatbot-header">
-            <h3 class="chatbot-title">Digital Twins Assistant</h3>
-            <div class="chatbot-subtitle">Ask about projects, maps, visualization, and tools</div>
-          </div>
-
-          <div class="chatbot-messages" id="chatbotMessages">
-            ${state.chat.messages.map(renderMsg).join("")}
-          </div>
-
-          <div class="chatbot-suggestions">
-            <button type="button" class="chatbot-chip">What is Digital Twins Hub?</button>
-            <button type="button" class="chatbot-chip">Show featured projects</button>
-            <button type="button" class="chatbot-chip">What tools do you support?</button>
-            <button type="button" class="chatbot-chip">How can I contact the team?</button>
-          </div>
-
-          <div class="chatbot-typing" id="chatbotTyping" style="display:none;">Assistant is typing...</div>
-
-          <div class="chatbot-input-area">
-            <input
-              id="chatbotInput"
-              class="chatbot-input"
-              type="text"
-              placeholder="Ask something..."
-              value="${escapeHtml(state.chat.draft)}"
-            />
-            <button type="button" id="chatbotSend" class="chatbot-send">Send</button>
-          </div>
-        </div>
-
-        <button type="button" class="chatbot-toggle" id="chatbotToggle" aria-label="Open chatbot">
-          💬
-        </button>
-      </div>
-    `;
-
-    const panel = document.getElementById("chatbotPanel");
-    const toggle = document.getElementById("chatbotToggle");
-    const messagesEl = document.getElementById("chatbotMessages");
-    const input = document.getElementById("chatbotInput");
-    const sendBtn = document.getElementById("chatbotSend");
-    const typingEl = document.getElementById("chatbotTyping");
-    const chips = chatEl.querySelectorAll(".chatbot-chip");
-
-    const scrollToBottom = () => {
-      try {
-        if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight;
-      } catch (_) {
-        // no-op
-      }
-    };
-
-    const addToState = (text, from) => {
-      state.chat.messages.push({ from, html: String(text || "") });
-    };
-
-    const replyToUser = (textRaw) => {
-      const text = String(textRaw || "").trim();
-      state.chat.draft = text;
-      if (!text) return;
-
-      addToState(text, "user");
-      state.chat.draft = "";
-      renderChatAssistant();
-
-      const typingNode = document.getElementById("chatbotTyping");
-      if (typingNode) typingNode.style.display = "block";
-
-      setTimeout(() => {
-        try {
-          const typingNode2 = document.getElementById("chatbotTyping");
-          if (typingNode2) typingNode2.style.display = "none";
-
-          const reply = answerChat(text);
-          addToState(reply, "bot");
-          renderChatAssistant();
-        } catch (_) {
-          // no-op
-        }
-      }, 700);
-    };
-
-    toggle?.addEventListener("click", () => {
-      state.chat.open = !state.chat.open;
-      renderChatAssistant();
-    });
-
-    sendBtn?.addEventListener("click", () => {
-      replyToUser(String(input?.value || ""));
-    });
-
-    input?.addEventListener("input", (e) => {
-      state.chat.draft = String(e?.target?.value || "");
-    });
-
-    input?.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        replyToUser(String(input?.value || ""));
-      }
-    });
-
-    chips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        replyToUser(String(chip.textContent || ""));
-      });
-    });
-
-    if (state.chat.open) {
-      setTimeout(() => {
-        try {
-          input?.focus();
-          scrollToBottom();
-        } catch (_) {
-          // no-op
-        }
-      }, 0);
-    } else {
-      scrollToBottom();
-    }
-  }
 
   // -----------------------------
   // Home Page (DigitalTwinsHub)
@@ -5284,7 +4999,6 @@
   let lastRenderedRouteName = null;
   function render() {
     renderNavbar();
-    renderChatAssistant();
 
     const route = parseRoute();
 

@@ -1638,147 +1638,10 @@
   }
 
   function renderChatAssistant() {
+    
     if (!chatEl) return;
-
-    if (!Array.isArray(state.chat.messages)) state.chat.messages = [];
-    if (state.chat.messages.length === 0) {
-      state.chat.messages.push({
-        from: "bot",
-        html: "Hi, I’m your Digital Twins Assistant. Ask me about projects, tools, maps, or AI features.",
-      });
-    }
-
-    const renderMsg = (m) => {
-      const from = String(m?.from || "bot");
-      const isUser = from === "user";
-      const cls = isUser ? "user" : "bot";
-      const text = String(m?.html || "");
-      return `<div class="chatbot-message ${cls}">${escapeHtml(text)}</div>`;
-    };
-
-    chatEl.innerHTML = `
-      <div class="chatbot-wrap">
-        <div class="chatbot-panel ${state.chat.open ? "open" : ""}" id="chatbotPanel">
-          <div class="chatbot-header">
-            <h3 class="chatbot-title">Digital Twins Assistant</h3>
-            <div class="chatbot-subtitle">Ask about projects, maps, visualization, and tools</div>
-          </div>
-
-          <div class="chatbot-messages" id="chatbotMessages">
-            ${state.chat.messages.map(renderMsg).join("")}
-          </div>
-
-          <div class="chatbot-suggestions">
-            <button type="button" class="chatbot-chip">What is Digital Twins Hub?</button>
-            <button type="button" class="chatbot-chip">Show featured projects</button>
-            <button type="button" class="chatbot-chip">What tools do you support?</button>
-            <button type="button" class="chatbot-chip">How can I contact the team?</button>
-          </div>
-
-          <div class="chatbot-typing" id="chatbotTyping" style="display:none;">Assistant is typing...</div>
-
-          <div class="chatbot-input-area">
-            <input
-              id="chatbotInput"
-              class="chatbot-input"
-              type="text"
-              placeholder="Ask something..."
-              value="${escapeHtml(state.chat.draft)}"
-            />
-            <button type="button" id="chatbotSend" class="chatbot-send">Send</button>
-          </div>
-        </div>
-
-        <button type="button" class="chatbot-toggle" id="chatbotToggle" aria-label="Open chatbot">
-          💬
-        </button>
-      </div>
-    `;
-
-    const panel = document.getElementById("chatbotPanel");
-    const toggle = document.getElementById("chatbotToggle");
-    const messagesEl = document.getElementById("chatbotMessages");
-    const input = document.getElementById("chatbotInput");
-    const sendBtn = document.getElementById("chatbotSend");
-    const typingEl = document.getElementById("chatbotTyping");
-    const chips = chatEl.querySelectorAll(".chatbot-chip");
-
-    const scrollToBottom = () => {
-      try {
-        if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight;
-      } catch (_) {
-        // no-op
-      }
-    };
-
-    const addToState = (text, from) => {
-      state.chat.messages.push({ from, html: String(text || "") });
-    };
-
-    const replyToUser = (textRaw) => {
-      const text = String(textRaw || "").trim();
-      state.chat.draft = text;
-      if (!text) return;
-
-      addToState(text, "user");
-      state.chat.draft = "";
-      renderChatAssistant();
-
-      const typingNode = document.getElementById("chatbotTyping");
-      if (typingNode) typingNode.style.display = "block";
-
-      setTimeout(() => {
-        try {
-          const typingNode2 = document.getElementById("chatbotTyping");
-          if (typingNode2) typingNode2.style.display = "none";
-
-          const reply = answerChat(text);
-          addToState(reply, "bot");
-          renderChatAssistant();
-        } catch (_) {
-          // no-op
-        }
-      }, 700);
-    };
-
-    toggle?.addEventListener("click", () => {
-      state.chat.open = !state.chat.open;
-      renderChatAssistant();
-    });
-
-    sendBtn?.addEventListener("click", () => {
-      replyToUser(String(input?.value || ""));
-    });
-
-    input?.addEventListener("input", (e) => {
-      state.chat.draft = String(e?.target?.value || "");
-    });
-
-    input?.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        replyToUser(String(input?.value || ""));
-      }
-    });
-
-    chips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        replyToUser(String(chip.textContent || ""));
-      });
-    });
-
-    if (state.chat.open) {
-      setTimeout(() => {
-        try {
-          input?.focus();
-          scrollToBottom();
-        } catch (_) {
-          // no-op
-        }
-      }, 0);
-    } else {
-      scrollToBottom();
-    }
+    chatEl.innerHTML = '';
+    return;
   }
 
   // -----------------------------
@@ -5284,7 +5147,7 @@
   let lastRenderedRouteName = null;
   function render() {
     renderNavbar();
-    renderChatAssistant();
+    
 
     const route = parseRoute();
 

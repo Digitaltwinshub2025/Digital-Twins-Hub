@@ -3873,6 +3873,38 @@
     const currentDetail = state.learning.currentDetail;
     const projects = Array.isArray(state.projects) ? state.projects : [];
 
+    const getLabsMindmapMermaid = () => {
+      return `mindmap
+  root((Digital Twins Hub))
+    Core Features
+    Flagship Projects
+      Baldwin Hills 6-Mile Corridor
+        Interactive Data Platform
+        Urban Scenario Evaluation
+        Stakeholder Engagement
+        Built with Unreal Engine, Rhino, QGIS
+      ASU Reclamation
+        Architecture & Community Design
+        Urban Space Repurposing
+        Environmental Design
+      Pando Populus
+        Resilience Intelligence
+        Climate & Social Risk Data
+        Community Planning Support
+      PUHC Innovation Alleys
+        Shade Infrastructure
+        Urban Agriculture
+        Environmental Performance
+    Leadership & Participation
+      Project Leaders
+        Professor Marcela Oliva
+        Fellowship Members
+      Engagement
+        Project Proposals
+        Mentorship
+        Peer Collaboration`;
+    };
+
     // Clean up any previous hero scroll handler (important when navigating between routes or detail views)
     if (state.learning._heroScrollHandler) {
       const prevTarget = state.learning._heroScrollTarget || window;
@@ -4184,6 +4216,21 @@
             <h1 class="text-3xl font-bold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">${escapeHtml(title)}</h1>
             ${description ? `<p class="mt-3 text-gray-700 text-sm" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">${escapeHtml(description)}</p>` : ""}
           </div>
+
+          ${
+            key === "labs"
+              ? `
+                <section class="space-y-3">
+                  <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Mindmap</h2>
+                  <div class="rounded-3xl border border-black/10 bg-white/80 shadow-sm overflow-hidden">
+                    <div class="p-4 overflow-x-auto">
+                      <div id="learningLabsMindmap" class="mermaid">${getLabsMindmapMermaid()}</div>
+                    </div>
+                  </div>
+                </section>
+              `
+              : ""
+          }
 
           ${
             key === "caseStudies"
@@ -4930,6 +4977,33 @@
 
     wireLearningVideosProgress();
     wireLearningVideoComments();
+
+    const renderMermaidIfNeeded = () => {
+      if (!currentDetail || currentDetail.key !== "labs") return;
+      const mmEl = document.getElementById("learningLabsMindmap");
+      if (!mmEl) return;
+      const mermaid = window.mermaid;
+      if (!mermaid) return;
+
+      try {
+        if (!state.learning._mermaidInitialized) {
+          mermaid.initialize({ startOnLoad: false, securityLevel: "loose" });
+          state.learning._mermaidInitialized = true;
+        }
+      } catch (_) {
+        // no-op
+      }
+
+      setTimeout(() => {
+        try {
+          mermaid.run({ nodes: [mmEl] });
+        } catch (_) {
+          // no-op
+        }
+      }, 0);
+    };
+
+    renderMermaidIfNeeded();
 
     document.getElementById("learningBackBtn")?.addEventListener("click", () => {
       state.learning.currentDetail = null;

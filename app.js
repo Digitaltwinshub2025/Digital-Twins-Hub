@@ -3873,36 +3873,115 @@
     const currentDetail = state.learning.currentDetail;
     const projects = Array.isArray(state.projects) ? state.projects : [];
 
-    const getLabsMindmapMermaid = () => {
-      return `mindmap
-  root((Digital Twins Hub))
-    Core Features
-    Flagship Projects
-      Baldwin Hills 6-Mile Corridor
-        Interactive Data Platform
-        Urban Scenario Evaluation
-        Stakeholder Engagement
-        Built with Unreal Engine, Rhino, QGIS
-      ASU Reclamation
-        Architecture & Community Design
-        Urban Space Repurposing
-        Environmental Design
-      Pando Populus
-        Resilience Intelligence
-        Climate & Social Risk Data
-        Community Planning Support
-      PUHC Innovation Alleys
-        Shade Infrastructure
-        Urban Agriculture
-        Environmental Performance
-    Leadership & Participation
-      Project Leaders
-        Professor Marcela Oliva
-        Fellowship Members
-      Engagement
-        Project Proposals
-        Mentorship
-        Peer Collaboration`;
+    const getLabsMindmapTree = () => {
+      return {
+        label: "Digital Twins Hub",
+        open: true,
+        children: [
+          { label: "Core Features", children: [] },
+          {
+            label: "Flagship Projects",
+            children: [
+              {
+                label: "Baldwin Hills 6-Mile Corridor",
+                children: [
+                  { label: "Interactive Data Platform", children: [] },
+                  { label: "Urban Scenario Evaluation", children: [] },
+                  { label: "Stakeholder Engagement", children: [] },
+                  { label: "Built with Unreal Engine, Rhino, QGIS", children: [] },
+                ],
+              },
+              {
+                label: "ASU Reclamation",
+                children: [
+                  { label: "Architecture & Community Design", children: [] },
+                  { label: "Urban Space Repurposing", children: [] },
+                  { label: "Environmental Design", children: [] },
+                ],
+              },
+              {
+                label: "Pando Populus",
+                children: [
+                  { label: "Resilience Intelligence", children: [] },
+                  { label: "Climate & Social Risk Data", children: [] },
+                  { label: "Community Planning Support", children: [] },
+                ],
+              },
+              {
+                label: "PUHC Innovation Alleys",
+                children: [
+                  { label: "Shade Infrastructure", children: [] },
+                  { label: "Urban Agriculture", children: [] },
+                  { label: "Environmental Performance", children: [] },
+                ],
+              },
+            ],
+          },
+          {
+            label: "Leadership & Participation",
+            children: [
+              {
+                label: "Project Leaders",
+                children: [
+                  { label: "Professor Marcela Oliva", children: [] },
+                  { label: "Fellowship Members", children: [] },
+                ],
+              },
+              {
+                label: "Engagement",
+                children: [
+                  { label: "Project Proposals", children: [] },
+                  { label: "Mentorship", children: [] },
+                  { label: "Peer Collaboration", children: [] },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+    };
+
+    const renderLabsMindmapNode = (node, depth = 0) => {
+      const label = escapeHtml(String(node?.label || ""));
+      const children = Array.isArray(node?.children) ? node.children : [];
+      const isOpen = !!node?.open;
+
+      const padClass = depth === 0 ? "" : depth === 1 ? "pl-4" : depth === 2 ? "pl-8" : "pl-12";
+      const boxClass =
+        depth === 0
+          ? "bg-black text-white"
+          : depth === 1
+            ? "bg-emerald-600 text-white"
+            : depth === 2
+              ? "bg-emerald-100 text-emerald-900"
+              : "bg-white text-gray-900";
+
+      const summaryHtml = `
+        <summary class="${padClass} list-none cursor-pointer select-none">
+          <span class="inline-flex items-center rounded-2xl px-4 py-2 text-sm shadow-sm border border-black/10 ${boxClass}" style="font-family:Poppins, ui-sans-serif">
+            ${label}
+          </span>
+        </summary>
+      `;
+
+      if (!children.length) {
+        return `
+          <div class="${padClass} mt-2">
+            <div class="inline-flex items-center rounded-2xl px-4 py-2 text-sm shadow-sm border border-black/10 ${boxClass}" style="font-family:Poppins, ui-sans-serif">
+              ${label}
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <details class="mt-3" ${isOpen ? "open" : ""}>
+          ${summaryHtml}
+          <div class="mt-2 space-y-2">
+            ${children.map((c) => renderLabsMindmapNode(c, depth + 1)).join("")}
+          </div>
+        </details>
+      `;
     };
 
     // Clean up any previous hero scroll handler (important when navigating between routes or detail views)
@@ -4224,7 +4303,9 @@
                   <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Mindmap</h2>
                   <div class="rounded-3xl border border-black/10 bg-white/80 shadow-sm overflow-hidden">
                     <div class="p-4 overflow-x-auto">
-                      <div id="learningLabsMindmap" class="mermaid">${getLabsMindmapMermaid()}</div>
+                      <div id="learningLabsMindmapTree" class="min-w-[720px]">
+                        ${renderLabsMindmapNode(getLabsMindmapTree(), 0)}
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -4977,33 +5058,6 @@
 
     wireLearningVideosProgress();
     wireLearningVideoComments();
-
-    const renderMermaidIfNeeded = () => {
-      if (!currentDetail || currentDetail.key !== "labs") return;
-      const mmEl = document.getElementById("learningLabsMindmap");
-      if (!mmEl) return;
-      const mermaid = window.mermaid;
-      if (!mermaid) return;
-
-      try {
-        if (!state.learning._mermaidInitialized) {
-          mermaid.initialize({ startOnLoad: false, securityLevel: "loose" });
-          state.learning._mermaidInitialized = true;
-        }
-      } catch (_) {
-        // no-op
-      }
-
-      setTimeout(() => {
-        try {
-          mermaid.run({ nodes: [mmEl] });
-        } catch (_) {
-          // no-op
-        }
-      }, 0);
-    };
-
-    renderMermaidIfNeeded();
 
     document.getElementById("learningBackBtn")?.addEventListener("click", () => {
       state.learning.currentDetail = null;

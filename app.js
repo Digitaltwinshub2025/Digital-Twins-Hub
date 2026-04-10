@@ -4426,11 +4426,11 @@
           <section id="learning-carousel" class="scroll-reveal">
             <div class="learning-carousel-section">
               <div class="learning-carousel" data-learning-carousel>
-                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/Slideshow/1%20(1).png" alt="Slide 1" /></div>
-                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/Slideshow/1%20(2).png" alt="Slide 2" /></div>
-                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/Slideshow/1%20(3).png" alt="Slide 3" /></div>
-                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/Slideshow/1%20(4).png" alt="Slide 4" /></div>
-                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/Videos.png" alt="Slide 5" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(1).png" alt="Slide 1" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(2).png" alt="Slide 2" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(3).png" alt="Slide 3" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(4).png" alt="Slide 4" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Videos.png" alt="Slide 5" /></div>
               </div>
 
               <div class="learning-carousel-controls">

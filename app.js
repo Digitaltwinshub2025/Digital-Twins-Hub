@@ -3873,117 +3873,6 @@
     const currentDetail = state.learning.currentDetail;
     const projects = Array.isArray(state.projects) ? state.projects : [];
 
-    const getLabsMindmapTree = () => {
-      return {
-        label: "Digital Twins Hub",
-        open: true,
-        children: [
-          { label: "Core Features", children: [] },
-          {
-            label: "Flagship Projects",
-            children: [
-              {
-                label: "Baldwin Hills 6-Mile Corridor",
-                children: [
-                  { label: "Interactive Data Platform", children: [] },
-                  { label: "Urban Scenario Evaluation", children: [] },
-                  { label: "Stakeholder Engagement", children: [] },
-                  { label: "Built with Unreal Engine, Rhino, QGIS", children: [] },
-                ],
-              },
-              {
-                label: "ASU Reclamation",
-                children: [
-                  { label: "Architecture & Community Design", children: [] },
-                  { label: "Urban Space Repurposing", children: [] },
-                  { label: "Environmental Design", children: [] },
-                ],
-              },
-              {
-                label: "Pando Populus",
-                children: [
-                  { label: "Resilience Intelligence", children: [] },
-                  { label: "Climate & Social Risk Data", children: [] },
-                  { label: "Community Planning Support", children: [] },
-                ],
-              },
-              {
-                label: "PUHC Innovation Alleys",
-                children: [
-                  { label: "Shade Infrastructure", children: [] },
-                  { label: "Urban Agriculture", children: [] },
-                  { label: "Environmental Performance", children: [] },
-                ],
-              },
-            ],
-          },
-          {
-            label: "Leadership & Participation",
-            children: [
-              {
-                label: "Project Leaders",
-                children: [
-                  { label: "Professor Marcela Oliva", children: [] },
-                  { label: "Fellowship Members", children: [] },
-                ],
-              },
-              {
-                label: "Engagement",
-                children: [
-                  { label: "Project Proposals", children: [] },
-                  { label: "Mentorship", children: [] },
-                  { label: "Peer Collaboration", children: [] },
-                ],
-              },
-            ],
-          },
-        ],
-      };
-    };
-
-    const renderLabsMindmapNode = (node, depth = 0) => {
-      const label = escapeHtml(String(node?.label || ""));
-      const children = Array.isArray(node?.children) ? node.children : [];
-      const isOpen = !!node?.open;
-
-      const padClass = depth === 0 ? "" : depth === 1 ? "pl-4" : depth === 2 ? "pl-8" : "pl-12";
-      const boxClass =
-        depth === 0
-          ? "bg-black text-white"
-          : depth === 1
-            ? "bg-emerald-600 text-white"
-            : depth === 2
-              ? "bg-emerald-100 text-emerald-900"
-              : "bg-white text-gray-900";
-
-      const summaryHtml = `
-        <summary class="${padClass} list-none cursor-pointer select-none">
-          <span class="inline-flex items-center rounded-2xl px-4 py-2 text-sm shadow-sm border border-black/10 ${boxClass}" style="font-family:Poppins, ui-sans-serif">
-            ${label}
-          </span>
-        </summary>
-      `;
-
-      if (!children.length) {
-        return `
-          <div class="${padClass} mt-2">
-            <div class="inline-flex items-center rounded-2xl px-4 py-2 text-sm shadow-sm border border-black/10 ${boxClass}" style="font-family:Poppins, ui-sans-serif">
-              ${label}
-            </div>
-          </div>
-        `;
-      }
-
-      return `
-        <details class="mt-3" ${isOpen ? "open" : ""}>
-          ${summaryHtml}
-          <div class="mt-2 space-y-2">
-            ${children.map((c) => renderLabsMindmapNode(c, depth + 1)).join("")}
-          </div>
-        </details>
-      `;
-    };
-
     // Clean up any previous hero scroll handler (important when navigating between routes or detail views)
     if (state.learning._heroScrollHandler) {
       const prevTarget = state.learning._heroScrollTarget || window;
@@ -4303,9 +4192,7 @@
                   <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Mindmap</h2>
                   <div class="rounded-3xl border border-black/10 bg-white/80 shadow-sm overflow-hidden">
                     <div class="p-4 overflow-x-auto">
-                      <div id="learningLabsMindmapTree" class="min-w-[720px]">
-                        ${renderLabsMindmapNode(getLabsMindmapTree(), 0)}
-                      </div>
+                      <div id="learningLabsMindmapInteractive" class="min-w-[1600px]"></div>
                     </div>
                   </div>
                 </section>
@@ -5058,6 +4945,42 @@
 
     wireLearningVideosProgress();
     wireLearningVideoComments();
+
+    const wireLearningLabsMindmap = () => {
+      if (!currentDetail || currentDetail.key !== "labs") return;
+      const host = document.getElementById("learningLabsMindmapInteractive");
+      if (!host) return;
+      if (typeof window.renderLabsMindmap !== "function") return;
+
+      if (!state.learning.labsMindmapCollapsedSet || !(state.learning.labsMindmapCollapsedSet instanceof Set)) {
+        state.learning.labsMindmapCollapsedSet = new Set(["platform", "flagship", "tools", "leadership"]);
+      }
+
+      const setCollapsed = (next) => {
+        state.learning.labsMindmapCollapsedSet = next instanceof Set ? next : new Set();
+        try {
+          window.renderLabsMindmap(host, {
+            collapsed: state.learning.labsMindmapCollapsedSet,
+            setCollapsed,
+          });
+        } catch (_) {
+          // no-op
+        }
+      };
+
+      setTimeout(() => {
+        try {
+          window.renderLabsMindmap(host, {
+            collapsed: state.learning.labsMindmapCollapsedSet,
+            setCollapsed,
+          });
+        } catch (_) {
+          // no-op
+        }
+      }, 0);
+    };
+
+    wireLearningLabsMindmap();
 
     document.getElementById("learningBackBtn")?.addEventListener("click", () => {
       state.learning.currentDetail = null;

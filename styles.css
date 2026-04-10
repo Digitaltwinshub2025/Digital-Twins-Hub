@@ -124,7 +124,7 @@ a:focus-visible {
 
 .learning-carousel-section {
   width: 100%;
-  min-height: 700px;
+  min-height: 820px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +136,7 @@ a:focus-visible {
   position: relative;
   width: 100%;
   max-width: 1700px;
-  height: 600px;
+  height: 720px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,8 +145,8 @@ a:focus-visible {
 
 .learning-carousel-card {
   position: absolute;
-  width: 260px;
-  height: 460px;
+  width: min(92vw, 1120px);
+  height: 640px;
   border-radius: 24px;
   overflow: hidden;
   transition: all 0.7s ease;
@@ -181,7 +181,7 @@ a:focus-visible {
 }
 
 .learning-carousel-card.left-1 {
-  transform: translateX(-300px) scale(0.95) rotateY(18deg);
+  transform: translateX(-520px) scale(0.72) rotateY(18deg);
   z-index: 4;
   opacity: 1;
   filter: blur(0px);
@@ -192,7 +192,7 @@ a:focus-visible {
 }
 
 .learning-carousel-card.right-1 {
-  transform: translateX(300px) scale(0.95) rotateY(-18deg);
+  transform: translateX(520px) scale(0.72) rotateY(-18deg);
   z-index: 4;
   opacity: 1;
   filter: blur(0px);
@@ -203,7 +203,7 @@ a:focus-visible {
 }
 
 .learning-carousel-card.left-2 {
-  transform: translateX(-520px) scale(0.88) rotateY(28deg);
+  transform: translateX(-820px) scale(0.54) rotateY(28deg);
   z-index: 3;
   opacity: 0.6;
   filter: blur(2px);
@@ -214,7 +214,7 @@ a:focus-visible {
 }
 
 .learning-carousel-card.right-2 {
-  transform: translateX(520px) scale(0.88) rotateY(-28deg);
+  transform: translateX(820px) scale(0.54) rotateY(-28deg);
   z-index: 3;
   opacity: 0.6;
   filter: blur(2px);
@@ -262,52 +262,52 @@ a:focus-visible {
 
 @media (max-width: 1100px) {
   .learning-carousel-card {
-    width: 210px;
-    height: 380px;
+    width: min(92vw, 920px);
+    height: 560px;
   }
 
   .learning-carousel-card.left-1 {
-    transform: translateX(-240px) scale(0.93) rotateY(18deg);
+    transform: translateX(-420px) scale(0.68) rotateY(18deg);
   }
 
   .learning-carousel-card.right-1 {
-    transform: translateX(240px) scale(0.93) rotateY(-18deg);
+    transform: translateX(420px) scale(0.68) rotateY(-18deg);
   }
 
   .learning-carousel-card.left-2 {
-    transform: translateX(-400px) scale(0.84) rotateY(24deg);
+    transform: translateX(-640px) scale(0.5) rotateY(24deg);
   }
 
   .learning-carousel-card.right-2 {
-    transform: translateX(400px) scale(0.84) rotateY(-24deg);
+    transform: translateX(640px) scale(0.5) rotateY(-24deg);
   }
 }
 
 @media (max-width: 768px) {
   .learning-carousel {
-    height: 470px;
+    height: 520px;
   }
 
   .learning-carousel-card {
-    width: 150px;
-    height: 260px;
+    width: 92vw;
+    height: 420px;
     border-radius: 20px;
   }
 
   .learning-carousel-card.left-1 {
-    transform: translateX(-140px) scale(0.9) rotateY(15deg);
+    transform: translateX(-250px) scale(0.72) rotateY(15deg);
   }
 
   .learning-carousel-card.right-1 {
-    transform: translateX(140px) scale(0.9) rotateY(-15deg);
+    transform: translateX(250px) scale(0.72) rotateY(-15deg);
   }
 
   .learning-carousel-card.left-2 {
-    transform: translateX(-240px) scale(0.78) rotateY(20deg);
+    transform: translateX(-420px) scale(0.54) rotateY(20deg);
   }
 
   .learning-carousel-card.right-2 {
-    transform: translateX(240px) scale(0.78) rotateY(-20deg);
+    transform: translateX(420px) scale(0.54) rotateY(-20deg);
   }
 
   .learning-carousel-controls {

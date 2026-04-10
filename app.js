@@ -4423,6 +4423,23 @@
             </div>
           </section>
 
+          <section id="learning-carousel" class="scroll-reveal">
+            <div class="learning-carousel-section">
+              <div class="learning-carousel" data-learning-carousel>
+                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/carousel-1.jpg" alt="Slide 1" /></div>
+                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/carousel-2.jpg" alt="Slide 2" /></div>
+                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/carousel-3.jpg" alt="Slide 3" /></div>
+                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/carousel-4.jpg" alt="Slide 4" /></div>
+                <div class="learning-carousel-card"><img src="./Assets/Learning%20Hub/carousel-5.jpg" alt="Slide 5" /></div>
+              </div>
+
+              <div class="learning-carousel-controls">
+                <button class="learning-carousel-btn" type="button" data-learning-carousel-prev aria-label="Previous">&#8249;</button>
+                <button class="learning-carousel-btn" type="button" data-learning-carousel-next aria-label="Next">&#8250;</button>
+              </div>
+            </div>
+          </section>
+
           <section id="learning-cards" class="space-y-4 scroll-reveal">
             <h2 class="text-2xl font-semibold text-white" style="font-family:Poppins, ui-sans-serif, system-ui">Browse Learning Materials</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -4506,6 +4523,43 @@
           target.scrollIntoView({ behavior: "smooth", block: "start" });
         });
       });
+
+      const carouselEl = appEl.querySelector("[data-learning-carousel]");
+      if (carouselEl) {
+        const cards = Array.from(carouselEl.querySelectorAll(".learning-carousel-card"));
+        const prevBtn = appEl.querySelector("[data-learning-carousel-prev]");
+        const nextBtn = appEl.querySelector("[data-learning-carousel-next]");
+
+        let current = 2;
+        const updateCarousel = () => {
+          cards.forEach((card, index) => {
+            card.className = "learning-carousel-card";
+            const offset = index - current;
+            if (offset === 0) card.classList.add("active");
+            else if (offset === -1) card.classList.add("left-1");
+            else if (offset === 1) card.classList.add("right-1");
+            else if (offset === -2) card.classList.add("left-2");
+            else if (offset === 2) card.classList.add("right-2");
+            else card.classList.add("hidden");
+          });
+        };
+
+        if (prevBtn) {
+          prevBtn.addEventListener("click", () => {
+            current = (current - 1 + cards.length) % cards.length;
+            updateCarousel();
+          });
+        }
+
+        if (nextBtn) {
+          nextBtn.addEventListener("click", () => {
+            current = (current + 1) % cards.length;
+            updateCarousel();
+          });
+        }
+
+        updateCarousel();
+      }
 
       // Scroll-driven hero sentence scale (re-initialized on each visit)
       const sentenceEl = document.getElementById("learningHeroSentence");

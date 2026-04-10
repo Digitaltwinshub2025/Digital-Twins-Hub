@@ -121,3 +121,201 @@ a:focus-visible {
 .text-shadow-soft {
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
 }
+
+.learning-carousel-section {
+  width: 100%;
+  min-height: 620px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.learning-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+.learning-carousel-card {
+  position: absolute;
+  width: 220px;
+  height: 390px;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.7s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  background: #111;
+}
+
+.learning-carousel-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.learning-carousel-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  transition: all 0.7s ease;
+}
+
+.learning-carousel-card.active {
+  transform: translateX(0) scale(1);
+  z-index: 5;
+  opacity: 1;
+  filter: blur(0px);
+}
+
+.learning-carousel-card.active::after {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.learning-carousel-card.left-1 {
+  transform: translateX(-250px) scale(0.95) rotateY(18deg);
+  z-index: 4;
+  opacity: 1;
+  filter: blur(0px);
+}
+
+.learning-carousel-card.left-1::after {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.15));
+}
+
+.learning-carousel-card.right-1 {
+  transform: translateX(250px) scale(0.95) rotateY(-18deg);
+  z-index: 4;
+  opacity: 1;
+  filter: blur(0px);
+}
+
+.learning-carousel-card.right-1::after {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.15));
+}
+
+.learning-carousel-card.left-2 {
+  transform: translateX(-430px) scale(0.88) rotateY(28deg);
+  z-index: 3;
+  opacity: 0.6;
+  filter: blur(2px);
+}
+
+.learning-carousel-card.left-2::after {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.45));
+}
+
+.learning-carousel-card.right-2 {
+  transform: translateX(430px) scale(0.88) rotateY(-28deg);
+  z-index: 3;
+  opacity: 0.6;
+  filter: blur(2px);
+}
+
+.learning-carousel-card.right-2::after {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.45));
+}
+
+.learning-carousel-card.hidden {
+  transform: scale(0.8);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.learning-carousel-controls {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.learning-carousel-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ddd;
+  font-size: 24px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.learning-carousel-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+@media (max-width: 1100px) {
+  .learning-carousel-card {
+    width: 180px;
+    height: 320px;
+  }
+
+  .learning-carousel-card.left-1 {
+    transform: translateX(-200px) scale(0.93) rotateY(18deg);
+  }
+
+  .learning-carousel-card.right-1 {
+    transform: translateX(200px) scale(0.93) rotateY(-18deg);
+  }
+
+  .learning-carousel-card.left-2 {
+    transform: translateX(-330px) scale(0.84) rotateY(24deg);
+  }
+
+  .learning-carousel-card.right-2 {
+    transform: translateX(330px) scale(0.84) rotateY(-24deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .learning-carousel {
+    height: 430px;
+  }
+
+  .learning-carousel-card {
+    width: 150px;
+    height: 260px;
+    border-radius: 20px;
+  }
+
+  .learning-carousel-card.left-1 {
+    transform: translateX(-140px) scale(0.9) rotateY(15deg);
+  }
+
+  .learning-carousel-card.right-1 {
+    transform: translateX(140px) scale(0.9) rotateY(-15deg);
+  }
+
+  .learning-carousel-card.left-2 {
+    transform: translateX(-240px) scale(0.78) rotateY(20deg);
+  }
+
+  .learning-carousel-card.right-2 {
+    transform: translateX(240px) scale(0.78) rotateY(-20deg);
+  }
+
+  .learning-carousel-controls {
+    bottom: 50px;
+  }
+
+  .learning-carousel-btn {
+    width: 48px;
+    height: 48px;
+  }
+}

@@ -181,10 +181,10 @@ a:focus-visible {
 }
 
 .learning-carousel-card.left-1 {
-  transform: translateX(-520px) scale(0.72) rotateY(18deg);
+  transform: translateX(-560px) scale(0.62) rotateY(18deg);
   z-index: 4;
-  opacity: 1;
-  filter: blur(0px);
+  opacity: 0.82;
+  filter: blur(1px);
 }
 
 .learning-carousel-card.left-1::after {
@@ -192,10 +192,10 @@ a:focus-visible {
 }
 
 .learning-carousel-card.right-1 {
-  transform: translateX(520px) scale(0.72) rotateY(-18deg);
+  transform: translateX(560px) scale(0.62) rotateY(-18deg);
   z-index: 4;
-  opacity: 1;
-  filter: blur(0px);
+  opacity: 0.82;
+  filter: blur(1px);
 }
 
 .learning-carousel-card.right-1::after {
@@ -203,10 +203,10 @@ a:focus-visible {
 }
 
 .learning-carousel-card.left-2 {
-  transform: translateX(-820px) scale(0.54) rotateY(28deg);
+  transform: translateX(-880px) scale(0.42) rotateY(28deg);
   z-index: 3;
-  opacity: 0.6;
-  filter: blur(2px);
+  opacity: 0.38;
+  filter: blur(2.5px);
 }
 
 .learning-carousel-card.left-2::after {
@@ -214,10 +214,10 @@ a:focus-visible {
 }
 
 .learning-carousel-card.right-2 {
-  transform: translateX(820px) scale(0.54) rotateY(-28deg);
+  transform: translateX(880px) scale(0.42) rotateY(-28deg);
   z-index: 3;
-  opacity: 0.6;
-  filter: blur(2px);
+  opacity: 0.38;
+  filter: blur(2.5px);
 }
 
 .learning-carousel-card.right-2::after {
@@ -267,19 +267,19 @@ a:focus-visible {
   }
 
   .learning-carousel-card.left-1 {
-    transform: translateX(-420px) scale(0.68) rotateY(18deg);
+    transform: translateX(-460px) scale(0.58) rotateY(18deg);
   }
 
   .learning-carousel-card.right-1 {
-    transform: translateX(420px) scale(0.68) rotateY(-18deg);
+    transform: translateX(460px) scale(0.58) rotateY(-18deg);
   }
 
   .learning-carousel-card.left-2 {
-    transform: translateX(-640px) scale(0.5) rotateY(24deg);
+    transform: translateX(-700px) scale(0.4) rotateY(24deg);
   }
 
   .learning-carousel-card.right-2 {
-    transform: translateX(640px) scale(0.5) rotateY(-24deg);
+    transform: translateX(700px) scale(0.4) rotateY(-24deg);
   }
 }
 
@@ -295,19 +295,19 @@ a:focus-visible {
   }
 
   .learning-carousel-card.left-1 {
-    transform: translateX(-250px) scale(0.72) rotateY(15deg);
+    transform: translateX(-270px) scale(0.62) rotateY(15deg);
   }
 
   .learning-carousel-card.right-1 {
-    transform: translateX(250px) scale(0.72) rotateY(-15deg);
+    transform: translateX(270px) scale(0.62) rotateY(-15deg);
   }
 
   .learning-carousel-card.left-2 {
-    transform: translateX(-420px) scale(0.54) rotateY(20deg);
+    transform: translateX(-460px) scale(0.42) rotateY(20deg);
   }
 
   .learning-carousel-card.right-2 {
-    transform: translateX(420px) scale(0.54) rotateY(-20deg);
+    transform: translateX(460px) scale(0.42) rotateY(-20deg);
   }
 
   .learning-carousel-controls {

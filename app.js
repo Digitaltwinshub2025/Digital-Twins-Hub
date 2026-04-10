@@ -3873,6 +3873,15 @@
     const currentDetail = state.learning.currentDetail;
     const projects = Array.isArray(state.projects) ? state.projects : [];
 
+    if (state.learning._carouselIntervalId) {
+      try {
+        clearInterval(state.learning._carouselIntervalId);
+      } catch (_) {
+        // no-op
+      }
+      state.learning._carouselIntervalId = null;
+    }
+
     // Clean up any previous hero scroll handler (important when navigating between routes or detail views)
     if (state.learning._heroScrollHandler) {
       const prevTarget = state.learning._heroScrollTarget || window;
@@ -4544,19 +4553,51 @@
           });
         };
 
+        const goPrev = () => {
+          current = (current - 1 + cards.length) % cards.length;
+          updateCarousel();
+        };
+
+        const goNext = () => {
+          current = (current + 1) % cards.length;
+          updateCarousel();
+        };
+
         if (prevBtn) {
           prevBtn.addEventListener("click", () => {
-            current = (current - 1 + cards.length) % cards.length;
-            updateCarousel();
+            goPrev();
           });
         }
 
         if (nextBtn) {
           nextBtn.addEventListener("click", () => {
-            current = (current + 1) % cards.length;
-            updateCarousel();
+            goNext();
           });
         }
+
+        let paused = false;
+        const setPaused = (v) => {
+          paused = !!v;
+        };
+
+        carouselEl.addEventListener("mouseenter", () => setPaused(true));
+        carouselEl.addEventListener("mouseleave", () => setPaused(false));
+        prevBtn?.addEventListener("mouseenter", () => setPaused(true));
+        nextBtn?.addEventListener("mouseenter", () => setPaused(true));
+        prevBtn?.addEventListener("mouseleave", () => setPaused(false));
+        nextBtn?.addEventListener("mouseleave", () => setPaused(false));
+        prevBtn?.addEventListener("focus", () => setPaused(true));
+        nextBtn?.addEventListener("focus", () => setPaused(true));
+        prevBtn?.addEventListener("blur", () => setPaused(false));
+        nextBtn?.addEventListener("blur", () => setPaused(false));
+
+        const tick = () => {
+          if (document.hidden) return;
+          if (paused) return;
+          goNext();
+        };
+
+        state.learning._carouselIntervalId = setInterval(tick, 3200);
 
         updateCarousel();
       }

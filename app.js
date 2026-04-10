@@ -4432,7 +4432,7 @@
             </div>
           </section>
 
-          <section id="learning-carousel" class="scroll-reveal">
+          <section id="learning-carousel" class="scroll-reveal relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
             <div class="learning-carousel-section">
               <div class="learning-carousel" data-learning-carousel>
                 <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(1).png" alt="Slide 1" /></div>

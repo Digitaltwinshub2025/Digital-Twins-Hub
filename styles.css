@@ -135,7 +135,7 @@ a:focus-visible {
 .learning-carousel {
   position: relative;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1700px;
   height: 600px;
   display: flex;
   align-items: center;

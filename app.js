@@ -4342,7 +4342,7 @@
       : `
         <div class="space-y-10 relative">
           <div class="pointer-events-none fixed inset-0 -z-10">
-            <div class="absolute inset-0 bg-center bg-cover" style="background-image:url('./assets/Learning%20Hub/learning-hub-hero.jpg');"></div>
+            <div class="absolute inset-0 bg-center bg-cover" style="background-image:url('/assets/Learning%20Hub/learning-hub-hero.jpg');"></div>
             <div class="absolute inset-0 bg-black/55"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/55 to-black/80"></div>
           </div>
@@ -4435,11 +4435,11 @@
           <section id="learning-carousel" class="scroll-reveal relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
             <div class="learning-carousel-section">
               <div class="learning-carousel" data-learning-carousel>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(1).png" alt="Slide 1" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(5).png" alt="Slide 2" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(6).png" alt="Slide 3" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(7).png" alt="Slide 4" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(8).png" alt="Slide 5" /></div>
+                <div class="learning-carousel-card"><img src="/assets/Learning%20Hub/Slideshow/1%20(1).png" alt="Slide 1" /></div>
+                <div class="learning-carousel-card"><img src="/assets/Learning%20Hub/Slideshow/1%20(5).png" alt="Slide 2" /></div>
+                <div class="learning-carousel-card"><img src="/assets/Learning%20Hub/Slideshow/1%20(6).png" alt="Slide 3" /></div>
+                <div class="learning-carousel-card"><img src="/assets/Learning%20Hub/Slideshow/1%20(7).png" alt="Slide 4" /></div>
+                <div class="learning-carousel-card"><img src="/assets/Learning%20Hub/Slideshow/1%20(8).png" alt="Slide 5" /></div>
               </div>
 
               <div class="learning-carousel-controls">

@@ -3745,12 +3745,12 @@
           ],
         },
         labs: {
-          title: "Hands-on labs",
+          title: "Mindmap",
           description: "Design labs where students work with real geospatial or sensor data to prototype digital twins.",
           items: [
             "Lab: Measure and map temperatures across a campus.",
-            "Lab: Build a small traffic flow simulation for one street.",
-            "Lab: Compare baseline vs. retrofitted building energy.",
+            "Lab: Build an indoor navigation proof of concept.",
+            "Lab: Prototype a digital twin dashboard using public GIS layers.",
           ],
         },
         templates: {
@@ -3774,6 +3774,20 @@
       };
     }
 
+    if (!state.learning.sections || typeof state.learning.sections !== "object") {
+      state.learning.sections = {};
+    }
+
+    if (!state.learning.sections.labs || typeof state.learning.sections.labs !== "object") {
+      state.learning.sections.labs = {
+        title: "Mindmap",
+        description: "Design labs where students work with real geospatial or sensor data to prototype digital twins.",
+        items: [],
+      };
+    }
+
+    state.learning.sections.labs.title = "Mindmap";
+
     const puhcWalkthroughItem = {
       title: "PUHC website walkthrough",
       url: "./assets/Learning%20Hub/puhc%20website%20walkthrough.mp4",
@@ -3783,10 +3797,6 @@
       title: "Environmental Context Visualization",
       url: "https://youtu.be/BaDAIZ9jpuI",
     };
-
-    if (!state.learning.sections || typeof state.learning.sections !== "object") {
-      state.learning.sections = {};
-    }
 
     if (!state.learning.sections.videos || typeof state.learning.sections.videos !== "object") {
       state.learning.sections.videos = {

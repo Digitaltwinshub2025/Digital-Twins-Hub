@@ -4440,6 +4440,11 @@
                 <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/3.png" alt="Slide 3" /></div>
                 <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/4.png" alt="Slide 4" /></div>
                 <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/5.png" alt="Slide 5" /></div>
+                <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/6.png" alt="Slide 6" /></div>
+                <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/7.png" alt="Slide 7" /></div>
+                <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/8.png" alt="Slide 8" /></div>
+                <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/9.png" alt="Slide 9" /></div>
+                <div class="learning-carousel-card"><img src="assets/Learning%20Hub/Slideshow/10.png" alt="Slide 10" /></div>
               </div>
 
               <div class="learning-carousel-controls">

@@ -4436,10 +4436,10 @@
             <div class="learning-carousel-section">
               <div class="learning-carousel" data-learning-carousel>
                 <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(1).png" alt="Slide 1" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(2).png" alt="Slide 2" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(3).png" alt="Slide 3" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(4).png" alt="Slide 4" /></div>
-                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Videos.png" alt="Slide 5" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(5).png" alt="Slide 2" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(6).png" alt="Slide 3" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(7).png" alt="Slide 4" /></div>
+                <div class="learning-carousel-card"><img src="./assets/Learning%20Hub/Slideshow/1%20(8).png" alt="Slide 5" /></div>
               </div>
 
               <div class="learning-carousel-controls">
@@ -4539,7 +4539,16 @@
         const prevBtn = appEl.querySelector("[data-learning-carousel-prev]");
         const nextBtn = appEl.querySelector("[data-learning-carousel-next]");
 
-        let current = 2;
+        // Randomize slide order on each visit to the Learning Hub page.
+        for (let i = cards.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = cards[i];
+          cards[i] = cards[j];
+          cards[j] = tmp;
+        }
+        cards.forEach((c) => carouselEl.appendChild(c));
+
+        let current = Math.min(2, Math.max(0, cards.length - 1));
         const updateCarousel = () => {
           cards.forEach((card, index) => {
             card.className = "learning-carousel-card";

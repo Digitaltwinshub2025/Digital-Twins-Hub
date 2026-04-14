@@ -3781,12 +3781,14 @@
     if (!state.learning.sections.labs || typeof state.learning.sections.labs !== "object") {
       state.learning.sections.labs = {
         title: "Mindmap",
-        description: "Design labs where students work with real geospatial or sensor data to prototype digital twins.",
+        description: "Create a mind map that shows how students use real geospatial or sensor data to prototype digital twins.",
         items: [],
       };
     }
 
     state.learning.sections.labs.title = "Mindmap";
+    state.learning.sections.labs.description = "Create a mind map that shows how students use real geospatial or sensor data to prototype digital twins.";
+    state.learning.sections.labs.items = [];
 
     const puhcWalkthroughItem = {
       title: "PUHC website walkthrough",

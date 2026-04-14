@@ -67,8 +67,8 @@
     col.forEach(id=>desc(id,map).forEach(d=>hidden.add(d)));
     const vNodes=nodes.filter(n=>!hidden.has(n.id));
     const vEdges=edges.filter(([f,t])=>!hidden.has(f)&&!hidden.has(t));
-    const btn=n=>{const isParent=(map[n.id]||[]).length>0;const active=col.has(n.id);const s=style(n.type,active);return `<button type="button" data-mm-node="${n.id}" style="position:absolute;left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px;background:${s.bg};color:${s.fg};border:1px solid ${s.bd};border-radius:14px;padding:0 18px;text-align:left;display:flex;align-items:center;cursor:${isParent?"pointer":"default"};font-family:Poppins, ui-sans-serif;letter-spacing:0.2px;font-size:16px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.18);transition:transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;outline:none">${n.label}</button>`;};
-    const ctrlBtn=(label,attr)=>`<button type="button" ${attr} style="height:44px;min-width:44px;padding:0 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.10);color:rgba(255,255,255,0.92);font-size:14px;font-weight:700;cursor:pointer;font-family:Poppins, ui-sans-serif;backdrop-filter:blur(10px);box-shadow:0 12px 40px rgba(0,0,0,0.35);transition:transform 160ms ease, background 160ms ease, box-shadow 160ms ease;outline:none">${label}</button>`;
+    const btn=n=>{const isParent=(map[n.id]||[]).length>0;const active=col.has(n.id);const s=style(n.type,active);return `<button type="button" data-mm-node="${n.id}" style="position:absolute;left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px;background:${s.bg};color:${s.fg};border:2px solid ${s.bd};border-radius:18px;padding:0 22px;text-align:left;display:flex;align-items:center;cursor:${isParent?"pointer":"default"};font-family:Poppins, ui-sans-serif;letter-spacing:0.2px;font-size:18px;font-weight:700;box-shadow:0 14px 44px rgba(15,23,42,0.16);transition:transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;outline:none">${n.label}</button>`;};
+    const ctrlBtn=(label,attr)=>`<button type="button" ${attr} style="height:56px;min-width:56px;padding:0 20px;border-radius:18px;border:2px solid rgba(15,23,42,0.10);background:linear-gradient(180deg, #ffffff, #eef4ff);color:#0f172a;font-size:16px;font-weight:800;cursor:pointer;font-family:Poppins, ui-sans-serif;box-shadow:0 14px 44px rgba(15,23,42,0.18);transition:transform 160ms ease, background 160ms ease, box-shadow 160ms ease;outline:none">${label}</button>`;
     host.innerHTML=`<div style="margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
         ${ctrlBtn("Expand all",'data-mm-expand')}
@@ -81,7 +81,7 @@
         ${ctrlBtn("\u2193",'data-mm-pan="down" aria-label="Pan down"')}
         ${ctrlBtn("\u2192",'data-mm-pan="right" aria-label="Pan right"')}
       </div>
-    </div><div data-mm-viewport style="position:relative;overflow:hidden;border-radius:26px;background:radial-gradient(1200px 800px at 50% 40%, rgba(255,255,255,0.08), rgba(0,0,0,0.0) 55%), linear-gradient(180deg, rgba(8,10,18,1), rgba(0,0,0,1));width:100%;height:100vh;"><div data-mm-stage style="position:absolute;left:0;top:0;width:${SIZE.w}px;height:${SIZE.h}px;transform-origin:0 0;transition:transform 280ms ease;"><svg width="${SIZE.w}" height="${SIZE.h}" viewBox="0 0 ${SIZE.w} ${SIZE.h}" style="position:absolute;inset:0;">
+    </div><div data-mm-viewport style="position:relative;overflow:hidden;border-radius:30px;background:radial-gradient(1200px 800px at 50% 30%, rgba(99,102,241,0.14), rgba(255,255,255,0) 62%), linear-gradient(180deg, #fbfdff 0%, #f1f6ff 55%, #eef2ff 100%);width:100%;height:100vh;border:1px solid rgba(15,23,42,0.10);box-shadow:0 22px 80px rgba(15,23,42,0.18);"><div data-mm-stage style="position:absolute;left:0;top:0;width:${SIZE.w}px;height:${SIZE.h}px;transform-origin:0 0;transition:transform 280ms ease;"><svg width="${SIZE.w}" height="${SIZE.h}" viewBox="0 0 ${SIZE.w} ${SIZE.h}" style="position:absolute;inset:0;">
       ${vEdges.map(([f,t])=>{const A=dict[f],B=dict[t];if(!A||!B) return "";const root=f==="root";const stroke=root?"#7f8cff":"#8cefe2";const sw=root?4:3.5;const cx=B.x-18,cy=B.y+B.h/2;return `<g><path d="${path(A,B)}" fill="none" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round" opacity="0.96"/><circle cx="${cx}" cy="${cy}" r="12" fill="${root?"#cdd5ff":"#cde4f8"}" stroke="${root?"#a8b4ff":"#cde4f8"}" stroke-width="1.5"/><path d="M ${cx-4} ${cy} L ${cx} ${cy-4} L ${cx} ${cy+4} Z" fill="#2d3748" opacity="0.9"/></g>`;}).join("")}
     </svg>${vNodes.map(btn).join("")}</div></div>`;
 
@@ -127,9 +127,9 @@
     host.querySelectorAll('[data-mm-pan]')?.forEach((b)=>b.addEventListener('click',()=>pan(b.getAttribute('data-mm-pan'))));
 
     host.querySelectorAll('button')?.forEach((b)=>{
-      b.addEventListener('mouseenter',()=>{b.style.transform='translateY(-1px)';b.style.boxShadow='0 16px 50px rgba(0,0,0,0.45)';b.style.background='rgba(255,255,255,0.14)';});
-      b.addEventListener('mouseleave',()=>{b.style.transform='';b.style.boxShadow='';b.style.background='';});
-      b.addEventListener('focus',()=>{b.style.boxShadow='0 0 0 4px rgba(255,255,255,0.25), 0 16px 50px rgba(0,0,0,0.45)';});
+      b.addEventListener('mouseenter',()=>{b.style.transform='translateY(-2px)';b.style.boxShadow='0 20px 60px rgba(15,23,42,0.22)';});
+      b.addEventListener('mouseleave',()=>{b.style.transform='';b.style.boxShadow='';});
+      b.addEventListener('focus',()=>{b.style.boxShadow='0 0 0 5px rgba(99,102,241,0.25), 0 20px 60px rgba(15,23,42,0.22)';});
       b.addEventListener('blur',()=>{b.style.boxShadow='';});
     });
 

@@ -4210,7 +4210,6 @@
             key === "labs"
               ? `
                 <section class="space-y-3">
-                  <h2 class="text-2xl font-semibold text-gray-900" style="font-family:Poppins, ui-sans-serif, system-ui">Mindmap</h2>
                   <div class="rounded-3xl border border-black/10 bg-white/80 shadow-sm overflow-hidden">
                     <div class="p-4 overflow-x-auto">
                       <div id="learningLabsMindmapInteractive" class="min-w-[1600px]"></div>

@@ -541,8 +541,8 @@ window.PROJECTS_CATALOG = [
     teamMemberFirstName: 'Michael',
     teamMemberLastName: '',
     teamMemberRole: 'Software Engineer',
-    repoUrl: 'https://digitaltwinshub2025.github.io/ALLEY-BLOOM/',
-    demoUrl: 'https://digitaltwinshub2025.github.io/ALLEY-BLOOM/',
+    repoUrl: 'https://digitaltwinshub2025.github.io/PUHC-Innovation-Alleys/',
+    demoUrl: 'https://digitaltwinshub2025.github.io/PUHC-Innovation-Alleys/',
     caseStudyUrl: 'https://docs.google.com/presentation/d/1s2cBJ4kS-AP2XAa2YtcGM4tVV9qV2JvCfkdn-R9tq-g/edit?usp=sharing',
     goal:
       'To visualize and communicate how data-informed design strategies—such as shade infrastructure, public art, and urban agriculture—can improve environmental performance, social use, and overall quality of life within dense urban alleyways.',

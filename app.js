@@ -3800,6 +3800,11 @@
       url: "https://youtu.be/BaDAIZ9jpuI",
     };
 
+    const ytLessonItem2 = {
+      title: "Video lesson",
+      url: "https://youtu.be/VahS4Ezz7vU",
+    };
+
     if (!state.learning.sections.videos || typeof state.learning.sections.videos !== "object") {
       state.learning.sections.videos = {
         title: "Video lessons",
@@ -3815,6 +3820,7 @@
         "Walkthrough of a full student project presentation.",
         puhcWalkthroughItem,
         ytLessonItem,
+        ytLessonItem2,
       ];
     } else {
       const hasPuhc = state.learning.sections.videos.items.some(
@@ -3846,6 +3852,29 @@
             (url.includes("youtube.com/watch") && url.includes("v=BaDAIZ9jpuI"));
           if (!isTarget) return it;
           return { ...it, title: ytLessonItem.title, url: ytLessonItem.url };
+        });
+      }
+
+      const hasYtLesson2 = state.learning.sections.videos.items.some(
+        (it) =>
+          it &&
+          typeof it === "object" &&
+          (String(it.url || "").includes("youtu.be/VahS4Ezz7vU") ||
+            String(it.url || "").includes("youtube.com/embed/VahS4Ezz7vU") ||
+            (String(it.url || "").includes("youtube.com/watch") && String(it.url || "").includes("v=VahS4Ezz7vU")))
+      );
+      if (!hasYtLesson2) {
+        state.learning.sections.videos.items.push(ytLessonItem2);
+      } else {
+        state.learning.sections.videos.items = state.learning.sections.videos.items.map((it) => {
+          if (!it || typeof it !== "object") return it;
+          const url = String(it.url || "");
+          const isTarget =
+            url.includes("youtu.be/VahS4Ezz7vU") ||
+            url.includes("youtube.com/embed/VahS4Ezz7vU") ||
+            (url.includes("youtube.com/watch") && url.includes("v=VahS4Ezz7vU"));
+          if (!isTarget) return it;
+          return { ...it, title: ytLessonItem2.title, url: ytLessonItem2.url };
         });
       }
     }
@@ -4042,7 +4071,13 @@
           ? (videoItems.find((v) => String(v.url || "") === selectedVideoUrlRaw) || videoItems[0] || null)
           : null;
 
-      const getYoutubeEmbedUrl = (rawUrl) => {
+      const shouldAutoplaySelected =
+        key === "videos" &&
+        selectedVideo &&
+        String(state.learning.videoAutoplayUrl || "") &&
+        String(state.learning.videoAutoplayUrl || "") === String(selectedVideo.url || "");
+
+      const getYoutubeEmbedUrl = (rawUrl, autoplay) => {
         const u = String(rawUrl || "").trim();
         if (!u) return "";
         const lower = u.toLowerCase();
@@ -4064,7 +4099,8 @@
         }
 
         if (!id) return "";
-        return `https://www.youtube.com/embed/${encodeURIComponent(id)}?rel=0`;
+        const qs = autoplay ? "rel=0&autoplay=1&mute=1" : "rel=0";
+        return `https://www.youtube.com/embed/${encodeURIComponent(id)}?${qs}`;
       };
 
       const getYoutubeThumbUrl = (rawUrl) => {
@@ -4298,7 +4334,7 @@
                               <div class="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black">
                                 ${(() => {
                                   const vUrl = String(selectedVideo?.url || "");
-                                  const yt = getYoutubeEmbedUrl(vUrl);
+                                  const yt = getYoutubeEmbedUrl(vUrl, shouldAutoplaySelected);
                                   if (yt) {
                                     return `<iframe class="w-full h-full" src="${escapeHtml(yt)}" title="${escapeHtml(String(selectedVideo?.title || "Video"))}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
                                   }
@@ -5059,7 +5095,11 @@
         const url = String(btn.getAttribute("data-learning-video-select") || "");
         if (!url) return;
         state.learning.selectedVideoUrl = url;
+        state.learning.videoAutoplayUrl = url;
         render();
+        setTimeout(() => {
+          if (String(state.learning.videoAutoplayUrl || "") === url) state.learning.videoAutoplayUrl = "";
+        }, 0);
       });
     });
 

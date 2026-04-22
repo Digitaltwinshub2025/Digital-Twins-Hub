@@ -5152,6 +5152,22 @@
   // Contact Page (simple)
   // -----------------------------
   function renderContact() {
+    const sponsorLogos = [
+      { src: "./Contact/LATTC.png", alt: "LATTC" },
+      { src: "./Contact/WLAC.png", alt: "WLAC" },
+      { src: "./Contact/AURA.jpg", alt: "AURA" },
+    ];
+
+    const sponsorRow = sponsorLogos
+      .map(
+        (l) => `
+          <div class="contact-sponsor-item">
+            <img src="${escapeHtml(l.src)}" alt="${escapeHtml(l.alt)}" loading="lazy" />
+          </div>
+        `
+      )
+      .join("");
+
     appEl.innerHTML = `
       <div class="min-h-screen bg-gray-50">
         <div class="max-w-5xl mx-auto px-6 py-14">
@@ -5196,6 +5212,22 @@
               <div class="sm:col-span-2 lg:col-span-2">
                 <div class="text-black font-semibold" style="font-family:Poppins, ui-sans-serif">Location</div>
                 <div class="mt-1 text-black/80" style="font-family:Poppins, ui-sans-serif, system-ui">Los Angeles Trade Technical-College</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-14">
+            <div class="text-center">
+              <div class="text-sm font-semibold text-black/70" style="font-family:Poppins, ui-sans-serif">Sponsors</div>
+              <div class="mt-2 text-xs text-black/50" style="font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+                Proudly supported by our partners
+              </div>
+            </div>
+
+            <div class="contact-sponsor-strip" aria-label="Sponsor logos slideshow">
+              <div class="contact-sponsor-track">
+                ${sponsorRow}
+                ${sponsorRow}
               </div>
             </div>
           </div>

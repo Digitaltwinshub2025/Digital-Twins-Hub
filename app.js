@@ -16,7 +16,6 @@
       img: "Team Members/Meri%20Sargsian.png",
       slug: "meri-sargsian",
       sortOrder: 14,
-      project: "Shade LA",
       cardObjectPosition: "50% 20%",
       bio:
         "Computer Science student at Los Angeles Valley College, planning to transfer to a UC in 2026. Experienced in web development and UX design with skills in React.js, ASP.NET, WordPress, HTML, CSS, and JavaScript. Previously worked as a full-stack developer and web development instructor, and contributed to website design improvements for nonprofit organizations.",
@@ -48,6 +47,14 @@
       slug: "omid-ahmadi",
       sortOrder: 1,
       cardObjectPosition: "50% 15%",
+      projects: [
+        {
+          title: "Baldwin Hills 6-Mile Corridor Initiative",
+          subtitle: "Digital Twin Project",
+          image: "gitlogos/Baldwin%20hills%206%20Miles.png?v=3",
+          href: "#/projects/02",
+        },
+      ],
       bio:
         "I worked at AT&T (DIRECTV) as a Quality Assurance on a project called SignalSaver / RainFade. This technology allows viewers to continue watching through the internet whenever there is a streaming interruption, or automatically switch if the satellite signal is lost. After two years of development and testing, we successfully released it to the market, and in 2024 the project received an award. Project Lead on: Baldwin Hills 6-Mile Corridor Initiative.",
       highlights: [
@@ -3428,6 +3435,16 @@
       return;
     }
 
+    const mapProjectToCard = (p) => {
+      const img = p?.image ? String(p.image).replace(/^\//, "") : "";
+      return {
+        title: p?.title ? String(p.title) : "Untitled",
+        subtitle: `${String(p?.category || "Project")}`.trim(),
+        img,
+        href: p?.id ? `#/projects/${encodeURIComponent(String(p.id))}` : "#/projects",
+      };
+    };
+
     const derivedProjects = (Array.isArray(state.projects) ? state.projects : [])
       .filter((p) => {
         const ownerRaw = String(p?.owner || "").trim();
@@ -3467,17 +3484,14 @@
 
         return ownerMatches || byNameMatches || teamMembersMatch;
       })
-      .map((p) => {
-        const img = p?.image ? String(p.image).replace(/^\//, "") : "";
-        return {
-          title: p?.title ? String(p.title) : "Untitled",
-          subtitle: `${String(p?.category || "Project")}`.trim(),
-          img,
-          href: p?.id ? `#/projects/${encodeURIComponent(String(p.id))}` : "#/projects",
-        };
-      });
+      .map(mapProjectToCard);
 
-    const projectsToShow = Array.isArray(m.projects) && m.projects.length ? m.projects : derivedProjects;
+    const allCatalogProjects = (Array.isArray(state.projects) ? state.projects : []).map(mapProjectToCard);
+
+    const isOmid = String(m?.slug || "") === "omid-ahmadi";
+
+    const projectsToShow = isOmid ? allCatalogProjects : Array.isArray(m.projects) && m.projects.length ? m.projects : derivedProjects;
+    const showAllProjects = isOmid || (Array.isArray(m.projects) && m.projects.length);
 
     appEl.innerHTML = `
       <div class="min-h-screen bg-black text-white">
@@ -3596,7 +3610,7 @@
                     <div class="text-sm font-semibold" style="font-family:Poppins, ui-sans-serif">Projects</div>
                     <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                       ${projectsToShow
-                        .slice(0, 4)
+                        .slice(0, showAllProjects ? projectsToShow.length : 4)
                         .map((p) => {
                           const openPreviewId = p?.openPreviewId ? String(p.openPreviewId) : "";
                           const href = p && (p.href || p.url || p.demoUrl || p.repoUrl) ? String(p.href || p.url || p.demoUrl || p.repoUrl) : "";
@@ -3649,9 +3663,11 @@
                               </div>
                             </div>
                           `;
-                          return href
-                            ? `<a href="${escapeHtml(href)}" target="_blank" rel="noreferrer" class="block hover:translate-y-[-2px] transition-transform">${card}</a>`
-                            : card;
+                          if (!href) return card;
+
+                          const isInternalHash = href.startsWith("#/");
+                          const attrs = isInternalHash ? "" : ' target="_blank" rel="noreferrer"';
+                          return `<a href="${escapeHtml(href)}"${attrs} class="block hover:translate-y-[-2px] transition-transform">${card}</a>`;
                         })
                         .join("")}
                     </div>

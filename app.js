@@ -5208,15 +5208,6 @@
                 <div class="mt-1 text-black/80" style="font-family:Poppins, ui-sans-serif, system-ui">DigitalTwinsHub@yahoo.com</div>
               </div>
               <div>
-                <div class="text-black font-semibold" style="font-family:Poppins, ui-sans-serif">Slack</div>
-                <div class="mt-1 text-black/80" style="font-family:Poppins, ui-sans-serif, system-ui">Digital Twins Fellowship</div>
-              </div>
-              <div>
-                <div class="text-black font-semibold" style="font-family:Poppins, ui-sans-serif">Discord</div>
-                <a class="mt-1 inline-block text-black/80 underline underline-offset-4 hover:text-black" href="https://discord.gg/nu6Vmjgd" target="_blank" rel="noreferrer"
-                  style="font-family:Poppins, ui-sans-serif, system-ui">https://discord.gg/nu6Vmjgd</a>
-              </div>
-              <div>
                 <div class="text-black font-semibold" style="font-family:Poppins, ui-sans-serif">YouTube</div>
                 <a class="mt-1 inline-block text-black/80 underline underline-offset-4 hover:text-black" href="https://www.youtube.com/@DigitalTwinsProjects" target="_blank" rel="noreferrer"
                   style="font-family:Poppins, ui-sans-serif, system-ui">@DigitalTwinsProjects</a>

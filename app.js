@@ -3822,22 +3822,22 @@
     };
 
     const ytLessonItem3 = {
-      title: "Video lesson",
+      title: "ASU Reclamation From Underutilized Spaces to Community Garden   3D & VR Showcase",
       url: "https://youtu.be/hV_5BW_MhAI",
     };
 
     const ytLessonItem4 = {
-      title: "Video lesson",
+      title: "Pando Populus",
       url: "https://youtu.be/GZQlX1aqon4",
     };
 
     const ytLessonItem5 = {
-      title: "Video lesson",
+      title: "USGBCA Report",
       url: "https://youtu.be/8dr-XNym5lU",
     };
 
     const ytLessonItem6 = {
-      title: "Video lesson",
+      title: "Shade-LA Report",
       url: "https://youtu.be/M01xOyR6grI",
     };
 
@@ -3918,21 +3918,31 @@
         });
       }
 
-      const ensureYt = (videoIdOrUrl, item) => {
-        const needle = String(videoIdOrUrl || "");
-        if (!needle) return;
-        const has = state.learning.sections.videos.items.some((it) => {
-          if (!it || typeof it !== "object") return false;
+      const upsertYt = (videoId, item) => {
+        const id = String(videoId || "").trim();
+        if (!id) return;
+
+        let found = false;
+        state.learning.sections.videos.items = state.learning.sections.videos.items.map((it) => {
+          if (!it || typeof it !== "object") return it;
           const url = String(it.url || "");
-          return url.includes(needle) || url.includes(`youtube.com/embed/${needle}`) || (url.includes("youtube.com/watch") && url.includes(`v=${needle}`));
+          const isTarget =
+            url.includes(`youtu.be/${id}`) ||
+            url.includes(`youtube.com/embed/${id}`) ||
+            (url.includes("youtube.com/watch") && url.includes(`v=${id}`)) ||
+            url === id;
+          if (!isTarget) return it;
+          found = true;
+          return { ...it, title: item.title, url: item.url };
         });
-        if (!has) state.learning.sections.videos.items.push(item);
+
+        if (!found) state.learning.sections.videos.items.push(item);
       };
 
-      ensureYt("hV_5BW_MhAI", ytLessonItem3);
-      ensureYt("GZQlX1aqon4", ytLessonItem4);
-      ensureYt("8dr-XNym5lU", ytLessonItem5);
-      ensureYt("M01xOyR6grI", ytLessonItem6);
+      upsertYt("hV_5BW_MhAI", ytLessonItem3);
+      upsertYt("GZQlX1aqon4", ytLessonItem4);
+      upsertYt("8dr-XNym5lU", ytLessonItem5);
+      upsertYt("M01xOyR6grI", ytLessonItem6);
     }
 
     const savedPathways = localStorage.getItem("learningHubPathways");

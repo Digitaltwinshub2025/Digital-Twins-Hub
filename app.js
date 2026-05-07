@@ -5172,6 +5172,11 @@
       { src: "./Contact/LATTC.png", alt: "LATTC" },
       { src: "./Contact/WLAC.png", alt: "WLAC" },
       { src: "./Contact/AURA.jpg", alt: "AURA" },
+      { src: "./Contact/ASU-logo.png", alt: "ASU" },
+      { src: "./Contact/USGBC.jpg", alt: "USGBC" },
+      { src: "./Contact/Shade%20LA.jpg", alt: "Shade LA" },
+      { src: "./Contact/Pando.png", alt: "Pando" },
+      { src: "./Contact/Baldwin%20hills.png", alt: "Baldwin Hills" },
     ];
 
     const sponsorRow = sponsorLogos

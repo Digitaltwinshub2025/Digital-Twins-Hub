@@ -322,10 +322,11 @@ a:focus-visible {
 
  .contact-sponsor-strip {
    margin-top: 12px;
-   height: 64px;
+   height: 118px;
    border-radius: 9999px;
-   border: 1px solid rgba(0, 0, 0, 0.08);
-   background: rgba(255, 255, 255, 0.8);
+   background: rgba(255, 255, 255, 0.55);
+   backdrop-filter: blur(6px);
+   -webkit-backdrop-filter: blur(6px);
    overflow: hidden;
    display: flex;
    align-items: center;
@@ -334,11 +335,11 @@ a:focus-visible {
  .contact-sponsor-track {
    display: flex;
    align-items: center;
-   gap: 28px;
+   gap: 18px;
    padding-left: 18px;
    padding-right: 18px;
    width: max-content;
-   animation: contact-sponsor-marquee 18s linear infinite;
+   animation: contact-sponsor-marquee 22s linear infinite;
  }
 
  .contact-sponsor-strip:hover .contact-sponsor-track {
@@ -346,18 +347,48 @@ a:focus-visible {
  }
 
  .contact-sponsor-item {
-   height: 42px;
+   height: 118px;
+   flex: 0 0 auto;
+   width: 260px;
    display: flex;
    align-items: center;
    justify-content: center;
+   padding: 14px 18px;
+   border-radius: 18px;
+   background: rgba(255, 255, 255, 0.7);
+   border: 1px solid rgba(0, 0, 0, 0.06);
+   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+   transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+   animation: sponsor-card-in 520ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+ }
+
+ .contact-sponsor-item:nth-child(1) { animation-delay: 40ms; }
+ .contact-sponsor-item:nth-child(2) { animation-delay: 80ms; }
+ .contact-sponsor-item:nth-child(3) { animation-delay: 120ms; }
+ .contact-sponsor-item:nth-child(4) { animation-delay: 160ms; }
+ .contact-sponsor-item:nth-child(5) { animation-delay: 200ms; }
+ .contact-sponsor-item:nth-child(6) { animation-delay: 240ms; }
+ .contact-sponsor-item:nth-child(7) { animation-delay: 280ms; }
+ .contact-sponsor-item:nth-child(8) { animation-delay: 320ms; }
+ .contact-sponsor-item:nth-child(9) { animation-delay: 360ms; }
+ .contact-sponsor-item:nth-child(10) { animation-delay: 400ms; }
+ .contact-sponsor-item:nth-child(11) { animation-delay: 440ms; }
+ .contact-sponsor-item:nth-child(12) { animation-delay: 480ms; }
+
+ .contact-sponsor-item:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 22px 55px rgba(0, 0, 0, 0.12);
+   background: rgba(255, 255, 255, 0.82);
  }
 
  .contact-sponsor-item img {
-   height: 42px;
+   max-height: 98px;
+   max-width: 220px;
    width: auto;
    object-fit: contain;
-   filter: grayscale(0.1);
+   filter: grayscale(0);
    opacity: 0.92;
+   transition: transform 200ms ease, opacity 200ms ease;
  }
 
  @keyframes contact-sponsor-marquee {
@@ -368,3 +399,52 @@ a:focus-visible {
      transform: translateX(-50%);
    }
  }
+
+ .contact-sponsor-item:hover img {
+   transform: scale(1.02);
+   opacity: 1;
+ }
+
+ @keyframes sponsor-card-in {
+   from {
+     opacity: 0;
+     transform: translateY(10px) scale(0.98);
+   }
+   to {
+     opacity: 1;
+     transform: translateY(0) scale(1);
+   }
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+   .contact-sponsor-item {
+     animation: none;
+     transition: none;
+   }
+
+   .contact-sponsor-track {
+     animation: none;
+   }
+
+   .contact-sponsor-item img {
+     transition: none;
+   }
+ }
+
+ @media (max-width: 640px) {
+   .contact-sponsor-strip {
+     height: 96px;
+   }
+
+   .contact-sponsor-item {
+     height: 84px;
+     width: 220px;
+     padding: 10px 12px;
+     border-radius: 16px;
+   }
+
+   .contact-sponsor-item img {
+    max-height: 68px;
+    max-width: 200px;
+  }
+}

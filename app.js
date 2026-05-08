@@ -5260,7 +5260,10 @@
             <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-sm md:text-base">
               <div>
                 <div class="text-black font-semibold" style="font-family:Poppins, ui-sans-serif">Email</div>
-                <div class="mt-1 text-black/80" style="font-family:Poppins, ui-sans-serif, system-ui">DigitalTwinsHub@yahoo.com</div>
+                <div class="mt-1 flex flex-col gap-1" style="font-family:Poppins, ui-sans-serif, system-ui">
+                  <a class="text-black/80 underline underline-offset-4 hover:text-black" href="mailto:DigitalTwinsHub@yahoo.com">DigitalTwinsHub@yahoo.com</a>
+                  <a class="text-black/80 underline underline-offset-4 hover:text-black" href="mailto:olivam@lattc.edu">olivam@lattc.edu</a>
+                </div>
               </div>
               <div>
                 <div class="text-black font-semibold" style="font-family:Poppins, ui-sans-serif">YouTube</div>

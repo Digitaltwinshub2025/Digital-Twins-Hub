@@ -2513,6 +2513,7 @@
         projs.forEach((mp) => {
           const pid = mp?.openPreviewId != null ? String(mp.openPreviewId).trim() : "";
           if (!pid) return;
+          if (pid === "03" && memberName.trim().toLowerCase() === "meri sargsian") return;
           const list = map.get(pid) || [];
           list.push(memberName);
           map.set(pid, list);

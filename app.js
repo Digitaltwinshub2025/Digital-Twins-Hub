@@ -103,17 +103,17 @@
     },
     {
       name: "Monique Nogueira",
-      role: "Architecture Designer",
+      role: "Architect & Interior Designer",
       img: "Team Members/Monique%20Nogueira.jpg",
       slug: "monique-nogueira",
       sortOrder: 3,
       cardObjectPosition: "80% 50%",
       bio:
-        "I am an Brazilian architect and interior designer with nearly 10 years of experience in furniture design, renovation projects, lighting design, and site management. Since moving to the United States, my perspective on architecture has expanded, inspiring me to focus on environmental and sustainable design. My experience in the Summer Internship confirmed how architecture can be a powerful tool to make the world a better place. I am passionate about creating functional and inspiring spaces while embracing new opportunities to contribute to a more sustainable future.",
+        "Brazilian architect and interior designer with nearly 9 years of experience in furniture design, renovation projects, and site management. Recent work focuses on sustainable and climate-resilient design, including GIS analysis, environmental mapping, and wildfire recovery strategies.",
       highlights: [
-        "Nearly 10 years of experience across furniture design, renovations, lighting design, and site management.",
-        "Focused on environmental and sustainable design with a global perspective.",
-        "Committed to creating functional, inspiring spaces that make a positive impact.",
+        "Brazilian architect and interior designer with nearly 9 years of professional experience.",
+        "Focus on sustainable and climate-resilient design with GIS analysis and environmental mapping.",
+        "Collaborating with USGBC California and Shade LA on heat mitigation strategies for vulnerable communities in Los Angeles.",
       ],
       education: [
         "Bachelor’s Degree in Architecture and Urbanism at Uniredentor Afya – 2015 - 2022 (Brazil)",
@@ -122,11 +122,20 @@
         "Foundations of Green Building - USBGC",
         "Climate Change and Built Enviroment Course - CC WLAC",
       ],
-      skills: ["Autocad", "Revit (student)", "Promob", "AURA", "ArchGIS", "Rhino (Student)"],
+      skills: [
+        "ArcGIS / GISPro",
+        "AURA Engine",
+        "AutoCAD",
+        "Revit",
+        "Rhino + Grasshopper (student)",
+        "SketchUp",
+        "3D Modeling & Visualization",
+      ],
       experience: [
-        "Architect and interior designer with project experience in furniture design and renovation work.",
-        "Lighting design work supported by postgraduate training (EBAC – 2024).",
-        "Site coordination and design development experience across multi-phase projects.",
+        "Nearly 10 years of experience in architecture, furniture design, lighting, and renovations in Brazil.",
+        "USGBC California Summer Internship focused on GIS mapping and fire-resilient design after the 2025 Eaton Fire.",
+        "Climate Center Fellowship focused on sustainable and resilient design strategies.",
+        "Currently collaborating with USGBC California and Shade LA on heat mitigation and climate-resilient design strategies for vulnerable communities in Los Angeles.",
       ],
     },
     {

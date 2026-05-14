@@ -423,6 +423,222 @@
       .replaceAll("'", "&#039;");
   }
 
+  function renderLearningChatRoom() {
+    const WEBSITE_URL = "https://californiacenterdigitaltwins.com/#/";
+    const WEBSITE_DATA = [
+      {
+        id: "home",
+        page: "Home",
+        title: "Digital Twins Projects Hub",
+        url: WEBSITE_URL,
+        content:
+          "Digital Twins Projects Hub. This platform is a collaborative space where innovators, researchers, and students can create, showcase, and track projects from any discipline.",
+      },
+    ];
+
+    const tokenize = (text) =>
+      String(text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .split(/\s+/)
+        .filter(Boolean);
+
+    const searchWebsiteData = (question) => {
+      const queryTokens = tokenize(question);
+      if (queryTokens.length === 0) return [];
+
+      return WEBSITE_DATA.map((item) => {
+        const haystack = tokenize(`${item.page} ${item.title} ${item.content}`);
+        const score = queryTokens.reduce((total, token) => total + haystack.filter((w) => w.includes(token)).length, 0);
+        return { ...item, score };
+      })
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score);
+    };
+
+    const createWebsiteOnlyAnswer = (question) => {
+      const matches = searchWebsiteData(question);
+      if (matches.length === 0) {
+        return {
+          text:
+            "I could not find that in the website data I currently have. Add the matching tab/page text into WEBSITE_DATA and I will answer from it only.",
+          sources: [],
+        };
+      }
+
+      const best = matches.slice(0, 2);
+      return {
+        text: best.map((m) => `${m.title}: ${m.content}`).join("\n\n"),
+        sources: best.map((m) => ({ page: m.page, url: m.url })),
+      };
+    };
+
+    const storageKey = "learningHubChatMessages";
+    const loadMessages = () => {
+      try {
+        const raw = localStorage.getItem(storageKey);
+        const parsed = raw ? JSON.parse(raw) : null;
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      } catch {
+        // no-op
+      }
+      return [
+        {
+          id: 1,
+          sender: "bot",
+          text: "Hi! Ask me about the California Center Digital Twins website. I will answer only from the saved website data.",
+          sources: [],
+        },
+      ];
+    };
+
+    const saveMessages = (msgs) => {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(msgs));
+      } catch {
+        // no-op
+      }
+    };
+
+    const messages = loadMessages();
+    const renderSources = (sources) => {
+      if (!Array.isArray(sources) || sources.length === 0) return "";
+      const names = sources.map((s) => escapeHtml(String(s?.page || ""))).filter(Boolean).join(", ");
+      return names
+        ? `<div class="mt-3 pt-3 border-t border-slate-200 text-xs text-slate-500">Source: ${names}</div>`
+        : "";
+    };
+
+    const renderMessage = (m) => {
+      const sender = String(m?.sender || "bot");
+      const isUser = sender === "user";
+      const bubbleCls = isUser
+        ? "bg-slate-900 text-white rounded-br-sm"
+        : "bg-white text-slate-800 border border-slate-200 rounded-bl-sm";
+      const wrapCls = isUser ? "justify-end" : "justify-start";
+      return `
+        <div class="flex ${wrapCls}">
+          <div class="max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${bubbleCls}">
+            ${escapeHtml(String(m?.text || ""))}
+            ${renderSources(m?.sources)}
+          </div>
+        </div>
+      `;
+    };
+
+    appEl.innerHTML = `
+      <div class="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+        <div class="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 grid md:grid-cols-[280px_1fr]">
+          <aside class="bg-slate-950 text-white p-5 hidden md:flex flex-col gap-5">
+            <div class="flex items-center gap-3">
+              <div class="h-11 w-11 rounded-2xl bg-white/10 flex items-center justify-center">
+                <div class="text-lg">DB</div>
+              </div>
+              <div>
+                <h1 class="font-semibold leading-tight">Website Database</h1>
+                <p class="text-xs text-slate-400">Site-only chat source</p>
+              </div>
+            </div>
+
+            <div class="rounded-2xl bg-white/10 p-4 space-y-2">
+              <div class="flex items-center gap-2 text-sm font-medium">Locked to website data</div>
+              <p class="text-xs text-slate-300 leading-relaxed">This chat searches only the saved content from californiacenterdigitaltwins.com.</p>
+            </div>
+
+            <a href="#/learning-hub" class="mt-1 inline-flex items-center justify-center rounded-full bg-white/10 hover:bg-white/15 px-4 py-2 text-xs" style="font-family:Poppins, ui-sans-serif">Back to Learning Hub</a>
+            <button type="button" id="learningChatClear" class="inline-flex items-center justify-center rounded-full border border-white/15 bg-transparent hover:bg-white/10 px-4 py-2 text-xs" style="font-family:Poppins, ui-sans-serif">Clear chat</button>
+          </aside>
+
+          <main class="flex flex-col min-h-[650px]">
+            <div class="bg-white p-4 border-b border-slate-200 flex items-center justify-between gap-3">
+              <div>
+                <h2 class="text-lg font-semibold text-slate-900">California Center Digital Twins Chat</h2>
+                <p class="text-sm text-slate-500">Answers are generated from website data only.</p>
+              </div>
+              <a href="#/learning-hub" class="md:hidden text-xs text-slate-700 underline underline-offset-4">Back</a>
+            </div>
+
+            <div id="learningChatScroll" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
+              ${messages.map(renderMessage).join("")}
+            </div>
+
+            <div class="p-3 bg-white border-t border-slate-200">
+              <div class="flex gap-2">
+                <div class="flex-1 relative">
+                  <input id="learningChatInput" placeholder="Ask from the website database..." class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-slate-900" />
+                </div>
+                <button id="learningChatSend" class="rounded-xl bg-slate-900 text-white px-4 flex items-center justify-center hover:bg-slate-700 transition" aria-label="Send message">Send</button>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    `;
+
+    const scrollEl = document.getElementById("learningChatScroll");
+    const inputEl = document.getElementById("learningChatInput");
+    const sendBtn = document.getElementById("learningChatSend");
+    const clearBtn = document.getElementById("learningChatClear");
+
+    const scrollToBottom = () => {
+      try {
+        if (!scrollEl) return;
+        scrollEl.scrollTop = scrollEl.scrollHeight;
+      } catch {
+        // no-op
+      }
+    };
+
+    scrollToBottom();
+
+    const appendMessage = (msg) => {
+      messages.push(msg);
+      saveMessages(messages);
+      if (scrollEl) {
+        scrollEl.insertAdjacentHTML("beforeend", renderMessage(msg));
+      }
+      scrollToBottom();
+    };
+
+    const send = () => {
+      const q = String(inputEl?.value || "").trim();
+      if (!q) return;
+
+      const now = Date.now();
+      appendMessage({ id: now, sender: "user", text: q, sources: [] });
+
+      const ans = createWebsiteOnlyAnswer(q);
+      appendMessage({ id: now + 1, sender: "bot", text: ans.text, sources: ans.sources });
+
+      if (inputEl) inputEl.value = "";
+      try {
+        inputEl?.focus();
+      } catch {
+        // no-op
+      }
+    };
+
+    sendBtn?.addEventListener("click", send);
+    inputEl?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") send();
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      const next = [
+        {
+          id: 1,
+          sender: "bot",
+          text: "Hi! Ask me about the California Center Digital Twins website. I will answer only from the saved website data.",
+          sources: [],
+        },
+      ];
+      messages.splice(0, messages.length, ...next);
+      saveMessages(messages);
+      if (scrollEl) scrollEl.innerHTML = next.map(renderMessage).join("");
+      scrollToBottom();
+    });
+  }
+
   function toast(title, message, type = "success") {
     const id = `t_${Math.random().toString(16).slice(2)}`;
     const bg =
@@ -1340,6 +1556,7 @@
     // #/team
     // #/team/:slug
     // #/learning-hub
+    // #/learning-hub/chat
     // #/documentation
     // #/contact
     const raw = (location.hash || "#/").replace(/^#/, "");
@@ -1359,7 +1576,8 @@
     if (base === "projects" && param) return { name: "projectDetail", id: param };
     if (base === "team" && !param) return { name: "team" };
     if (base === "team" && param) return { name: "teamMember", slug: param };
-    if (base === "learning-hub") return { name: "learning" };
+    if (base === "learning-hub" && !param) return { name: "learning" };
+    if (base === "learning-hub" && param === "chat") return { name: "learningChat" };
     if (base === "documentation") return { name: "documentation" };
     if (base === "contact") return { name: "contact" };
     return { name: "home" };
@@ -1485,7 +1703,7 @@
     const activeKey = (() => {
       if (route.name === "projectDetail") return "projects";
       if (route.name === "teamMember") return "team";
-      if (route.name === "learning") return "learning";
+      if (route.name === "learning" || route.name === "learningChat") return "learning";
       return route.name;
     })();
 
@@ -3852,6 +4070,11 @@
       url: "./assets/Learning%20Hub/WebsiteOnlyChatRoom.jsx",
     };
 
+    const websiteOnlyChatInteractiveItem = {
+      title: "Website-only chat room (Interactive)",
+      url: "#/learning-hub/chat",
+    };
+
     const ytLessonItem = {
       title: "Environmental Context Visualization",
       url: "https://youtu.be/BaDAIZ9jpuI",
@@ -3999,6 +4222,7 @@
         "Importing open data into QGIS and cleaning it.",
         "Connecting a live sensor feed to a simple dashboard.",
         "Publishing a web map of a neighborhood twin.",
+        websiteOnlyChatInteractiveItem,
         websiteOnlyChatTutorialItem,
       ];
     } else {
@@ -4006,6 +4230,11 @@
         (it) => it && typeof it === "object" && String(it.url || "").includes("WebsiteOnlyChatRoom.jsx")
       );
       if (!hasWebsiteOnlyChatTutorial) state.learning.sections.tutorials.items.push(websiteOnlyChatTutorialItem);
+
+      const hasWebsiteOnlyChatInteractive = state.learning.sections.tutorials.items.some(
+        (it) => it && typeof it === "object" && String(it.url || "") === "#/learning-hub/chat"
+      );
+      if (!hasWebsiteOnlyChatInteractive) state.learning.sections.tutorials.items.push(websiteOnlyChatInteractiveItem);
     }
 
     const savedPathways = localStorage.getItem("learningHubPathways");
@@ -5373,7 +5602,7 @@
 
     const route = parseRoute();
 
-    if (route.name !== "learning" && state.learning?._heroScrollHandler) {
+    if (route.name !== "learning" && route.name !== "learningChat" && state.learning?._heroScrollHandler) {
       const prevTarget = state.learning._heroScrollTarget || window;
       try {
         if (prevTarget === window) window.removeEventListener("scroll", state.learning._heroScrollHandler);
@@ -5408,6 +5637,7 @@
     else if (route.name === "team") renderTeamPage();
     else if (route.name === "teamMember") renderTeamMember(route.slug);
     else if (route.name === "learning") renderLearningHub();
+    else if (route.name === "learningChat") renderLearningChatRoom();
     else if (route.name === "documentation") renderDocumentation();
     else if (route.name === "contact") renderContact();
     else renderHome();

@@ -110,6 +110,13 @@
       cardObjectPosition: "80% 50%",
       projects: [
         {
+          openPreviewId: "01",
+          title: "USGBC Resilient & Rebuilding Guide",
+          subtitle: "Computer Science",
+          img: "gitlogos/USGBC.png",
+          href: "#/projects/01",
+        },
+        {
           openPreviewId: "03",
           title: "Shade LA",
           subtitle: "Urban Heat Mitigation",

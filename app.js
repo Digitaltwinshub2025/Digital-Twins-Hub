@@ -108,6 +108,22 @@
       slug: "monique-nogueira",
       sortOrder: 3,
       cardObjectPosition: "80% 50%",
+      projects: [
+        {
+          openPreviewId: "03",
+          title: "Shade LA",
+          subtitle: "Urban Heat Mitigation",
+          img: "gitlogos/ShadeLA.png",
+          href: "#/projects/03",
+        },
+        {
+          openPreviewId: "04",
+          title: "Pando Populus",
+          subtitle: "Resilience Intelligence",
+          img: "gitlogos/Pando.jpeg",
+          href: "#/projects/04",
+        },
+      ],
       bio:
         "I am a Brazilian architect and interior designer with nearly 10 years of experience in furniture design, renovation projects, and site management. Since moving to the United States, I have expanded my focus toward environmental design, climate resilience, and sustainable architecture. My work combines design practice with digital tools and data-informed strategies to support more resilient and community-centered environments. Through academic and project-based experience in digital twins, ecological modeling, and spatial analysis, I have contributed to climate-focused planning and sustainable design solutions. I am passionate about creating functional and inspiring spaces while exploring innovative ways to support a more sustainable future.",
       highlights: [

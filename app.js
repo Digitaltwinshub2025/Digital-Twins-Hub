@@ -3847,6 +3847,11 @@
       url: "./assets/Learning%20Hub/puhc%20website%20walkthrough.mp4",
     };
 
+    const websiteOnlyChatTutorialItem = {
+      title: "Website-only chat room (React)",
+      url: "./assets/Learning%20Hub/WebsiteOnlyChatRoom.jsx",
+    };
+
     const ytLessonItem = {
       title: "Environmental Context Visualization",
       url: "https://youtu.be/BaDAIZ9jpuI",
@@ -3881,6 +3886,14 @@
       state.learning.sections.videos = {
         title: "Video lessons",
         description: "Curate or embed video explainers that walk through core ideas and example digital twin builds.",
+        items: [],
+      };
+    }
+
+    if (!state.learning.sections.tutorials || typeof state.learning.sections.tutorials !== "object") {
+      state.learning.sections.tutorials = {
+        title: "Step-by-step tutorials",
+        description: "Build guided tutorials that students can follow at their own pace, from data import to dashboards.",
         items: [],
       };
     }
@@ -3979,6 +3992,20 @@
       upsertYt("GZQlX1aqon4", ytLessonItem4);
       upsertYt("8dr-XNym5lU", ytLessonItem5);
       upsertYt("M01xOyR6grI", ytLessonItem6);
+    }
+
+    if (!Array.isArray(state.learning.sections.tutorials.items) || state.learning.sections.tutorials.items.length === 0) {
+      state.learning.sections.tutorials.items = [
+        "Importing open data into QGIS and cleaning it.",
+        "Connecting a live sensor feed to a simple dashboard.",
+        "Publishing a web map of a neighborhood twin.",
+        websiteOnlyChatTutorialItem,
+      ];
+    } else {
+      const hasWebsiteOnlyChatTutorial = state.learning.sections.tutorials.items.some(
+        (it) => it && typeof it === "object" && String(it.url || "").includes("WebsiteOnlyChatRoom.jsx")
+      );
+      if (!hasWebsiteOnlyChatTutorial) state.learning.sections.tutorials.items.push(websiteOnlyChatTutorialItem);
     }
 
     const savedPathways = localStorage.getItem("learningHubPathways");

@@ -4065,11 +4065,6 @@
       url: "./assets/Learning%20Hub/puhc%20website%20walkthrough.mp4",
     };
 
-    const websiteOnlyChatTutorialItem = {
-      title: "Website-only chat room (React)",
-      url: "./assets/Learning%20Hub/WebsiteOnlyChatRoom.jsx",
-    };
-
     const websiteOnlyChatInteractiveItem = {
       title: "Website-only chat room (Interactive)",
       url: "#/learning-hub/chat",
@@ -4223,13 +4218,11 @@
         "Connecting a live sensor feed to a simple dashboard.",
         "Publishing a web map of a neighborhood twin.",
         websiteOnlyChatInteractiveItem,
-        websiteOnlyChatTutorialItem,
       ];
     } else {
-      const hasWebsiteOnlyChatTutorial = state.learning.sections.tutorials.items.some(
-        (it) => it && typeof it === "object" && String(it.url || "").includes("WebsiteOnlyChatRoom.jsx")
+      state.learning.sections.tutorials.items = state.learning.sections.tutorials.items.filter(
+        (it) => !(it && typeof it === "object" && String(it.url || "").includes("WebsiteOnlyChatRoom.jsx"))
       );
-      if (!hasWebsiteOnlyChatTutorial) state.learning.sections.tutorials.items.push(websiteOnlyChatTutorialItem);
 
       const hasWebsiteOnlyChatInteractive = state.learning.sections.tutorials.items.some(
         (it) => it && typeof it === "object" && String(it.url || "") === "#/learning-hub/chat"

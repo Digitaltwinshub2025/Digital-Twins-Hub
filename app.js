@@ -3051,19 +3051,6 @@
 
   function renderProjectCard(p) {
     const img = getProjectImage(p);
-    const pid = p && p.id != null ? String(p.id) : "";
-
-    const teamNames = (() => {
-      const map = state.projectsPage?._projectTeamById;
-      if (!map || !pid) return [];
-      const v = map.get(pid);
-      return Array.isArray(v) ? v : [];
-    })();
-
-    const teamPreviewMax = 3;
-    const teamPreview = teamNames.slice(0, teamPreviewMax);
-    const teamRemaining = Math.max(0, teamNames.length - teamPreview.length);
-    const teamLine = teamPreview.length ? `Team: ${teamPreview.join(", ")}${teamRemaining ? ` +${teamRemaining} more` : ""}` : "";
 
     const imageUrl = img ? encodeURI(String(img)) : "";
 
@@ -3074,7 +3061,6 @@
           <div class="dtp-visual" style="${imageUrl ? `background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22)), radial-gradient(circle at top right, rgba(255,255,255,0.35), transparent 30%), radial-gradient(circle at 15% 80%, rgba(255,255,255,0.22), transparent 28%), url('${escapeHtml(imageUrl)}');` : ""}"></div>
           <div class="dtp-content" style="font-family: Istok Web, Poppins, ui-sans-serif">
             <div data-open-preview="${escapeHtml(String(p.id))}" class="dtp-pill">Projects Detalis</div>
-            ${teamLine ? `<div class="dtp-teamline">${escapeHtml(teamLine)}</div>` : ""}
 
             <div class="flex flex-wrap gap-2">
               ${
